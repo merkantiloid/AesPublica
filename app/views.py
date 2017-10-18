@@ -1,4 +1,6 @@
 from flask import render_template, redirect
+from flask_login import login_user, login_required, logout_user
+
 from app import mainApp, db
 from .forms import LoginForm, RegisterForm
 from .models import User
@@ -6,20 +8,9 @@ import bcrypt
 
 @mainApp.route('/')
 @mainApp.route('/index')
-
+@login_required
 def index():
-    user = {'nickname': 'Miguel'}  # fake user
-    posts = [  # fake array of posts
-        {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return render_template('index.html', title='Home')
 
 
 @mainApp.route('/login', methods=['GET'])
@@ -33,13 +24,22 @@ def login():
     form = LoginForm()
     if not form.validate_on_submit():
         return render_template('login.html', form=form)
+    registered_user = User.query.filter_by(name=form.name.data).first()
+    login_user(registered_user)
     return redirect("/index")
+
+
+@mainApp.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/login')
 
 
 @mainApp.route('/register' , methods=['GET'])
 def register_get():
     form = RegisterForm()
     return render_template('register.html', form=form)
+
 
 @mainApp.route('/register' , methods=['POST'])
 def register():
