@@ -1,9 +1,12 @@
-from flask import render_template, flash, redirect
-from app import mainApp
-from .forms import LoginForm
+from flask import render_template, redirect
+from app import mainApp, db
+from .forms import LoginForm, RegisterForm
+from .models import User
+import bcrypt
 
 @mainApp.route('/')
 @mainApp.route('/index')
+
 def index():
     user = {'nickname': 'Miguel'}  # fake user
     posts = [  # fake array of posts
@@ -20,15 +23,32 @@ def index():
 
 
 @mainApp.route('/login', methods=['GET'])
-def login():
+def login_get():
     form = LoginForm()
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', form=form)
 
 
 @mainApp.route('/login', methods=['POST'])
-def login_submit():
+def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for OpenID="%s", remember_me=%s' % (form.openid.data, str(form.remember_me.data)))
-        return redirect('/index')
-    return render_template('login.html', title='Sign In', form=form)
+    if not form.validate_on_submit():
+        return render_template('login.html', form=form)
+    return redirect("/index")
+
+
+@mainApp.route('/register' , methods=['GET'])
+def register_get():
+    form = RegisterForm()
+    return render_template('register.html', form=form)
+
+@mainApp.route('/register' , methods=['POST'])
+def register():
+    form = RegisterForm()
+    if not form.validate_on_submit():
+        return render_template('register.html', form=form)
+    hash = bcrypt.hashpw(form.password.data.encode(), bcrypt.gensalt())
+    user = User(name=form.name.data, hash=hash)
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect("/index")
