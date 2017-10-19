@@ -1,12 +1,12 @@
 from flask import render_template, redirect
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, logout_user
 import bcrypt
 
 from app import mainApp, db
 from ..forms import LoginForm, RegisterForm
 from ..models import User
 
-from .calc import index
+from .calc import calc
 from .calc import calc_json
 
 @mainApp.route('/login', methods=['GET'])

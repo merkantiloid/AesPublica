@@ -2,7 +2,8 @@ var calculator = new Vue({
     el: '#calculator',
     delimiters: ["<%","%>"],
     data: {
-        calc: {}
+        calc: {},
+        static: gStatic
     },
     created: function () {
         var vm = this;

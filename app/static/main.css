@@ -22,7 +22,3 @@ h6{
     text-align: center
 }
 
-.pad2px  [class*='col-'] {
-    padding-right: 2px;
-    padding-left: 2px;
-}
