@@ -1,12 +1,55 @@
 {% extends "base.html" %}
 
 {% block scripts%}
+<script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-<div id="calculator">
-<% title %>
+
+<div id="calculator" class="container-fluid pad2px">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="bordered">
+                <h6>Reprocess settings:</h6>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="bordered">
+                Build list
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="bordered">
+                Minerals
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="bordered">
+                Store
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="bordered">
+                Ore settings
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="bordered">
+                Ore list
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="{{ url_for('static', filename='apps/calculator.js') }}"></script>

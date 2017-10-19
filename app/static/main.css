@@ -1,0 +1,28 @@
+body{
+    background-image: url("/static/logo25.png");
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+    background-size: 80px 80px;
+}
+
+.bordered{
+    border: 1px solid #A0A0C0;
+    margin-top: 0px;
+    margin-bottom: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background: #f4f4ff;
+    border-radius: 10px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+h6{
+    text-align: center
+}
+
+.pad2px  [class*='col-'] {
+    padding-right: 2px;
+    padding-left: 2px;
+}

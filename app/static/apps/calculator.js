@@ -2,9 +2,16 @@ var calculator = new Vue({
     el: '#calculator',
     delimiters: ["<%","%>"],
     data: {
-        title: "Ore Calculator"
+        calc: {}
     },
     created: function () {
-        console.log(this.title)
+        var vm = this;
+        axios.get('/calc/data.json')
+            .then(function (response) {
+                vm.calc = response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 });

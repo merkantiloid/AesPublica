@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     {% if title %}
     <title>{{ title }} - EveCalc</title>
@@ -14,17 +16,15 @@
 </head>
 <body>
 <div>
-    GGL |
-    <a href="/index">Home</a> |
+    | <a href="/">Calc</a> |
     {% if g.user.is_authenticated %}
     <a href="/logout">Logout ({{ g.user.name }})</a> |
     {% else %}
     <a href="/login">Login</a> |
+    <a href="/register">Register</a> |
     {% endif %}
 
-    <a href="/register">Register</a> |
 </div>
-<hr>
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul>

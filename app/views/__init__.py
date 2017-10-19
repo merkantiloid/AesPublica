@@ -1,17 +1,13 @@
 from flask import render_template, redirect
 from flask_login import login_user, login_required, logout_user
-
-from app import mainApp, db
-from .forms import LoginForm, RegisterForm
-from .models import User
 import bcrypt
 
-@mainApp.route('/')
-@mainApp.route('/index')
-@login_required
-def index():
-    return render_template('index.html', title='Home')
+from app import mainApp, db
+from ..forms import LoginForm, RegisterForm
+from ..models import User
 
+from .calc import index
+from .calc import calc_json
 
 @mainApp.route('/login', methods=['GET'])
 def login_get():
@@ -26,7 +22,7 @@ def login():
         return render_template('login.html', form=form)
     registered_user = User.query.filter_by(name=form.name.data).first()
     login_user(registered_user)
-    return redirect("/index")
+    return redirect("/")
 
 
 @mainApp.route('/logout')
@@ -51,4 +47,4 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    return redirect("/index")
+    return redirect("/")
