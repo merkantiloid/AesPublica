@@ -1,0 +1,1 @@
+drop table eve_market_groups;

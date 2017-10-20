@@ -2,7 +2,8 @@
     ./manage.py script_sql mysql <script description>
     ./manage.py db_version
     ./manage.py upgrade
+    ./manage.py test
     ./manage.py downgrade <version>
 
 #### SDE
-    python3 ./utils/sde.py ~/Downloads/sde-20170818-TRANQUILITY.zip
+    python3 ./sde.py ~/Downloads/sde-20170818-TRANQUILITY.zip
