@@ -1,0 +1,1 @@
+drop table ore_calcs;

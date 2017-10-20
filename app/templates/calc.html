@@ -12,7 +12,7 @@
 </script>
 
 <div id="calculator" class="container-fluid">
-    <div class="row">
+    <div class="row" v-cloak>
         <div class="col-sm-4">
             <div class="bordered">
                 <h6>Reprocess settings:</h6>
@@ -20,7 +20,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Space</label>
                     <div class="col-sm-8">
-                        <select id="space" class="form-control" v-model="calc.selSpace">
+                        <select id="space" class="form-control" v-model="calc.space">
                             <option v-for="(name,code) in static.spaces" v-bind:value="code"><% name %></option>
                         </select>
                     </div>

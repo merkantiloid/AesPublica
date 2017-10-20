@@ -22,3 +22,6 @@ h6{
     text-align: center
 }
 
+[v-cloak] {
+    display: none;
+}
