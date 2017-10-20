@@ -1,7 +1,37 @@
 import yaml
 
 from app import db
-from app.eve_models import EveType, EveMarketGroup
+from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory
+
+
+def parse_categories(file):
+    print(".... loading categories")
+    data = yaml.load(file, Loader=yaml.CLoader)
+    for key in data:
+        print(key, data[key]['name'].get('en','N/A'))
+        item = EveCategory.query.get(key)
+        if not item:
+            item = EveCategory(id=key)
+        item.icon_id = data[key].get('iconID',None)
+        item.published = data[key]['published']
+        item.name = data[key]['name']['en']
+        db.session.add(item)
+        db.session.commit()
+
+def parse_groups(file):
+    print(".... loadinggroups")
+    data = yaml.load(file, Loader=yaml.CLoader)
+    for key in data:
+        print(key, data[key]['name'].get('en','N/A'))
+        item = EveGroup.query.get(key)
+        if not item:
+            item = EveGroup(id=key)
+        item.category_id = data[key]['categoryID']
+        item.icon_id = data[key].get('iconID',None)
+        item.published = data[key]['published']
+        item.name = data[key]['name']['en']
+        db.session.add(item)
+        db.session.commit()
 
 
 def parse_market_groups(file):
@@ -9,7 +39,7 @@ def parse_market_groups(file):
     data = yaml.load(file, Loader=yaml.CLoader)
     for record in data:
         key = record['marketGroupID']
-        print(key, record['marketGroupName'])
+        # print(key, record['marketGroupName'])
         item = EveMarketGroup.query.get(key)
         if not item:
             item = EveMarketGroup(id=key)

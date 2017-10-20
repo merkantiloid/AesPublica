@@ -20,3 +20,19 @@ class EveMarketGroup(db.Model):
     name = db.Column(db.String)
     icon_id = db.Column(db.BigInteger)
     parent_id = db.Column(db.BigInteger)
+
+
+class EveGroup(db.Model):
+    __tablename__ = 'eve_groups'
+    id = db.Column(db.BigInteger, primary_key=True)
+    category_id = db.Column(db.BigInteger)
+    icon_id = db.Column(db.BigInteger)
+    published = db.Column(db.Boolean)
+    name = db.Column(db.String)
+
+class EveCategory(db.Model):
+    __tablename__ = 'eve_categories'
+    id = db.Column(db.BigInteger, primary_key=True)
+    icon_id = db.Column(db.BigInteger)
+    published = db.Column(db.Boolean)
+    name = db.Column(db.String)
