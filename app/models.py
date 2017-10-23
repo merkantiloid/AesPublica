@@ -35,3 +35,6 @@ class OreCalc(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship("User", back_populates="ore_calc")
     space = db.Column(db.String)
+    citadel_id = db.Column(db.BigInteger)
+    character_id = db.Column(db.BigInteger)
+    implant_id = db.Column(db.BigInteger)

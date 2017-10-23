@@ -20,7 +20,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Space</label>
                     <div class="col-sm-8">
-                        <select id="space" class="form-control" v-model="calc.space">
+                        <select id="space" class="form-control form-control-sm" v-model="calc.space">
                             <option v-for="(name,code) in static.spaces" v-bind:value="code"><% name %></option>
                         </select>
                     </div>
@@ -29,6 +29,27 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Citadel</label>
                     <div class="col-sm-8">
+                        <select id="citadel" class="form-control form-control-sm" v-model="calc.citadel_id">
+                            <option v-for="obj in static.citadels" v-bind:value="obj.id"><% obj.name %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="space">Character</label>
+                    <div class="col-sm-8">
+                        <select id="character" class="form-control form-control-sm" v-model="calc.character_id">
+                            <option v-for="obj in calc.characters" v-bind:value="obj.id"><% obj.name %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="space">Implant</label>
+                    <div class="col-sm-8">
+                        <select id="implant" class="form-control form-control-sm" v-model="calc.implant_id">
+                            <option v-for="obj in static.repr_implants" v-bind:value="obj.id"><% obj.name %></option>
+                        </select>
                     </div>
                 </div>
 
