@@ -38,3 +38,6 @@ class OreCalc(db.Model):
     citadel_id = db.Column(db.BigInteger)
     character_id = db.Column(db.BigInteger)
     implant_id = db.Column(db.BigInteger)
+    rig1_id = db.Column(db.BigInteger)
+    rig2_id = db.Column(db.BigInteger)
+    rig3_id = db.Column(db.BigInteger)

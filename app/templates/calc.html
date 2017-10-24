@@ -29,7 +29,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Citadel</label>
                     <div class="col-sm-8">
-                        <select id="citadel" class="form-control form-control-sm" v-model="calc.citadel_id">
+                        <select id="citadel" class="form-control form-control-sm" v-model="calc.citadel_id" v-on:change="changeCitadel">
                             <option v-for="obj in static.citadels" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
@@ -38,8 +38,8 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Rig 1</label>
                     <div class="col-sm-8">
-                        <select id="rig1" class="form-control form-control-sm" v-model="calc.rig_id">
-                            <option v-for="obj in static.rigs" v-bind:value="obj.id"><% obj.name %></option>
+                        <select id="rig1" class="form-control form-control-sm" v-model="calc.rig1_id">
+                            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Rig 2</label>
                     <div class="col-sm-8">
-                        <select id="rig2" class="form-control form-control-sm" v-model="calc.rig_id">
-                            <option v-for="obj in static.rigs" v-bind:value="obj.id"><% obj.name %></option>
+                        <select id="rig2" class="form-control form-control-sm" v-model="calc.rig2_id">
+                            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
                 </div>
@@ -56,8 +56,8 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Rig 3</label>
                     <div class="col-sm-8">
-                        <select id="rig3" class="form-control form-control-sm" v-model="calc.rig_id">
-                            <option v-for="obj in static.rigs" v-bind:value="obj.id"><% obj.name %></option>
+                        <select id="rig3" class="form-control form-control-sm" v-model="calc.rig3_id">
+                            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
                 </div>
