@@ -30,7 +30,12 @@ var calculator = new Vue({
           this.calc.rig3_id = -1;
           this.rigs = gStatic.repr_rigs[ citadelByID(this.calc.citadel_id).rig_size ];
 
+      },
+
+      recalcPercent: function(event){
+          console.log(this.calc);
       }
+
     }
 
 });

@@ -1,3 +1,7 @@
+#### Dev server
+
+    ./run.py
+
 #### MIGRATIONS
     ./manage.py script_sql mysql <script description>
     ./manage.py db_version
@@ -59,13 +63,24 @@ ref. implants
       
 citadel rigs
 
-    SELECT t.id, t.name, ta.value, ta2.value as rig_size
+    SELECT t.id, t.name,             
+           ta.value, 
+           ta2.value as rig_size,           
+           taH.value as rig_H,
+           taL.value as rig_L,
+           taZ.value as rig_Z
       FROM eve_types t,
            eve_groups g,
            eve_type_attributes ta,
            eve_attributes a,
            eve_type_attributes ta2,
-           eve_attributes a2       
+           eve_attributes a2,
+           eve_type_attributes taH,
+           eve_attributes aH,           
+           eve_type_attributes taL,
+           eve_attributes aL,           
+           eve_type_attributes taZ,
+           eve_attributes aZ
       where t.published=1
         and g.id=t.group_id
         and g.category_id = 66
@@ -75,6 +90,46 @@ citadel rigs
         and a.id in (717)
         and ta2.type_id=t.id
         and a2.id=ta2.attribute_id
-        and a2.id in (1547)
+        and a2.id in (1547)        
+        and taH.type_id=t.id
+        and aH.id=taH.attribute_id
+        and aH.id in (2355)        
+        and taL.type_id=t.id
+        and aL.id=taL.attribute_id
+        and aL.id in (2356)        
+        and taZ.type_id=t.id
+        and aZ.id=taZ.attribute_id
+        and aZ.id in (2357)
       order by t.name  
+            
+processing skills
+
+    SELECT t.id, t.name, ta.value, a.id, a.name
+      FROM evecalc_dev.eve_types t,
+           eve_type_attributes ta,
+           eve_attributes a
+      where t.market_group_id=1323
+        and ta.type_id=t.id
+        and a.id=ta.attribute_id
+        and a.id in (379)
+      order by t.name      
          
+skill to ores
+         
+     SELECT t.id, 
+            t.name, 
+            ore.type_id, 
+            tor.name,
+            g.*
+       FROM eve_types t,       
+            eve_market_groups g,
+            eve_type_attributes ore,
+            eve_attributes ao,
+            eve_types tor
+       where t.id in (12180,12181) #processing skill id
+         and ore.value = t.id
+         and ao.id=ore.attribute_id
+         and ore.attribute_id in (790)
+         and tor.id=ore.type_id
+         and g.id = tor.market_group_id
+       order by t.name, tor.name

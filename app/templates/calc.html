@@ -20,7 +20,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Space</label>
                     <div class="col-sm-8">
-                        <select id="space" class="form-control form-control-sm" v-model="calc.space">
+                        <select id="space" class="form-control form-control-sm" v-model="calc.space" v-on:change="recalcPercent">
                             <option v-for="(name,code) in static.spaces" v-bind:value="code"><% name %></option>
                         </select>
                     </div>

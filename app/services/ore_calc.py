@@ -4,6 +4,9 @@ from app import db
 
 class OreCalcService:
 
+    PROCESSING_SKILLS = [3385,3389,12180,12181,12182,12183,12184,12185,12186,12187,12188,12189,12190,12191,12192,12193,12194,12195,12196,18025,46152,46153,46154,46155,46156]
+
+
     def __init__(self, user):
         self.user = user
         if not self.user.ore_calc:
@@ -19,7 +22,11 @@ class OreCalcService:
             db.session.add(temp)
             db.session.commit()
 
-        self.characters = [{'id': -1, 'name': 'All 5'}]
+        self.characters = [{
+            'id': -1,
+            'name': 'All 5',
+        }]
+
 
     def to_json(self):
         return {
