@@ -15,7 +15,19 @@
     <div class="row" v-cloak>
         <div class="col-sm-4">
             <div class="bordered">
-                <h6>Reprocess settings:</h6>
+                <div class="row text-right">
+                    <div class="col-sm-6">
+                        <h6>Reprocessing</h6>
+                    </div>
+                    <div class="col-sm-6">
+                        <table class="table table-sm">
+                            <tr><td>ore 5:</td><td><% kOreHi %></td></tr>
+                            <tr><td>ore 4:</td><td><% kOreLow %></td></tr>
+                            <tr><td>scrap:</td><td><% kScrap %></td></tr>
+                        </table>
+                    </div>
+                </div>
+
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Space</label>
@@ -36,27 +48,9 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="space">Rig 1</label>
+                    <label class="col-sm-4 col-form-label" for="space">Rig</label>
                     <div class="col-sm-8">
-                        <select id="rig1" class="form-control form-control-sm" v-model="calc.rig1_id">
-                            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="space">Rig 2</label>
-                    <div class="col-sm-8">
-                        <select id="rig2" class="form-control form-control-sm" v-model="calc.rig2_id">
-                            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="space">Rig 3</label>
-                    <div class="col-sm-8">
-                        <select id="rig3" class="form-control form-control-sm" v-model="calc.rig3_id">
+                        <select id="rig1" class="form-control form-control-sm" v-model="calc.rig1_id" v-on:change="recalcPercent">
                             <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
@@ -65,7 +59,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Character</label>
                     <div class="col-sm-8">
-                        <select id="character" class="form-control form-control-sm" v-model="calc.character_id">
+                        <select id="character" class="form-control form-control-sm" v-model="calc.character_id" v-on:change="recalcPercent">
                             <option v-for="obj in calc.characters" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>
@@ -74,7 +68,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label" for="space">Implant</label>
                     <div class="col-sm-8">
-                        <select id="implant" class="form-control form-control-sm" v-model="calc.implant_id">
+                        <select id="implant" class="form-control form-control-sm" v-model="calc.implant_id" v-on:change="recalcPercent">
                             <option v-for="obj in static.repr_implants" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>

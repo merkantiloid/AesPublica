@@ -2,13 +2,24 @@ function citadelByID(id){
     return gStatic.citadels.find(function(e){return e.id==id});
 }
 
+function recordById(records, id){
+    return records.find(function(e){return e.id==id});
+}
+
+function r4(n){
+    return Math.round( n * 10000 )/10000;
+}
+
 var calculator = new Vue({
     el: '#calculator',
     delimiters: ["<%","%>"],
     data: {
         calc: {},
         static: gStatic,
-        rigs: []
+        rigs: [],
+        kOreLow: 0,
+        kOreHi: 0,
+        kScrap: 0,
     },
 
     created: function () {
@@ -17,6 +28,7 @@ var calculator = new Vue({
             .then(function (response) {
                 vm.calc = response.data;
                 vm.rigs = gStatic.repr_rigs[ citadelByID(vm.calc.citadel_id).rig_size ];
+                vm.recalcPercent();
             })
             .catch(function (error) {
                 console.log(error);
@@ -24,16 +36,33 @@ var calculator = new Vue({
     },
 
     methods: {
-      changeCitadel: function(event) {
+      changeCitadel: function() {
           this.calc.rig1_id = -1;
-          this.calc.rig2_id = -1;
-          this.calc.rig3_id = -1;
           this.rigs = gStatic.repr_rigs[ citadelByID(this.calc.citadel_id).rig_size ];
-
+          this.recalcPercent(event);
+          this.saveSettings();
       },
 
-      recalcPercent: function(event){
-          console.log(this.calc);
+      changeNotCitadelfunction() {
+          this.recalcPercent(event);
+          this.saveSettings();
+      },
+
+      recalcPercent: function(){
+          var base = gStatic.repr_rigs_hash[this.calc.rig1_id].value,
+              char = recordById(this.calc.characters, this.calc.character_id),
+              space = gStatic.repr_rigs_hash[this.calc.rig1_id][this.calc.space],
+              implant = 1+recordById(gStatic.repr_implants, this.calc.implant_id).value/100,
+              skill1 = char.skills[3385],
+              skill2 = char.skills[3389],
+              skillM = char.skills[12196];
+          this.kOreLow = r4( 100 * base * (1+2*4/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * space * implant);
+          this.kOreHi  = r4( 100 * base * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * space * implant);
+          this.kScrap  = r4( 100 * base * (1+2*skillM/100.0)  * space * implant);
+      },
+
+      saveSettings: function(){
+
       }
 
     }

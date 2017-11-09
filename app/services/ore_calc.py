@@ -2,10 +2,8 @@ from ..models import OreCalc
 from .static import Static
 from app import db
 
+
 class OreCalcService:
-
-    PROCESSING_SKILLS = [3385,3389,12180,12181,12182,12183,12184,12185,12186,12187,12188,12189,12190,12191,12192,12193,12194,12195,12196,18025,46152,46153,46154,46155,46156]
-
 
     def __init__(self, user):
         self.user = user
@@ -16,8 +14,6 @@ class OreCalcService:
                 citadel_id=Static.DEFAULT_CITADEL,
                 implant_id= -1,
                 rig1_id= -1,
-                rig2_id= -1,
-                rig3_id= -1,
             )
             db.session.add(temp)
             db.session.commit()
@@ -25,8 +21,12 @@ class OreCalcService:
         self.characters = [{
             'id': -1,
             'name': 'All 5',
+            'skills': {
+                3385: 5,
+                3389: 5,
+                12196: 5
+            }
         }]
-
 
     def to_json(self):
         return {
@@ -36,6 +36,4 @@ class OreCalcService:
             "character_id": self.user.ore_calc.character_id,
             "implant_id": self.user.ore_calc.implant_id,
             "rig1_id": self.user.ore_calc.rig1_id,
-            "rig2_id": self.user.ore_calc.rig2_id,
-            "rig3_id": self.user.ore_calc.rig3_id,
         }
