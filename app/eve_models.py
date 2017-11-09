@@ -30,6 +30,7 @@ class EveGroup(db.Model):
     published = db.Column(db.Boolean)
     name = db.Column(db.String)
 
+
 class EveCategory(db.Model):
     __tablename__ = 'eve_categories'
     id = db.Column(db.BigInteger, primary_key=True)
@@ -37,11 +38,13 @@ class EveCategory(db.Model):
     published = db.Column(db.Boolean)
     name = db.Column(db.String)
 
+
 class EveTypeAttribute(db.Model):
     __tablename__ = 'eve_type_attributes'
     type_id = db.Column(db.BigInteger, primary_key=True)
     attribute_id = db.Column(db.BigInteger, primary_key=True)
     value = db.Column(db.Float)
+
 
 class EveAttribute(db.Model):
     __tablename__ = 'eve_attributes'

@@ -9,6 +9,7 @@ class User(db.Model):
     lang = db.Column(db.String(255))
 
     ore_calc = db.relationship("OreCalc", uselist=False, back_populates="user")
+    esi_chars = db.relationship("EsiChar", back_populates="user")
 
     @property
     def is_authenticated(self):

@@ -43,7 +43,7 @@ var calculator = new Vue({
           this.saveSettings();
       },
 
-      changeNotCitadelfunction() {
+      changeNotCitadel: function() {
           this.recalcPercent(event);
           this.saveSettings();
       },
@@ -62,7 +62,21 @@ var calculator = new Vue({
       },
 
       saveSettings: function(){
+        var vm = this;
+        axios.post(
+            '/calc/save_settings',
+            {
+                "space":        vm.calc.space,
+                "citadel_id":   vm.calc.citadel_id,
+                "character_id": vm.calc.character_id,
+                "implant_id":   vm.calc.implant_id,
+                "rig1_id":      vm.calc.rig1_id,
+            }
+        ).then(function (response) {
 
+        }).catch(function (error) {
+            console.log(error);
+        });
       }
 
     }

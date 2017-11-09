@@ -9,11 +9,25 @@
             <div class="bordered">
                 <h6>
                     Characters
-                    (<a href="/characters/new">new</a>)
+                    (<a href="{{ url }}">NEW</a>)
                 </h6>
 
-
-
+                <table class="table table-sm">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Scopes</th>
+                        <th>Type</th>
+                    </tr>
+                    {% for char in characters  %}
+                    <tr>
+                        <td>{{char.character_id}}</td>
+                        <td>{{char.character_name}}</td>
+                        <td>{{char.scopes}}</td>
+                        <td>{{char.token_type}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
 
             </div>
         </div>

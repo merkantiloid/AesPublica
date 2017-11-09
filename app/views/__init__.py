@@ -8,7 +8,9 @@ from ..models import User
 
 from .calc import calc
 from .calc import calc_json
+from .calc import save_settings
 from .characters import characters
+
 
 @mainApp.route('/login', methods=['GET'])
 def login_get():

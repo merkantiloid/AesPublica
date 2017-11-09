@@ -1,14 +1,25 @@
-from flask import Flask, g, redirect, request
+from flask import Flask, g, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
+from preston.esi import Preston
+from urllib.parse import quote
+
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
+mainApp.config.from_envvar('ESI_CONFIG')
 db = SQLAlchemy(mainApp)
 
 lm = LoginManager()
 lm.init_app(mainApp)
 
+preston = Preston(
+    client_id=mainApp.config['ESI_CLIENT_ID'],
+    client_secret=mainApp.config['ESI_SECRET'],
+    callback_url=quote(mainApp.config['ESI_CALLBACK_URL'], safe=''),
+    scope='esi-skills.read_skills.v1',
+    user_agent='Probleme',
+)
 
 from .models import User
 

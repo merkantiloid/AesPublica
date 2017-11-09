@@ -1,6 +1,12 @@
 #### Dev server
+    ESI_CONFIG=~/esi.conf ./run.py
+    
 
-    ./run.py
+#### esi.conf
+    ESI_CLIENT_ID='c1l2i3e4n5t6_7i8d'
+    ESI_SECRET='1s2e3c4r5e6t7'
+    ESI_CALLBACK_URL='http://localhost:5000/probleme_callback'
+    
 
 #### MIGRATIONS
     ./manage.py script_sql mysql <script description>

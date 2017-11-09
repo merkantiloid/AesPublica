@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, ValidationError
-from .models import User
+from .models import User, OreCalc
+from app import db
 import bcrypt
 
 
@@ -23,3 +24,22 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
+
+
+class SettingsForm(FlaskForm):
+    space = StringField('space', validators=[DataRequired()])
+    citadel_id = IntegerField('citadel_id', validators=[DataRequired()])
+    character_id = IntegerField('character_id', validators=[DataRequired()])
+    implant_id = IntegerField('implant_id', validators=[DataRequired()])
+    rig1_id = IntegerField('rig1_id', validators=[DataRequired()])
+
+    def save(self, user):
+        model = OreCalc.query.filter(OreCalc.user_id == user.id).first()
+        if model:
+            model.space = self.space.data
+            model.citadel_id = self.citadel_id.data
+            model.character_id = self.character_id.data
+            model.implant_id = self.implant_id.data
+            model.rig1_id = self.rig1_id.data
+            db.session.add(model)
+            db.session.commit()
