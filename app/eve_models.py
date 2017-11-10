@@ -59,3 +59,10 @@ class EveAttribute(db.Model):
     published = db.Column(db.Boolean)
     stackable = db.Column(db.Boolean)
     high_is_good = db.Column(db.Boolean)
+
+
+class EveBlueprint(db.Model):
+    __tablename__ = 'eve_blueprints'
+    id = db.Column(db.BigInteger, primary_key=True)
+    props = db.Column(db.JSON)
+

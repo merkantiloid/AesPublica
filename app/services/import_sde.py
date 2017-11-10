@@ -1,7 +1,7 @@
 import yaml
 
 from app import db
-from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute
+from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute, EveBlueprint
 from sqlalchemy.sql import text
 
 def parse_categories(file):
@@ -147,5 +147,18 @@ def parse_type_attrs(file):
         else:
             item.value = None
 
+        db.session.add(item)
+        db.session.commit()
+
+
+def parse_blueprints_attrs(file):
+    print(".... loading attribute values for blueprints")
+    data = yaml.load(file, Loader=yaml.CLoader)
+    for key in data:
+        print(key)
+        item = EveBlueprint.query.filter(EveBlueprint.id == key).first()
+        if not item:
+            item = EveBlueprint(id=key)
+        item.props = data[key]
         db.session.add(item)
         db.session.commit()
