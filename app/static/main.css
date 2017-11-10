@@ -41,3 +41,7 @@ h6{
 .col-form-label.small{
     font-size: 12px;
 }
+
+.badge-info{
+    background-color: #67d2e8;
+}

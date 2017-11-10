@@ -9,7 +9,7 @@
             <div class="bordered">
                 <h6>
                     Characters
-                    (<a href="{{ url }}">NEW</a>)
+                    (<a href="{{ url }}">new</a>)
                 </h6>
 
                 <table class="table table-sm">
@@ -18,6 +18,8 @@
                         <th>Name</th>
                         <th>Scopes</th>
                         <th>Type</th>
+                        <th>Expires On</th>
+                        <th></th>
                     </tr>
                     {% for char in characters  %}
                     <tr>
@@ -25,6 +27,17 @@
                         <td>{{char.character_name}}</td>
                         <td>{{char.scopes}}</td>
                         <td>{{char.token_type}}</td>
+                        <td>{{ char.access_expiration | fldate }}</td>
+                        <td>
+                            <a href="/characters/{{char.character_id}}/update_skills" class="btn btn-primary">Update Skills</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            {% for skill in char.skills  %}
+                            <span class="badge badge-info">{{skill.type.name}}</span>
+                            {% endfor %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>

@@ -15,9 +15,17 @@
     ./manage.py test
     ./manage.py downgrade <version>
 
+
 #### SDE Import
     python3 ./sde.py ~/Downloads/sde-20170818-TRANQUILITY.zip
         
+
+#### Preston fix
+
+    if time.time() > self.access_expiration:
+        self._get_new_access_token()
+        + self.session.headers.update({'Authorization': 'Bearer {}'.format(self.access_token)})
+
 #### TIPS
 
 citadels

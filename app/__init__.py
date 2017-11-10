@@ -3,11 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from preston.esi import Preston
 from urllib.parse import quote
-
+from .filters import fldate
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
 mainApp.config.from_envvar('ESI_CONFIG')
+
+mainApp.jinja_env.filters['fldate'] = fldate
+
 db = SQLAlchemy(mainApp)
 
 lm = LoginManager()
