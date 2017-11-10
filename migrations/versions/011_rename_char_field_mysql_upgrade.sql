@@ -1,0 +1,1 @@
+alter table ore_calcs change column character_id esi_char_id bigint not null;

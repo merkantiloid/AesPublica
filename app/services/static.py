@@ -21,3 +21,5 @@ class Static:
             "repr_rigs": Static.REPR_RIGS,
             "repr_rigs_hash": Static.REPR_RIGS_HASH,
         }
+
+

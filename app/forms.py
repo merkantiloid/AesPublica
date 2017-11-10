@@ -29,7 +29,7 @@ class RegisterForm(FlaskForm):
 class SettingsForm(FlaskForm):
     space = StringField('space', validators=[DataRequired()])
     citadel_id = IntegerField('citadel_id', validators=[DataRequired()])
-    character_id = IntegerField('character_id', validators=[DataRequired()])
+    esi_char_id = IntegerField('esi_char_id', validators=[DataRequired()])
     implant_id = IntegerField('implant_id', validators=[DataRequired()])
     rig1_id = IntegerField('rig1_id', validators=[DataRequired()])
 
@@ -38,7 +38,7 @@ class SettingsForm(FlaskForm):
         if model:
             model.space = self.space.data
             model.citadel_id = self.citadel_id.data
-            model.character_id = self.character_id.data
+            model.esi_char_id = self.esi_char_id.data
             model.implant_id = self.implant_id.data
             model.rig1_id = self.rig1_id.data
             db.session.add(model)

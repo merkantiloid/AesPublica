@@ -37,7 +37,7 @@ class OreCalc(db.Model):
     user = db.relationship("User", back_populates="ore_calc")
     space = db.Column(db.String)
     citadel_id = db.Column(db.BigInteger)
-    character_id = db.Column(db.BigInteger)
+    esi_char_id = db.Column(db.BigInteger)
     implant_id = db.Column(db.BigInteger)
     rig1_id = db.Column(db.BigInteger)
     rig2_id = db.Column(db.BigInteger)

@@ -61,7 +61,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label small" for="space">Character</label>
                     <div class="col-sm-10">
-                        <select id="character" class="form-control form-control-sm" v-model="calc.character_id" v-on:change="changeNotCitadel">
+                        <select id="character" class="form-control form-control-sm" v-model="calc.esi_char_id" v-on:change="changeNotCitadel">
                             <option v-for="obj in calc.characters" v-bind:value="obj.id"><% obj.name %></option>
                         </select>
                     </div>

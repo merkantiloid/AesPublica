@@ -1,6 +1,7 @@
 from ..models import OreCalc
 from .static import Static
 from app import db
+from .loaders import load_chars
 
 
 class OreCalcService:
@@ -18,22 +19,14 @@ class OreCalcService:
             db.session.add(temp)
             db.session.commit()
 
-        self.characters = [{
-            'id': -1,
-            'name': 'All 5',
-            'skills': {
-                3385: 5,
-                3389: 5,
-                12196: 5
-            }
-        }]
+        self.characters = [{'id': -1,'name': 'All 5','skills': {3385: 5, 3389: 5, 12196: 5}}] + load_chars(user.id)
 
     def to_json(self):
         return {
             "space": self.user.ore_calc.space,
             "citadel_id": self.user.ore_calc.citadel_id,
             "characters": self.characters,
-            "character_id": self.user.ore_calc.character_id,
+            "esi_char_id": self.user.ore_calc.esi_char_id,
             "implant_id": self.user.ore_calc.implant_id,
             "rig1_id": self.user.ore_calc.rig1_id,
         }

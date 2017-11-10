@@ -29,6 +29,7 @@ def update_skills(cid):
             db.session.commit()
             ids.append(model.skill_id)
         db.session.execute('delete from esi_skills where esi_char_id = :id and skill_id not in :ids',  params={'id': char.id, 'ids': ids} )
+        db.session.commit()
 
     return redirect('/characters')
 

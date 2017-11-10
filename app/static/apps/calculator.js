@@ -50,7 +50,7 @@ var calculator = new Vue({
 
       recalcPercent: function(){
           var base = gStatic.repr_rigs_hash[this.calc.rig1_id].value,
-              char = recordById(this.calc.characters, this.calc.character_id),
+              char = recordById(this.calc.characters, this.calc.esi_char_id),
               space = gStatic.repr_rigs_hash[this.calc.rig1_id][this.calc.space],
               implant = 1+recordById(gStatic.repr_implants, this.calc.implant_id).value/100,
               skill1 = char.skills[3385],
@@ -68,7 +68,7 @@ var calculator = new Vue({
             {
                 "space":        vm.calc.space,
                 "citadel_id":   vm.calc.citadel_id,
-                "character_id": vm.calc.character_id,
+                "esi_char_id":  vm.calc.esi_char_id,
                 "implant_id":   vm.calc.implant_id,
                 "rig1_id":      vm.calc.rig1_id,
             }
