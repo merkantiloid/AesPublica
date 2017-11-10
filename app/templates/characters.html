@@ -35,7 +35,7 @@
                     <tr>
                         <td colspan="6">
                             {% for skill in char.skills  %}
-                            <span class="badge badge-warning">{{skill.type.name}}</span>
+                            <span class="badge badge-warning">{{skill.type.name}} {{skill.current_skill_level}}</span>
                             {% endfor %}
                         </td>
                     </tr>
