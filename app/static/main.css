@@ -42,6 +42,8 @@ h6{
     font-size: 12px;
 }
 
-.badge-info{
-    background-color: #67d2e8;
+.badge-warning{
+    font-weight: normal;
+    font-size: 11px;
+    background-color: #fff1c7;
 }
