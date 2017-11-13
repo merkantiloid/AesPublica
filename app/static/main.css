@@ -4,6 +4,7 @@ body{
     background-repeat: no-repeat;
     background-color: #FFFFFF;
     background-size: 80px 80px;
+    font-size: 12px;
 }
 
 .bordered{
@@ -48,7 +49,19 @@ h6{
     background-color: #fff1c7;
 }
 
+.w2c{
+    width: 10%;
+}
+.w25p{
+    width: 25%;
+}
+
 .icon {
   color: #007bff;
   font-weight: bold;
+  font-size: 20px;
+}
+
+.ion-ios-checkmark{
+  cursor: pointer;
 }

@@ -20,6 +20,36 @@
                     <i class="icon ion-ios-circle-outline"></i>
                     <i class="icon ion-ios-checkmark"></i>
                 </h6>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                      <textarea class="form-control"></textarea>
+                    </div>
+                    <div class="col-sm-8">
+                        <table class="table table-sm">
+                            <tr>
+                                <th></th>
+                                <th>Type</th>
+                                <th class="w2c">ME</th>
+                                <th class="w2c">TE</th>
+                                <th class="w25p">Qty</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <i class="icon ion-ios-circle-outline"></i>
+                                    <i class="icon ion-plus-circled"></i>
+                                </th>
+                                <th>
+                                    <input type="hidden" v-model="newItem.bpId"/>
+                                    <input class="form-control form-control-sm" type="text" v-model="newItem.bpName"/>
+                                </th>
+                                <th><input class="form-control form-control-sm" type="number" step="1" min="0" max="10" v-model="newItem.me"/></th>
+                                <th><input class="form-control form-control-sm" type="number" step="2" min="0" max="20" v-model="newItem.te"/></th>
+                                <th><input class="form-control form-control-sm" type="number" v-model="newItem.qty"/></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-sm-4">

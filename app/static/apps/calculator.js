@@ -20,6 +20,13 @@ var calculator = new Vue({
         kOreLow: 0,
         kOreHi: 0,
         kScrap: 0,
+        newItem: {
+            bpId: null,
+            bpName: null,
+            me: 10,
+            te: 20,
+            qty: 1,
+        }
     },
 
     created: function () {

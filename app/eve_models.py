@@ -1,5 +1,5 @@
 from app import db
-
+from sqlalchemy import ForeignKey
 
 class EveType(db.Model):
     __tablename__ = 'eve_types'
@@ -64,5 +64,7 @@ class EveAttribute(db.Model):
 class EveBlueprint(db.Model):
     __tablename__ = 'eve_blueprints'
     id = db.Column(db.BigInteger, primary_key=True)
+    blueprint_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    blueprint = db.relationship("EveType")
     props = db.Column(db.JSON)
 

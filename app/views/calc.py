@@ -26,3 +26,10 @@ def save_settings():
     form.save(g.user)
     s = OreCalcService(g.user)
     return jsonify(s.to_json())
+
+
+@mainApp.route('/calc/search_blueprint')
+@login_required
+def search_blueprint():
+    s = SearchService("blueprint")
+    return jsonify(s.to_json())
