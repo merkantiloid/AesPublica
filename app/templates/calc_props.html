@@ -1,0 +1,60 @@
+<div class="row text-right">
+    <div class="col-sm-12">
+        <table class="table table-sm">
+            <tr>
+                <td class="gray text-right">ore 5:</td>
+                <td class="text-left"><% kOreHi %><span class="gray">%</span></td>
+                <td class="gray text-right">ore 4:</td>
+                <td class="text-left"><% kOreLow %><span class="gray">%</span></td>
+                <td class="gray text-right">scrap:</td>
+                <td class="text-left"><% kScrap %><span class="gray">%</span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label small" for="space">Space</label>
+    <div class="col-sm-10">
+        <select id="space" class="form-control form-control-sm" v-model="calc.space" v-on:change="changeNotCitadel">
+            <option v-for="(name,code) in static.spaces" v-bind:value="code"><% name %></option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label small" for="space">Citadel</label>
+    <div class="col-sm-10">
+        <select id="citadel" class="form-control form-control-sm" v-model="calc.citadel_id" v-on:change="changeCitadel">
+            <option v-for="obj in static.citadels" v-bind:value="obj.id"><% obj.name %></option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label small" for="space">Rig</label>
+    <div class="col-sm-10">
+        <select id="rig1" class="form-control form-control-sm" v-model="calc.rig1_id" v-on:change="changeNotCitadel">
+            <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %></option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label small" for="space">Character</label>
+    <div class="col-sm-10">
+        <select id="character" class="form-control form-control-sm" v-model="calc.esi_char_id" v-on:change="changeNotCitadel">
+            <option v-for="obj in calc.characters" v-bind:value="obj.id"><% obj.name %></option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label small" for="space">Implant</label>
+    <div class="col-sm-10">
+        <select id="implant" class="form-control form-control-sm" v-model="calc.implant_id" v-on:change="changeNotCitadel">
+            <option v-for="obj in static.repr_implants" v-bind:value="obj.id"><% obj.name %></option>
+        </select>
+    </div>
+</div>

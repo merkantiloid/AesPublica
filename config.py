@@ -7,4 +7,4 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO=False
 
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'replace with env variable'
+SECRET_KEY = os.getenv('SECRET_KEY', 'replace with env variable')

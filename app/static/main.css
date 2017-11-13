@@ -47,3 +47,8 @@ h6{
     font-size: 11px;
     background-color: #fff1c7;
 }
+
+.icon {
+  color: #007bff;
+  font-weight: bold;
+}

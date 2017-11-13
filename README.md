@@ -1,5 +1,6 @@
 #### Dev server
-    ESI_CONFIG=~/esi.conf ./run.py
+    source ./probleme/bin/activate
+    ESI_CONFIG=~/esi.conf SECRET_KEY=test ./run.py    
     
 
 #### esi.conf

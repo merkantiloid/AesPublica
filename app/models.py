@@ -1,4 +1,6 @@
 from app import db
+from app.eve_models import EveType
+from sqlalchemy import ForeignKey
 
 
 class User(db.Model):
@@ -42,3 +44,15 @@ class OreCalc(db.Model):
     rig1_id = db.Column(db.BigInteger)
     rig2_id = db.Column(db.BigInteger)
     rig3_id = db.Column(db.BigInteger)
+    build_items = db.Column(db.Text)
+
+
+class BuildItem(db.Model):
+    __tablename__ = 'build_items'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    blueprint_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    runs = db.Column(db.BigInteger, nullable=False)
+    me = db.Column(db.Integer, nullable=False)
+    te = db.Column(db.Integer, nullable=False)
+
+    blueprint = db.relationship("EveType")
