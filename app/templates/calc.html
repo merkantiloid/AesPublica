@@ -2,6 +2,7 @@
 
 {% block scripts%}
 <script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/auto-complete.min.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>
 {% endblock %}
 
@@ -36,13 +37,10 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <i class="icon ion-ios-circle-outline"></i>
-                                    <i class="icon ion-plus-circled"></i>
+                                    <i v-show="!newItem.typeId"  class="icon ion-ios-circle-outline"></i>
+                                    <i v-show="!!newItem.typeId" v-on:click="AddBuildItem" class="icon ion-plus-circled"></i>
                                 </th>
-                                <th>
-                                    <input type="hidden" v-model="newItem.bpId"/>
-                                    <input class="form-control form-control-sm" type="text" v-model="newItem.bpName"/>
-                                </th>
+                                <th><type-select v-on:type-selected="TypeSelected($event)"></type-select></th>
                                 <th><input class="form-control form-control-sm" type="number" step="1" min="0" max="10" v-model="newItem.me"/></th>
                                 <th><input class="form-control form-control-sm" type="number" step="2" min="0" max="20" v-model="newItem.te"/></th>
                                 <th><input class="form-control form-control-sm" type="number" v-model="newItem.qty"/></th>
@@ -91,5 +89,6 @@
 
 </div>
 
+<script src="{{ url_for('static', filename='apps/components/type-select.js') }}"></script>
 <script src="{{ url_for('static', filename='apps/calculator.js') }}"></script>
 {% endblock %}

@@ -38,7 +38,7 @@ class SearchService:
 
         for record in records:
             self.result.append({
-                'type_id': record[0],
+                'id': record[0],
                 'name': record[1]
             })
 

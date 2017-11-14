@@ -10,6 +10,7 @@ from .calc import calc
 from .calc import calc_json
 from .calc import save_settings
 from .characters import characters
+from .search import search_type
 
 
 @mainApp.route('/login', methods=['GET'])

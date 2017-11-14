@@ -21,8 +21,7 @@ var calculator = new Vue({
         kOreHi: 0,
         kScrap: 0,
         newItem: {
-            bpId: null,
-            bpName: null,
+            typeId: null,
             me: 10,
             te: 20,
             qty: 1,
@@ -84,7 +83,16 @@ var calculator = new Vue({
         }).catch(function (error) {
             console.log(error);
         });
-      }
+      },
+
+      TypeSelected: function(typeId){
+          this.newItem.typeId = typeId;
+          console.log(typeId);
+      },
+
+      AddBuildItem: function(typeId){
+          this.newItem.typeId = null;
+      },
 
     }
 

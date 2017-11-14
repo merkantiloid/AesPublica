@@ -1,7 +1,7 @@
 from app import mainApp
 from flask import render_template, jsonify, g
 from flask_login import login_required
-from app.services import OreCalcService, Static, SearchService
+from app.services import OreCalcService, Static
 from app.forms import SettingsForm
 
 
@@ -25,12 +25,4 @@ def save_settings():
     form = SettingsForm()
     form.save(g.user)
     s = OreCalcService(g.user)
-    return jsonify(s.to_json())
-
-
-@mainApp.route('/calc/search_blueprint')
-@login_required
-def search_blueprint():
-    s = SearchService("type")
-    s.search("rhea")
     return jsonify(s.to_json())
