@@ -159,7 +159,6 @@ def parse_blueprints_attrs(file):
         item = EveBlueprint.query.filter(EveBlueprint.id == key).first()
         if not item:
             item = EveBlueprint(id=key)
-        item.blueprint_id = item.props['blueprintTypeID']
         item.props = data[key]
         db.session.add(item)
         db.session.commit()

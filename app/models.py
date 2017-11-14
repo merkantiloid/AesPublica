@@ -55,8 +55,8 @@ class BuildItem(db.Model):
     me = db.Column(db.Integer, nullable=False)
     te = db.Column(db.Integer, nullable=False)
 
-    blueprint_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
-    blueprint = db.relationship("EveType")
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType")
 
     ore_calc_id = db.Column(db.BigInteger, ForeignKey('ore_calcs.id'), nullable=False)
     ore_calc = db.relationship("OreCalc")
