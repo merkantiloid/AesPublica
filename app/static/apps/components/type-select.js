@@ -1,5 +1,5 @@
 Vue.component('type-select', {
-    template: '<input ref="selector" class="form-control form-control-sm" type="text"/>',
+    template: '<input ref="selector" class="type-selector form-control form-control-sm" type="text"/>',
 
     props: ['label','initial','mode'],
 
@@ -28,7 +28,13 @@ Vue.component('type-select', {
                 return '<div class="autocomplete-suggestion" data-id="'+item.id+'" data-val="'+item.name+'">'+item.name.replace(re, "<b>$1</b>")+'</div>';
             },
             onSelect: function(e, term, item){
-                vm.$emit('type-selected', parseInt(item.getAttribute('data-id'))  );
+                vm.$emit(
+                    'type-selected',
+                    {
+                        id: parseInt(item.getAttribute('data-id')),
+                        name: item.getAttribute('data-val')
+                    }
+                );
             }
         });
 

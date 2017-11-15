@@ -75,3 +75,13 @@ h6{
 .autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
 .autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
 .autocomplete-suggestion.selected { background: #f0f0f0; }
+
+textarea.form-control {
+  white-space: pre;
+  overflow-wrap: normal;
+  font-size: 12px;
+}
+
+table.table-sm{
+    margin-bottom: 0;
+}

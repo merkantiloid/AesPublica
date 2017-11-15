@@ -2,6 +2,7 @@ from ..models import OreCalc
 from .static import Static
 from app import db
 from .loaders import load_chars
+from .parsing import parse_name_qty
 
 
 class OreCalcService:
@@ -22,11 +23,19 @@ class OreCalcService:
         self.characters = [{'id': -1,'name': 'All 5','skills': {3385: 5, 3389: 5, 12196: 5}}] + load_chars(user.id)
 
     def to_json(self):
+        model = self.user.ore_calc
         return {
-            "space": self.user.ore_calc.space,
-            "citadel_id": self.user.ore_calc.citadel_id,
-            "characters": self.characters,
-            "esi_char_id": self.user.ore_calc.esi_char_id,
-            "implant_id": self.user.ore_calc.implant_id,
-            "rig1_id": self.user.ore_calc.rig1_id,
+            "settings": {
+                "space": model.space,
+                "citadel_id": model.citadel_id,
+                "characters": self.characters,
+                "esi_char_id": model.esi_char_id,
+                "implant_id": model.implant_id,
+                "rig1_id": model.rig1_id,
+            },
+            "build_items_text": model.build_items_text,
         }
+
+
+    def add_build_item(self, text):
+        print(parse_name_qty(text))

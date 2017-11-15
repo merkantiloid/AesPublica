@@ -34,7 +34,7 @@ class SettingsForm(FlaskForm):
     rig1_id = IntegerField('rig1_id', validators=[DataRequired()])
 
     def save(self, user):
-        model = OreCalc.query.filter(OreCalc.user_id == user.id).first()
+        model = user.ore_calc
         if model:
             model.space = self.space.data
             model.citadel_id = self.citadel_id.data
@@ -43,3 +43,10 @@ class SettingsForm(FlaskForm):
             model.rig1_id = self.rig1_id.data
             db.session.add(model)
             db.session.commit()
+
+
+class BuildItemForm(FlaskForm):
+    type_id = IntegerField('type_id', validators=[DataRequired()])
+    me = IntegerField('me', validators=[DataRequired()])
+    te = IntegerField('te', validators=[DataRequired()])
+    qty = IntegerField('qty', validators=[DataRequired()])

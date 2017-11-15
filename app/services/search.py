@@ -28,7 +28,6 @@ class SearchService:
     )
 
     def search(self, term):
-        print(self.type, 'blueprint')
         self.result = []
         records = []
         if self.type == 'blueprint':
