@@ -11,12 +11,19 @@ for type in types:
 
 def parse_name_qty(text):
     lines = text.splitlines()
-    result = []
+
+    temp={}
+
     for line in lines:
         success, type_id, qty, me, te = name_qty_line(line)
         if success:
-            result.append({'id': type_id, 'qty': qty, 'me': me, 'te': te})
-    return result
+            key = "%d-%d-%d" % (type_id,me,te)
+            if key in temp:
+                temp[key]['qty'] += qty
+            else:
+                temp[key] = {'type_id': type_id, 'qty': qty, 'me': me, 'te': te}
+
+    return temp.values()
 
 
 def name_qty_line(line):
@@ -50,7 +57,6 @@ def name_qty_line(line):
                 qty_is_found = True
                 result_qty = int( ''.join([x.lower() for x in parts[ifrom:index+1]]) )
             index += 1
-
 
     if index <= last and type_is_found:
         for part in parts[index:]:

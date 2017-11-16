@@ -115,6 +115,7 @@ var calculator = new Vue({
                 '/calc/build_items_text',
                 {text: vm.calc.build_items_text}
             ).then(function (response) {
+                vm.calc.build_items = response.data.build_items;
                 vm.buildItemsTextChanged = false;
             }).catch(function (error) {
                 console.log(error);
@@ -123,6 +124,10 @@ var calculator = new Vue({
 
         TextChanged: function(){
             this.buildItemsTextChanged = true;
+        },
+
+        IURL: function(type_id){
+            return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
         }
 
     }

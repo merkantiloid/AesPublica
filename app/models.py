@@ -60,3 +60,14 @@ class BuildItem(db.Model):
 
     ore_calc_id = db.Column(db.BigInteger, ForeignKey('ore_calcs.id'), nullable=False)
     ore_calc = db.relationship("OreCalc")
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'type_id': self.type_id,
+            'type_name': self.type.name,
+            'me': self.me,
+            'te': self.te,
+            'runs': self.runs,
+            'qty': self.runs * self.type.portion_size
+        }

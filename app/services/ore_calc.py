@@ -1,9 +1,10 @@
-from ..models import OreCalc
+from app.models import OreCalc, BuildItem
+from app.eve_models import EveType
 from .static import Static
 from app import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
-
+from math import ceil
 
 class OreCalcService:
 
@@ -34,8 +35,28 @@ class OreCalcService:
                 "rig1_id": model.rig1_id,
             },
             "build_items_text": model.build_items_text,
+            "build_items": [x.to_json() for x in model.build_items],
         }
 
 
     def add_build_item(self, text):
-        print(parse_name_qty(text))
+        items = parse_name_qty(text)
+        ids = []
+        ore_calc = self.user.ore_calc
+        for item in items:
+            ids.append( item['type_id'] )
+            type = EveType.query.get(item['type_id'])
+            model = BuildItem.query.filter(BuildItem.ore_calc_id == ore_calc.id, BuildItem.type_id == item['type_id']).first()
+            if not model:
+                model = BuildItem(ore_calc_id = ore_calc.id, type_id = item['type_id'])
+            model.runs = ceil(item['qty']/type.portion_size)
+            model.me = item['me']
+            model.te = item['te']
+            db.session.add(model)
+
+        db.session.execute('delete from build_items where ore_calc_id = :id and type_id not in :ids',  params={'id': ore_calc.id, 'ids': ids} )
+
+        ore_calc.build_items_text = text
+        db.session.add(ore_calc)
+
+        db.session.commit()
