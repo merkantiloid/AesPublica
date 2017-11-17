@@ -1,4 +1,31 @@
 from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash
+from app.eve_models import EveType, EveBlueprint
+from app.esi_models import EsiChar
+
+
+BlueprintById = {}
+BlueprintByProductId = {}
+MaterialsByProductId = {}
+bps = EveBlueprint.query.all()
+for bp in bps:
+    BlueprintById[bp.id] = bp
+    BlueprintByProductId[bp.product_id] = bp
+    if 'manufacturing' in bp.props['activities'] and 'materials' in bp.props['activities']['manufacturing']:
+        array = bp.props['activities']['manufacturing']['materials']
+        hash = {}
+        for el in array:
+            hash[el['typeID']] = el['quantity']
+        MaterialsByProductId[bp.product_id] = hash
+
+
+TypeHashes = {}
+TypeById = {}
+
+types = EveType.query.all()
+for type in types:
+    TypeHashes[type.name.lower()] = type.id
+    TypeById[type.id] = type
+
 
 class Static:
     SPACES = {'h':'Hi-Sec', 'l':'Low-Sec', 'z':'Zero/WH'}

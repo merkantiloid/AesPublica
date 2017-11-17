@@ -77,16 +77,18 @@ h6{
 .autocomplete-suggestion.selected { background: #f0f0f0; }
 
 textarea.form-control {
-  white-space: pre;
-  overflow-wrap: normal;
-  font-size: 12px;
+    white-space: pre;
+    overflow-wrap: normal;
+    font-size: 12px;
+    height: calc(100% - 36px);
+    min-height: 100px;
 }
 
 table.table-sm{
     margin-bottom: 0;
 }
 
-table.table-sm th{
+table.table-sm th, table.table-sm td{
     margin-bottom: 0;
     padding: 0;
 }
@@ -97,4 +99,8 @@ th.sm{
 
 th.md{
     width: 140px;
+}
+
+span.light-gray{
+    color: #dddddd;
 }

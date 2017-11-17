@@ -18,6 +18,7 @@ var calculator = new Vue({
             settings: {},
             build_items_text: '',
             build_items: [],
+            minerals: [],
         },
         static: gStatic,
         rigs: [],
@@ -116,6 +117,7 @@ var calculator = new Vue({
                 {text: vm.calc.build_items_text}
             ).then(function (response) {
                 vm.calc.build_items = response.data.build_items;
+                vm.calc.minerals = response.data.minerals;
                 vm.buildItemsTextChanged = false;
             }).catch(function (error) {
                 console.log(error);

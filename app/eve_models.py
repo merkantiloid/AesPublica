@@ -11,6 +11,13 @@ class EveType(db.Model):
     portion_size = db.Column(db.BigInteger)
     published = db.Column(db.Boolean)
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'portion_size': self.portion_size,
+        }
+
 
 class EveMarketGroup(db.Model):
     __tablename__ = 'eve_market_groups'
@@ -64,7 +71,8 @@ class EveAttribute(db.Model):
 class EveBlueprint(db.Model):
     __tablename__ = 'eve_blueprints'
     id = db.Column(db.BigInteger, primary_key=True)
-    blueprint_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
-    blueprint = db.relationship("EveType")
+
+    product_id = db.Column(db.BigInteger)
+
     props = db.Column(db.JSON)
 

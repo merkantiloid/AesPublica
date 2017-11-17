@@ -1,0 +1,1 @@
+alter table eve_blueprints add column product_id bigint;

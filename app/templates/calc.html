@@ -23,7 +23,15 @@
 
         <div class="col-sm-6">
             <div class="bordered">
-                Minerals
+                <h6 class="text-left">Minerals</h6>
+                <table class="table table-sm">
+                    <tr v-for="mineral in calc.minerals">
+                        <td><img width="24" height="24" v-bind:src="IURL(mineral.type_id)"/></td>
+                        <td><% mineral.type_name %></td>
+                        <td class="text-right"><% mineral.qty|fi %></td>
+                    </tr>
+                </table>
+
             </div>
         </div>
 
@@ -65,5 +73,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='apps/components/type-select.js') }}"></script>
+<script src="{{ url_for('static', filename='apps/filters.js') }}"></script>
 <script src="{{ url_for('static', filename='apps/calculator.js') }}"></script>
 {% endblock %}

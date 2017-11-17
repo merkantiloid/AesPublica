@@ -16,7 +16,7 @@ def parse_categories(file):
         item.published = data[key]['published']
         item.name = data[key]['name']['en']
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()
 
 def parse_groups(file):
     print(".... loadinggroups")
@@ -31,7 +31,7 @@ def parse_groups(file):
         item.published = data[key]['published']
         item.name = data[key]['name']['en']
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()
 
 
 def parse_market_groups(file):
@@ -49,7 +49,7 @@ def parse_market_groups(file):
         item.icon_id = record.get('iconID',None)
         item.parent_id = record.get('parentGroupID',None)
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()
 
 
 def parse_type_ids(file):
@@ -67,39 +67,7 @@ def parse_type_ids(file):
         item.portion_size = data[key]['portionSize']
         item.published = data[key]['published']
         db.session.add(item)
-        db.session.commit()
-
-def parse_numbers(fileValues, fileAttrs):
-    print(".... loading numbers")
-    sql = text("SELECT t.id, t.name"
-        "           from eve_types t,"
-        "                eve_groups g"
-        "           where g.category_id=65"
-        "             and g.published=1"
-        "             and t.group_id = g.id"
-        "             and t.published=1"
-    )
-    citadel_ids = db.session.execute(sql).fetchall()
-    citadels = {}
-    for record in citadel_ids:
-        citadels[record[0]] = record[1]
-
-    attrsRaw = yaml.load(fileAttrs, Loader=yaml.CLoader)
-    attrs = {}
-    for record in attrsRaw:
-        attrs[record['attributeID']] = {
-            'name': record['attributeName'],
-            'description': record['description'],
-        }
-
-    data = yaml.load(fileValues, Loader=yaml.CLoader)
-    for record in data:
-        id = record['typeID']
-        if id in citadels and record['attributeID'] in [2600,2601,2602]:
-            print(citadels[id], attrs[record['attributeID']]['name'], record)
-    # Sotiyo strEngMatBonus {'attributeID': 2600, 'typeID': 35827, 'valueFloat': 0.99}
-    # Sotiyo strEngCostBonus {'attributeID': 2601, 'typeID': 35827, 'valueFloat': 0.95}
-    # Sotiyo strEngTimeBonus {'attributeID': 2602, 'typeID': 35827, 'valueFloat': 0.7}
+    db.session.commit()
 
 
 def parse_attrs(file):
@@ -124,7 +92,7 @@ def parse_attrs(file):
         item.high_is_good = record['highIsGood']
 
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()
 
 
 def parse_type_attrs(file):
@@ -148,11 +116,11 @@ def parse_type_attrs(file):
             item.value = None
 
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()
 
 
 def parse_blueprints_attrs(file):
-    print(".... loading attribute values for blueprints")
+    print(".... loading blueprints")
     data = yaml.load(file, Loader=yaml.CLoader)
     for key in data:
         print(key)
@@ -160,5 +128,7 @@ def parse_blueprints_attrs(file):
         if not item:
             item = EveBlueprint(id=key)
         item.props = data[key]
+        if "manufacturing" in data[key]["activities"] and "products" in data[key]["activities"]["manufacturing"]:
+            item.product_id = data[key]["activities"]["manufacturing"]["products"][0]["typeID"]
         db.session.add(item)
-        db.session.commit()
+    db.session.commit()

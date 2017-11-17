@@ -18,7 +18,7 @@
 
 
 #### SDE Import
-    ESI_CONFIG=~/esi.conf python3 ./sde.py ~/Downloads/sde-20170818-TRANQUILITY.zip
+    ESI_CONFIG=~/esi.conf python3 ./sde.py ~/Downloads/sde-20171024-TRANQUILITY.zip
         
 
 #### Preston fix

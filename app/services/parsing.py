@@ -1,13 +1,5 @@
 import re
-from app.eve_models import EveType
-from app.esi_models import EsiChar
-
-
-TypeHashes = {}
-types = EveType.query.all()
-for type in types:
-    TypeHashes[type.name.lower()] = type.id
-
+from .static import TypeHashes
 
 def parse_name_qty(text):
     lines = text.splitlines()
@@ -27,7 +19,7 @@ def parse_name_qty(text):
 
 
 def name_qty_line(line):
-    raw_parts = re.split("\s|\.|,",line)
+    raw_parts = re.split("\s|,",line)
     parts = []
     for part in raw_parts:
         if part != '':

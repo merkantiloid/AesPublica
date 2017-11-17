@@ -1,6 +1,7 @@
 from app import db
 from app.eve_models import EveType
 from sqlalchemy import ForeignKey
+from math import ceil
 
 
 class User(db.Model):
@@ -51,7 +52,7 @@ class OreCalc(db.Model):
 class BuildItem(db.Model):
     __tablename__ = 'build_items'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    runs = db.Column(db.BigInteger, nullable=False)
+    qty = db.Column(db.BigInteger, nullable=False)
     me = db.Column(db.Integer, nullable=False)
     te = db.Column(db.Integer, nullable=False)
 
@@ -64,10 +65,10 @@ class BuildItem(db.Model):
     def to_json(self):
         return {
             'id': self.id,
-            'type_id': self.type_id,
-            'type_name': self.type.name,
+            'type': self.type.to_json(),
             'me': self.me,
             'te': self.te,
-            'runs': self.runs,
-            'qty': self.runs * self.type.portion_size
+            'runs': ceil(self.qty/self.type.portion_size),
+            'qty': self.qty,
+            'excess': ceil(self.qty/self.type.portion_size)*self.type.portion_size-self.qty
         }
