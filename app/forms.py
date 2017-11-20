@@ -32,6 +32,8 @@ class SettingsForm(FlaskForm):
     esi_char_id = IntegerField('esi_char_id', validators=[DataRequired()])
     implant_id = IntegerField('implant_id', validators=[DataRequired()])
     rig1_id = IntegerField('rig1_id', validators=[DataRequired()])
+    rig2_id = IntegerField('rig2_id', validators=[DataRequired()])
+    rig3_id = IntegerField('rig3_id', validators=[DataRequired()])
 
     def save(self, user):
         model = user.ore_calc
@@ -41,6 +43,8 @@ class SettingsForm(FlaskForm):
             model.esi_char_id = self.esi_char_id.data
             model.implant_id = self.implant_id.data
             model.rig1_id = self.rig1_id.data
+            model.rig2_id = self.rig2_id.data
+            model.rig3_id = self.rig3_id.data
             db.session.add(model)
             db.session.commit()
 

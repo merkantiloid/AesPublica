@@ -88,16 +88,25 @@ REPR_RIGS_SQL = text(
     " order by t.name  "
 )
 
+def get_metas(record):
+    if record[3]>2:
+        return ['ore','ice','moon']
+    elif record[3] == 2 and "Asteroid Ore" in record[1]:
+        return ['ore']
+    elif record[3] == 2 and "Ice" in record[1]:
+        return ['ice']
+    elif record[3] == 2 and "Moon Ore" in record[1]:
+        return ['moon']
 
 def load_repr_rigs():
     rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
     rigs = {
-        2: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1}],
-        3: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1}],
-        4: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1}],
+        2: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
+        3: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
+        4: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
     }
     for record in rig_raws:
-        rigs[int(record[3])].append({
+        temp = {
             'id': record[0],
             'name': record[1],
             'value': record[2],
@@ -105,13 +114,17 @@ def load_repr_rigs():
             'h': record[4],
             'l': record[5],
             'z': record[6],
-        })
+        }
+        temp['metas'] = get_metas(record)
+
+        rigs[int(record[3])].append(temp)
+
     return rigs
 
 
 def load_repr_rigs_hash():
     rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
-    rigs = {"-1": {'value': 0, 'h': 1, 'l': 1, 'z': 1}}
+    rigs = {"-1": {'value': 0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}}
     for record in rig_raws:
         rigs[record[0]] = {
             'id': record[0],
@@ -121,6 +134,7 @@ def load_repr_rigs_hash():
             'h': record[4],
             'l': record[5],
             'z': record[6],
+            'metas': get_metas(record),
         }
 
     return rigs
@@ -133,16 +147,16 @@ ALL_ORES_SQL = text(
     "       t.volume, "
     "       tac.value as compressed_id," 
     "       ta.value as ore_type,"
-    "       case ta.value"
-    "         when 0 then 'mission'"
-    "         when 1 then 'standard'"
-    "         when 2 then 'plus_5'"
-    "         when 3 then 'plus10'"
-    "         when 4 then 'high'"
-    "         when 5 then 'jackpot'"
-    "       end as ore_type_text  "
+    "       case" 
+    "         when mg.id = 1855 then 'ice'"
+    "         when ta.value=4 then 'ore_m'"
+    "         when mg.id in (512,514,521,522,525,530,517) then 'ore_z'"
+    "         when mg.id in (527,528,529) then 'ore_l'"
+    "         when mg.id in (523,526,516,515,519,518) then 'ore_h'"
+    "         else null"
+    "       end as ore_type_text"
     "  from eve_types t"
-    "         inner join eve_market_groups mg on mg.id = t.market_group_id and mg.parent_id=54"
+    "         inner join eve_market_groups mg on mg.id = t.market_group_id and (mg.parent_id=54 or mg.id = 1855)"
     "         inner join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2699)"
     "         left join eve_type_attributes tac on tac.type_id = t.id and tac.attribute_id in (1940)"
     "  where t.published=1 "

@@ -10,6 +10,16 @@ function r4(n){
     return Math.round( n * 10000 )/10000;
 }
 
+function bestRig(meta,ids){
+    var bestId = -1;
+    ids.forEach(function(id){
+        if( gStatic.repr_rigs_hash[id]['metas'].indexOf(meta)>-1 && gStatic.repr_rigs_hash[id].value > gStatic.repr_rigs_hash[bestId].value ){
+            bestId = id;
+        }
+    })
+    return gStatic.repr_rigs_hash[bestId];
+}
+
 var calculator = new Vue({
     el: '#calculator',
     delimiters: ["<%","%>"],
@@ -24,8 +34,8 @@ var calculator = new Vue({
         },
         static: gStatic,
         rigs: [],
-        kOreLow: 0,
-        kOreHi: 0,
+        kOre: 0,
+        kIce: 0,
         kScrap: 0,
         newItem: {
             type_id: null,
@@ -59,6 +69,8 @@ var calculator = new Vue({
     methods: {
         changeCitadel: function() {
             this.calc.settings.rig1_id = -1;
+            this.calc.settings.rig2_id = -1;
+            this.calc.settings.rig3_id = -1;
             this.rigs = gStatic.repr_rigs[ citadelByID(this.calc.settings.citadel_id).rig_size ];
             this.recalcPercent(event);
             this.saveSettings();
@@ -70,16 +82,23 @@ var calculator = new Vue({
         },
 
         recalcPercent: function(){
-            var base = gStatic.repr_rigs_hash[this.calc.settings.rig1_id].value,
-                char = recordById(this.calc.settings.characters, this.calc.settings.esi_char_id),
-                space = gStatic.repr_rigs_hash[this.calc.settings.rig1_id][this.calc.settings.space],
+            var baseOre = bestRig('ore',[this.calc.settings.rig1_id,this.calc.settings.rig2_id,this.calc.settings.rig3_id]),
+                baseIce = bestRig('ice',[this.calc.settings.rig1_id,this.calc.settings.rig2_id,this.calc.settings.rig3_id]),
+                spaceOre = baseOre[this.calc.settings.space],
+                spaceIce = baseIce[this.calc.settings.space],
+
                 implant = 1+recordById(gStatic.repr_implants, this.calc.settings.implant_id).value/100,
+
+                char = recordById(this.calc.settings.characters, this.calc.settings.esi_char_id),
                 skill1 = char.skills[3385],
                 skill2 = char.skills[3389],
                 skillM = char.skills[12196];
-            this.kOreLow = r4( 100 * base * (1+2*4/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * space * implant);
-            this.kOreHi  = r4( 100 * base * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * space * implant);
-            this.kScrap  = r4( 100 * base * (1+2*skillM/100.0) * implant);
+
+            console.log(baseOre, baseIce, spaceOre, spaceIce);
+
+            this.kOre  = r4( 100 * baseOre.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceOre * implant);
+            this.kIce  = r4( 100 * baseIce.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceIce * implant);
+            this.kScrap  = r4( 100 * baseOre.value * (1+2*skillM/100.0) * implant);
         },
 
         saveSettings: function(){

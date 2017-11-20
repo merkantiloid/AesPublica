@@ -20,13 +20,7 @@
 #### SDE Import
     ESI_CONFIG=~/esi.conf python3 ./sde.py ~/Downloads/sde-20171024-TRANQUILITY.zip
         
-
-#### Preston fix
-
-    if time.time() > self.access_expiration:
-        self._get_new_access_token()
-        + self.session.headers.update({'Authorization': 'Bearer {}'.format(self.access_token)})
-
+        
 #### TIPS
 
 citadels

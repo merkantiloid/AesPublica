@@ -32,6 +32,8 @@ class OreCalcService:
                 "esi_char_id": model.esi_char_id,
                 "implant_id": model.implant_id,
                 "rig1_id": model.rig1_id,
+                "rig2_id": model.rig2_id,
+                "rig3_id": model.rig3_id,
             },
             "build_items_text": model.build_items_text,
             "build_items": [x.to_json() for x in model.build_items],
