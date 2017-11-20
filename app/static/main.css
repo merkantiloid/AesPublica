@@ -39,6 +39,14 @@ h6{
     color: #CCCCCC;
 }
 
+.red{
+    color: #CC0000;
+}
+
+.green{
+    color: #00CC00;
+}
+
 .col-form-label.small{
     font-size: 12px;
 }

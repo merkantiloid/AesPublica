@@ -1,4 +1,4 @@
-from .static import MaterialsByProductId, TypeById
+from .static import MaterialsByProductId, TypeById, CalcIDs
 from math import ceil
 
 def sort_key(item):
@@ -13,7 +13,7 @@ class ComponentsService:
         all = self.disassemble()
         result = []
         for key in all:
-            if TypeById[key].group_id == 18:
+            if key in CalcIDs:
                 result.append({'type_id': key, 'type_name': TypeById[key].name, 'qty': all[key]})
 
         result = sorted(result, key=sort_key)

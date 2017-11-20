@@ -1,8 +1,17 @@
-<h6 class="text-left">Minerals</h6>
+<h6 class="text-left">Minerals & Ice products</h6>
 <table class="table table-sm">
+    <tr>
+        <th></th>
+        <th></th>
+        <th class="text-right red">Need</th>
+        <th class="text-right green">Odd</th>
+        <th class="text-right gray">All</th>
+    </tr>
     <tr v-for="mineral in calc.minerals">
         <td><img width="24" height="24" v-bind:src="IURL(mineral.type_id)"/></td>
         <td><% mineral.type_name %></td>
+        <td class="text-right red"><% 0|fi %></td>
+        <td class="text-right green"><% 0|fi %></td>
         <td class="text-right"><% mineral.qty|fi %></td>
     </tr>
 </table>

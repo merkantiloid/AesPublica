@@ -196,3 +196,19 @@ def load_chars(user_id):
             }
         )
     return chars
+
+
+CALC_IDS_SQL = text(
+    "select id " 
+    "  from eve_types"
+    "  where group_id in (18,423)"
+    "    and published=1"
+)
+
+
+def load_calc_ids():
+    records = db.session.execute(CALC_IDS_SQL).fetchall()
+    ids = []
+    for record in records:
+        ids.append(record[0])
+    return ids

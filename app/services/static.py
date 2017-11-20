@@ -1,4 +1,4 @@
-from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash
+from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids
 from app.eve_models import EveType, EveBlueprint
 from app.esi_models import EsiChar
 
@@ -25,6 +25,8 @@ types = EveType.query.all()
 for type in types:
     TypeHashes[type.name.lower()] = type.id
     TypeById[type.id] = type
+
+CalcIDs = load_calc_ids()
 
 
 class Static:
