@@ -6,9 +6,7 @@ from app import mainApp, db
 from ..forms import LoginForm, RegisterForm
 from ..models import User
 
-from .calc import calc
-from .calc import calc_json
-from .calc import save_settings
+import app.views.calc
 from .characters import characters
 from .search import search_type
 

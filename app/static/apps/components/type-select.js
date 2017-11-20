@@ -1,12 +1,10 @@
 Vue.component('type-select', {
     template: '<input ref="selector" class="type-selector form-control form-control-sm" type="text"/>',
 
-    props: ['label','initial','mode'],
-
     mounted: function () {
         var vm = this;
 
-        var my_autoComplete = new autoComplete({
+        var myAutoComplete = new autoComplete({
             selector: this.$refs.selector,
             minChars: 3,
             delay: 500,

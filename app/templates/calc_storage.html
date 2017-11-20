@@ -1,0 +1,33 @@
+<h6 class="text-left">
+    <i v-show="!storeItemsTextChanged" class="icon ion-ios-circle-outline"></i>
+    <i v-show="storeItemsTextChanged" class="icon ion-ios-checkmark" v-on:click="UpdateStoreItemsText"></i>
+    Storage
+</h6>
+
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table table-sm">
+            <tr>
+                <th>
+                    <i v-show="!newStoreItem.type_id"  class="icon ion-ios-circle-outline"></i>
+                    <i v-show="!!newStoreItem.type_id" v-on:click="AddStoreItem" class="icon ion-plus-circled"></i>
+                </th>
+                <th><type-select v-on:type-selected="TypeStorageSelected($event)"></type-select></th>
+                <th class="text-right">Qty</th>
+                <th class="md"><input class="form-control form-control-sm" size="10" type="number" v-model="newStoreItem.qty"/></th>
+            </tr>
+        </table>
+        <textarea class="form-control" v-model="calc.store_items_text" v-on:change="StoreTextChanged" v-on:keyup="StoreTextChanged"></textarea>
+    </div>
+    <div class="col-sm-6">
+        <table class="table table-sm">
+            <tr v-for="item in calc.store_items">
+                <td><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
+                <td><% item.type.name %></td>
+                <td class="text-right">
+                    <% item.qty | fi %>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

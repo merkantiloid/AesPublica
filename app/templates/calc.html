@@ -23,15 +23,7 @@
 
         <div class="col-sm-6">
             <div class="bordered">
-                <h6 class="text-left">Minerals</h6>
-                <table class="table table-sm">
-                    <tr v-for="mineral in calc.minerals">
-                        <td><img width="24" height="24" v-bind:src="IURL(mineral.type_id)"/></td>
-                        <td><% mineral.type_name %></td>
-                        <td class="text-right"><% mineral.qty|fi %></td>
-                    </tr>
-                </table>
-
+                {% include 'calc_minerals.html' %}
             </div>
         </div>
 
@@ -39,16 +31,16 @@
 
     <div class="row" v-cloak>
         <div class="col-sm-12">
-            <div class="bordered">
+            <div class="bordered build_list">
                 {% include 'calc_build_list.html' %}
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-8">
-            <div class="bordered">
-                Storage
+        <div class="col-sm-12">
+            <div class="bordered storage">
+                {% include 'calc_storage.html' %}
             </div>
         </div>
 

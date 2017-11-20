@@ -19,6 +19,8 @@ var calculator = new Vue({
             build_items_text: '',
             build_items: [],
             minerals: [],
+            store_items_text: '',
+            store_items: [],
         },
         static: gStatic,
         rigs: [],
@@ -32,7 +34,13 @@ var calculator = new Vue({
             te: 20,
             qty: 1,
         },
-        buildItemsTextChanged: false
+        newStoreItem: {
+            type_id: null,
+            type_name: null,
+            qty: 1,
+        },
+        buildItemsTextChanged: false,
+        storeItemsTextChanged: false,
     },
 
     created: function () {
@@ -91,6 +99,11 @@ var calculator = new Vue({
             this.newItem.type_name = payload.name;
         },
 
+        TypeStorageSelected: function(payload){
+            this.newStoreItem.type_id = payload.id;
+            this.newStoreItem.type_name = payload.name;
+        },
+
         AddBuildItem: function(){
             if(this.calc.build_items_text == null){
                 this.calc.build_items_text = "";
@@ -106,9 +119,28 @@ var calculator = new Vue({
                                          "TE" + this.newItem.te;
             this.newItem.type_id = null;
             this.newItem.type_name = null;
-            $('input.type-selector').val(null);
+            $('.build_list input.type-selector').val(null);
             this.buildItemsTextChanged = true;
         },
+
+
+        AddStoreItem: function(){
+            if(this.calc.store_items_text == null){
+                this.calc.store_items_text = "";
+            }
+            if(this.calc.store_items_text != null && this.calc.store_items_text != ''){
+                this.calc.store_items_text = this.calc.store_items_text + "\n";
+            }
+
+            this.calc.store_items_text = this.calc.store_items_text +
+                                         this.newStoreItem.type_name + "\t" +
+                                         this.newStoreItem.qty;
+            this.newStoreItem.type_id = null;
+            this.newStoreItem.type_name = null;
+            $('.storage input.type-selector').val(null);
+            this.storeItemsTextChanged = true;
+        },
+
 
         UpdateBuildItemsText: function(){
             var vm = this;
@@ -124,8 +156,26 @@ var calculator = new Vue({
             });
         },
 
+        UpdateStoreItemsText: function(){
+            var vm = this;
+            axios.post(
+                '/calc/store_items_text',
+                {text: vm.calc.store_items_text}
+            ).then(function (response) {
+                vm.calc.store_items = response.data.store_items;
+                vm.calc.minerals = response.data.minerals;
+                vm.storeItemsTextChanged = false;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+
         TextChanged: function(){
             this.buildItemsTextChanged = true;
+        },
+
+        StoreTextChanged: function(){
+            this.storeItemsTextChanged = true;
         },
 
         IURL: function(type_id){

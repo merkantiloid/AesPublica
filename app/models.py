@@ -45,8 +45,12 @@ class OreCalc(db.Model):
     rig1_id = db.Column(db.BigInteger)
     rig2_id = db.Column(db.BigInteger)
     rig3_id = db.Column(db.BigInteger)
+
     build_items_text = db.Column(db.Text)
     build_items = db.relationship("BuildItem", back_populates="ore_calc")
+
+    store_items_text = db.Column(db.Text)
+    store_items = db.relationship("StoreItem", back_populates="ore_calc")
 
 
 class BuildItem(db.Model):
@@ -71,4 +75,23 @@ class BuildItem(db.Model):
             'runs': ceil(self.qty/self.type.portion_size),
             'qty': self.qty,
             'excess': ceil(self.qty/self.type.portion_size)*self.type.portion_size-self.qty
+        }
+
+
+class StoreItem(db.Model):
+    __tablename__ = 'store_items'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    qty = db.Column(db.BigInteger, nullable=False)
+
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType")
+
+    ore_calc_id = db.Column(db.BigInteger, ForeignKey('ore_calcs.id'), nullable=False)
+    ore_calc = db.relationship("OreCalc")
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'type': self.type.to_json(),
+            'qty': self.qty,
         }

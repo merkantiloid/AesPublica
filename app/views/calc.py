@@ -2,7 +2,7 @@ from app import mainApp
 from flask import render_template, jsonify, g, request
 from flask_login import login_required
 from app.services import OreCalcService, Static
-from app.forms import SettingsForm, BuildItemForm
+from app.forms import SettingsForm
 
 
 @mainApp.route('/')
@@ -33,5 +33,14 @@ def save_settings():
 def build_items_add():
     s = OreCalcService(g.user)
     s.add_build_item(request.get_json()['text'])
+
+    return jsonify(s.to_json())
+
+
+@mainApp.route('/calc/store_items_text', methods=['POST'])
+@login_required
+def store_items_add():
+    s = OreCalcService(g.user)
+    s.add_store_item(request.get_json()['text'])
 
     return jsonify(s.to_json())
