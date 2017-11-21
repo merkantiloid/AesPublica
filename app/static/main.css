@@ -112,3 +112,14 @@ th.md{
 span.light-gray{
     color: #dddddd;
 }
+
+.base-ore-block{
+    display: inline-grid;
+    margin: 3px;
+    border: 1px solid #DDEEDD;
+}
+
+.ore-block{
+    display: inline-grid;
+}
+

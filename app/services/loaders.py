@@ -148,21 +148,23 @@ ALL_ORES_SQL = text(
     "       tac.value as compressed_id," 
     "       ta.value as ore_type,"
     "       case" 
-    "         when mg.id = 1855 then 'ice'"
-    "         when ta.value=4 then 'ore_m'"
-    "         when mg.id in (512,514,521,522,525,530,517) then 'ore_z'"
-    "         when mg.id in (527,528,529) then 'ore_l'"
-    "         when mg.id in (523,526,516,515,519,518) then 'ore_h'"
+    "         when mg.id = 1855 then '4_ice'"
+    "         when ta.value=4 then '5_ore_m'"
+    "         when mg.id in (512,514,521,522,525,530,517) then '3_ore_z'"
+    "         when mg.id in (527,528,529) then '2_ore_l'"
+    "         when mg.id in (523,526,516,515,519,518) then '1_ore_h'"
     "         else null"
     "       end as ore_type_text,"
-    "       sac.value as skill_id"
+    "       sac.value as skill_id,"
+    "       bac.value as base_ore_id"
     "  from eve_types t"
     "         inner join eve_market_groups mg on mg.id = t.market_group_id and (mg.parent_id=54 or mg.id = 1855)"
     "         left join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2699)"
     "         left join eve_type_attributes tac on tac.type_id = t.id and tac.attribute_id in (1940)"
     "         left join eve_type_attributes sac on sac.type_id = t.id and sac.attribute_id in (790)"
+    "         left join eve_type_attributes bac on bac.type_id = t.id and bac.attribute_id in (2711)"
     "  where t.published=1 "
-    "  order by mg.name, t.portion_size, ta.value"
+    "  order by ore_type_text, skill_id, base_ore_id, case when compressed_id is null then '0' else '1' end,  ore_type"
 )
 def load_ores():
     records = db.session.execute(ALL_ORES_SQL).fetchall()
@@ -177,6 +179,7 @@ def load_ores():
             "ore_type": record[5],
             "ore_type_text": record[6],
             "skill_id": int(record[7]),
+            "base_ore_id": int(record[8]),
         }
     return ores
 

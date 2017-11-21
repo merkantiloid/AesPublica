@@ -1,0 +1,16 @@
+<h6 class="text-left">
+    Ore settings
+</h6>
+
+<div v-for="sec,key in static.ores">
+    <div><b><% sec.name %></b></div>
+
+    <div class="base-ore-block" v-for="base_ore, base_key in sec.items">
+        <div class="ore-block" v-for="ore in base_ore.ores">
+            <% ore.name %>
+        </div>
+    </div>
+
+</div>
+
+

@@ -35,6 +35,26 @@ for r in EveTypeMaterial.query.all():
 
 AllOres = load_ores()
 
+AllOresGrouped = {
+    '1_ore_h': {'name': 'Hi-Sec Ores', 'items': {}},
+    '2_ore_l': {'name': 'Low-Sec Ores', 'items': {}},
+    '3_ore_z': {'name': 'Zero-Sec Ores', 'items': {}},
+    '4_ice':   {'name': 'Ice', 'items': {}},
+    '5_ore_m': {'name': 'Moon Extra Ores', 'items': {}}
+}
+
+for id in AllOres:
+    ore = AllOres[id]
+    if ore['ore_type_text'] != '5_ore_m' and ore['ore_type'] == 1 and ore['compressed_id'] or \
+            ore['ore_type_text'] == '5_ore_m' and ore['ore_type'] == 4 and ore['compressed_id']:
+        key = ore['skill_id'] if ore['ore_type_text'] != '4_ice' else ore['base_ore_id']
+        AllOresGrouped[ore['ore_type_text']]['items'][key] = {'base_name': ore['name'], 'ores': []}
+
+for id in AllOres:
+    ore = AllOres[id]
+    key = ore['skill_id'] if ore['ore_type_text'] != '4_ice' else ore['base_ore_id']
+    AllOresGrouped[ore['ore_type_text']]['items'][key]['ores'].append(ore)
+
 ReprRigsHash = load_repr_rigs_hash()
 
 ReprImplants = load_repr_implants()
@@ -61,6 +81,7 @@ class Static:
             "repr_implants": ReprImplants,
             "repr_rigs": Static.REPR_RIGS,
             "repr_rigs_hash": ReprRigsHash,
+            "ores": AllOresGrouped,
         }
 
 
