@@ -76,3 +76,10 @@ class EveBlueprint(db.Model):
 
     props = db.Column(db.JSON)
 
+class EveTypeMaterial(db.Model):
+    __tablename__ = 'eve_type_materials'
+
+    type_id = db.Column(db.BigInteger, primary_key=True)
+    material_id = db.Column(db.BigInteger, primary_key=True)
+    qty = db.Column(db.BigInteger)
+

@@ -43,7 +43,7 @@ class ComponentsService:
                 if i_type_id in MaterialsByProductId:
                     for mid in MaterialsByProductId[i_type_id]:
                         mqty = MaterialsByProductId[i_type_id][mid]
-                        real_qty = self.applyME(mqty, queue[pkey]['runs'], queue[pkey]['me']) #todo portion_size
+                        real_qty = self.applyME(mqty, queue[pkey]['runs'], queue[pkey]['me'])
 
                         if mid in MaterialsByProductId:
                             imt_key = "%d-%d-%d" % (mid, 10, 20)

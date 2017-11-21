@@ -154,29 +154,30 @@ ALL_ORES_SQL = text(
     "         when mg.id in (527,528,529) then 'ore_l'"
     "         when mg.id in (523,526,516,515,519,518) then 'ore_h'"
     "         else null"
-    "       end as ore_type_text"
+    "       end as ore_type_text,"
+    "       sac.value as skill_id"
     "  from eve_types t"
     "         inner join eve_market_groups mg on mg.id = t.market_group_id and (mg.parent_id=54 or mg.id = 1855)"
-    "         inner join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2699)"
+    "         left join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2699)"
     "         left join eve_type_attributes tac on tac.type_id = t.id and tac.attribute_id in (1940)"
+    "         left join eve_type_attributes sac on sac.type_id = t.id and sac.attribute_id in (790)"
     "  where t.published=1 "
     "  order by mg.name, t.portion_size, ta.value"
 )
 def load_ores():
-    all_ores = db.session.execute(ALL_ORES_SQL).fetchall()
-    ores = []
-    for record in all_ores:
-        all_ores.append(
-            {
-                "id": record[0],
-                "name": record[1],
-                "portion_size": record[2],
-                "volume": record[3],
-                "compressed_id": record[4],
-                "ore_type": record[5],
-                "ore_type_text": record[6],
-            }
-        )
+    records = db.session.execute(ALL_ORES_SQL).fetchall()
+    ores = {}
+    for record in records:
+        ores[record[0]] = {
+            "id": record[0],
+            "name": record[1],
+            "portion_size": record[2],
+            "volume": record[3],
+            "compressed_id": record[4],
+            "ore_type": record[5],
+            "ore_type_text": record[6],
+            "skill_id": int(record[7]),
+        }
     return ores
 
 
@@ -196,7 +197,7 @@ ALL_CHARS_SQL = text(
 )
 def load_chars(user_id):
     records = db.session.execute(ALL_CHARS_SQL, params={'user_id': user_id}).fetchall()
-    chars = []
+    chars = [{'id': -1,'name': 'All 5','skills': {3385: 5, 3389: 5, 12196: 5}}]
     for record in records:
         chars.append(
             {

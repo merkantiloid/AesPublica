@@ -1,5 +1,5 @@
-from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids
-from app.eve_models import EveType, EveBlueprint
+from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids, load_ores
+from app.eve_models import EveType, EveBlueprint, EveTypeMaterial
 from app.esi_models import EsiChar
 
 
@@ -20,13 +20,27 @@ for bp in bps:
 
 TypeHashes = {}
 TypeById = {}
-
-types = EveType.query.all()
-for type in types:
+for type in EveType.query.all():
     TypeHashes[type.name.lower()] = type.id
     TypeById[type.id] = type
 
 CalcIDs = load_calc_ids()
+
+
+ReprocessByTypeId = {}
+for r in EveTypeMaterial.query.all():
+    if r.type_id not in ReprocessByTypeId:
+        ReprocessByTypeId[r.type_id] = {}
+    ReprocessByTypeId[r.type_id][r.material_id] = r.qty
+
+AllOres = load_ores()
+
+ReprRigsHash = load_repr_rigs_hash()
+
+ReprImplants = load_repr_implants()
+ReprImplantsHash = {}
+for x in ReprImplants:
+    ReprImplantsHash[x['id']] = x
 
 
 class Static:
@@ -36,19 +50,17 @@ class Static:
     CITADELS = load_citadels()
     DEFAULT_CITADEL = 35825 #Raitaru
 
-    REPR_IMPLANTS = load_repr_implants()
-
     REPR_RIGS = load_repr_rigs()
-    REPR_RIGS_HASH = load_repr_rigs_hash()
+
 
     @staticmethod
     def to_json():
         return {
             "spaces": Static.SPACES,
             "citadels": Static.CITADELS,
-            "repr_implants": Static.REPR_IMPLANTS,
+            "repr_implants": ReprImplants,
             "repr_rigs": Static.REPR_RIGS,
-            "repr_rigs_hash": Static.REPR_RIGS_HASH,
+            "repr_rigs_hash": ReprRigsHash,
         }
 
 

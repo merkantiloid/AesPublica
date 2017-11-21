@@ -1,0 +1,1 @@
+drop table eve_type_materials;

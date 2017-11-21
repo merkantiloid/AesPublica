@@ -4,6 +4,7 @@ from app import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
 from .components import ComponentsService
+from .reprocess import ReprocessService
 
 class OreCalcService:
 
@@ -20,10 +21,13 @@ class OreCalcService:
             db.session.add(temp)
             db.session.commit()
 
-        self.characters = [{'id': -1,'name': 'All 5','skills': {3385: 5, 3389: 5, 12196: 5}}] + load_chars(user.id)
+        self.characters = load_chars(user.id)
 
     def to_json(self):
         model = self.user.ore_calc
+
+        ReprocessService(model).reprocess()
+
         return {
             "settings": {
                 "space": model.space,

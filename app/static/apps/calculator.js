@@ -94,8 +94,6 @@ var calculator = new Vue({
                 skill2 = char.skills[3389],
                 skillM = char.skills[12196];
 
-            console.log(baseOre, baseIce, spaceOre, spaceIce);
-
             this.kOre  = r4( 100 * baseOre.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceOre * implant);
             this.kIce  = r4( 100 * baseIce.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceIce * implant);
             this.kScrap  = r4( 100 * baseOre.value * (1+2*skillM/100.0) * implant);

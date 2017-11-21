@@ -1,7 +1,7 @@
 import yaml
 
 from app import db
-from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute, EveBlueprint
+from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute, EveBlueprint, EveTypeMaterial
 from sqlalchemy.sql import text
 
 def parse_categories(file):
@@ -130,5 +130,17 @@ def parse_blueprints_attrs(file):
         item.props = data[key]
         if "manufacturing" in data[key]["activities"] and "products" in data[key]["activities"]["manufacturing"]:
             item.product_id = data[key]["activities"]["manufacturing"]["products"][0]["typeID"]
+        db.session.add(item)
+    db.session.commit()
+
+
+def parse_type_materials(file):
+    print(".... loading type materials")
+    data = yaml.load(file, Loader=yaml.CLoader)
+    for record in data:
+        item = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == record['typeID'], EveTypeMaterial.material_id == record['materialTypeID']).first()
+        if not item:
+            item = EveTypeMaterial(type_id = record['typeID'], material_id = record['materialTypeID'])
+        item.qty = record['quantity']
         db.session.add(item)
     db.session.commit()
