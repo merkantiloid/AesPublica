@@ -7,10 +7,7 @@ class ReprocessService:
     def __init__(self, ore_calc):
         self.ore_calc = ore_calc
 
-        self.base_scrap = 0
-        for rid in [self.ore_calc.rig1_id,self.ore_calc.rig2_id,self.ore_calc.rig3_id]:
-            if self.base_scrap < ReprRigsHash[rid]['value']:
-                self.base_scrap = ReprRigsHash[rid]['value']
+        self.base_scrap = 0.5
 
         self.implant = ReprImplantsHash[self.ore_calc.implant_id]['value']
 
@@ -59,7 +56,6 @@ class ReprocessService:
                             ReprocessByTypeId[store_type_id][part_id] *
                             chunks *
                             self.base_scrap *
-                            (1+self.implant/100) *
                             (1+2*self.skill_metallurgy/100)
                         )
                         if deep:
