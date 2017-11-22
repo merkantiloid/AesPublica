@@ -70,6 +70,10 @@ h6{
   font-size: 20px;
 }
 
+button .icon {
+  font-size: 12px;
+}
+
 .ion-ios-checkmark, .ion-plus-circled{
   cursor: pointer;
 }
@@ -123,3 +127,6 @@ span.light-gray{
     display: inline-grid;
 }
 
+label.label-sm{
+    margin: 0;
+}

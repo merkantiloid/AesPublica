@@ -197,6 +197,30 @@ var calculator = new Vue({
 
         IURL: function(type_id){
             return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
+        },
+
+        SetOres: function(selector){
+            $(selector).prop('checked', true);
+        },
+
+        ResetOres: function(selector){
+            $(selector).prop('checked', false);
+        },
+
+        OreClasses: function(ore){
+            console.log(ore);
+            var result = '';
+            if(ore.compressed_id == null){
+                result = result + 'compressed'
+            }else{
+                result = result + 'common'
+            }
+
+            if(ore.compressed_id == null && ore.ore_type == 1){
+                result = result + ' simple'
+            }
+
+            return result;
         }
 
     }

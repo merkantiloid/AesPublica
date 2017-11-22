@@ -2,12 +2,28 @@
     Ore settings
 </h6>
 
-<div v-for="sec,key in static.ores">
-    <div><b><% sec.name %></b></div>
+<div v-for="sec,key in static.ores" v-bind:class="key">
+    <div>
+        <b><% sec.name %></b>
+        <button v-on:click="SetOres('.'+key +' input')"><i class="icon ion-android-checkbox-outline"></i> All</button>
+        <button v-on:click="ResetOres('.'+key +' input')"><i class="icon ion-android-checkbox-outline-blank"></i> All</button>
+        |
+        <button v-on:click="SetOres('.'+key +' input.compressed')"><i class="icon ion-android-checkbox-outline"></i> Compr</button>
+        <button v-on:click="ResetOres('.'+key +' input.compressed')"><i class="icon ion-android-checkbox-outline-blank"></i> Compr</button>
+        |
+        <button v-on:click="SetOres('.'+key +' input.common')"><i class="icon ion-android-checkbox-outline"></i> Common</button>
+        <button v-on:click="ResetOres('.'+key +' input.common')"><i class="icon ion-android-checkbox-outline-blank"></i> Common</button>
+        |
+        <button v-on:click="SetOres('.'+key +' input.compressed.simple')"><i class="icon ion-android-checkbox-outline"></i> Simple & Compr</button>
+
+    </div>
 
     <div class="base-ore-block" v-for="base_ore, base_key in sec.items">
         <div class="ore-block" v-for="ore in base_ore.ores">
-            <% ore.name %>
+            <label class="label-sm">
+                <input v-bind:class="OreClasses(ore)" type="checkbox" v-bind:value="ore.id">
+                <% ore.name %>
+            </label>
         </div>
     </div>
 
