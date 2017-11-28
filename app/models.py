@@ -46,6 +46,8 @@ class OreCalc(db.Model):
     rig2_id = db.Column(db.BigInteger)
     rig3_id = db.Column(db.BigInteger)
 
+    ore_settings = db.Column(db.String)
+
     build_items_text = db.Column(db.Text)
     build_items = db.relationship("BuildItem", back_populates="ore_calc")
 

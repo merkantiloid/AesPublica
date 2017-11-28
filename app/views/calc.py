@@ -48,3 +48,12 @@ def store_items_add():
     s.add_store_item(request.get_json()['text'])
 
     return jsonify(s.to_json())
+
+
+@mainApp.route('/calc/save_ore_settings', methods=['POST'])
+@login_required
+def save_ore_settings():
+    s = OreCalcService(g.user)
+    s.save_ore_settings(request.get_json()['text'])
+
+    return jsonify(s.to_json())

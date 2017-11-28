@@ -51,6 +51,7 @@ var calculator = new Vue({
         },
         buildItemsTextChanged: false,
         storeItemsTextChanged: false,
+        oreSettingsChanged: false,
     },
 
     created: function () {
@@ -201,19 +202,20 @@ var calculator = new Vue({
 
         SetOres: function(selector){
             $(selector).prop('checked', true);
+            this.TouchOreSettings();
         },
 
         ResetOres: function(selector){
             $(selector).prop('checked', false);
+            this.TouchOreSettings();
         },
 
         OreClasses: function(ore){
-            console.log(ore);
-            var result = '';
+            var result = 'ore-input';
             if(ore.compressed_id == null){
-                result = result + 'compressed'
+                result = result + ' compressed'
             }else{
-                result = result + 'common'
+                result = result + ' common'
             }
 
             if(ore.compressed_id == null && ore.ore_type == 1){
@@ -221,6 +223,23 @@ var calculator = new Vue({
             }
 
             return result;
+        },
+
+        TouchOreSettings: function(){
+            this.oreSettingsChanged = true;
+        },
+
+        SaveOreSettings: function(){
+            var vm = this,
+                text = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray().join(',');
+            axios.post(
+                '/calc/save_ore_settings',
+                {text: text}
+            ).then(function (response) {
+                vm.oreSettingsChanged = false;
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
 
     }

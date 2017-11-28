@@ -26,7 +26,9 @@ class OreCalcService:
     def to_json(self):
         model = self.user.ore_calc
 
-        ReprocessService(model).reprocess()
+        reprocessed = ReprocessService(model).reprocess(only_ore = True)
+
+        minerals = ComponentsService(model).only_minerals(reprocessed)
 
         return {
             "settings": {
@@ -41,7 +43,7 @@ class OreCalcService:
             },
             "build_items_text": model.build_items_text,
             "build_items": [x.to_json() for x in model.build_items],
-            'minerals': ComponentsService(model).only_minerals(),
+            'minerals': minerals,
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
         }
@@ -94,3 +96,8 @@ class OreCalcService:
 
         db.session.commit()
 
+    def save_ore_settings(self, text):
+        ore_calc = self.user.ore_calc
+        ore_calc.ore_settings = text
+        db.session.add(ore_calc)
+        db.session.commit()

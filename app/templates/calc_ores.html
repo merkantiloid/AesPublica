@@ -1,3 +1,6 @@
+<i v-show="!oreSettingsChanged"  class="icon ion-ios-circle-outline"></i>
+<i v-show="oreSettingsChanged" v-on:click="SaveOreSettings" class="icon ion-ios-checkmark"></i>
+
 <div v-for="sec,key in static.ores" v-bind:class="key">
     <div>
         <b><% sec.name %></b>
@@ -17,7 +20,7 @@
     <div class="base-ore-block" v-for="base_ore, base_key in sec.items">
         <div class="ore-block" v-for="ore in base_ore.ores">
             <label class="label-sm">
-                <input v-bind:class="OreClasses(ore)" type="checkbox" v-bind:value="ore.id">
+                <input v-bind:class="OreClasses(ore)" type="checkbox" v-bind:value="ore.id" v-on:click="TouchOreSettings">
                 <% ore.name %>
             </label>
         </div>

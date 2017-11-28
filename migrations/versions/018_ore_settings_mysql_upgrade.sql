@@ -1,0 +1,1 @@
+alter table ore_calcs add column ore_settings text;
