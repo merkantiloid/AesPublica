@@ -30,6 +30,8 @@ class OreCalcService:
 
         minerals = ComponentsService(model).only_minerals(reprocessed)
 
+        checked_ores = model.ore_settings.split(',') if model.ore_settings else []
+
         return {
             "settings": {
                 "space": model.space,
@@ -46,6 +48,7 @@ class OreCalcService:
             'minerals': minerals,
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
+            "ore_settings": checked_ores,
         }
 
 

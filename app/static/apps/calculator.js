@@ -31,6 +31,7 @@ var calculator = new Vue({
             minerals: [],
             store_items_text: '',
             store_items: [],
+            ore_settings: [],
         },
         static: gStatic,
         rigs: [],
@@ -226,20 +227,27 @@ var calculator = new Vue({
         },
 
         TouchOreSettings: function(){
+            var values = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray();
+            this.calc.ore_settings = values;
             this.oreSettingsChanged = true;
         },
 
         SaveOreSettings: function(){
             var vm = this,
-                text = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray().join(',');
+                values = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray();
             axios.post(
                 '/calc/save_ore_settings',
-                {text: text}
+                {text: values.join(',')}
             ).then(function (response) {
                 vm.oreSettingsChanged = false;
+                vm.calc.ore_settings = values;
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+
+        IsOreChecked: function(id){
+            return this.calc.ore_settings.indexOf(id.toString()) > -1;
         }
 
     }

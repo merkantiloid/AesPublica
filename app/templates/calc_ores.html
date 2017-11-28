@@ -20,7 +20,7 @@
     <div class="base-ore-block" v-for="base_ore, base_key in sec.items">
         <div class="ore-block" v-for="ore in base_ore.ores">
             <label class="label-sm">
-                <input v-bind:class="OreClasses(ore)" type="checkbox" v-bind:value="ore.id" v-on:click="TouchOreSettings">
+                <input v-bind:class="OreClasses(ore)" type="checkbox" v-bind:checked="IsOreChecked(ore.id)" v-bind:value="ore.id" v-on:click="TouchOreSettings">
                 <% ore.name %>
             </label>
         </div>
