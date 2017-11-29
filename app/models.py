@@ -54,6 +54,19 @@ class OreCalc(db.Model):
     store_items_text = db.Column(db.Text)
     store_items = db.relationship("StoreItem", back_populates="ore_calc")
 
+    def checked_ores(self):
+        if not self.ore_settings:
+            return []
+
+        result = []
+        parts = self.ore_settings.split(',')
+        for part in parts:
+            try:
+                result.append( int(part) )
+            except ValueError:
+                pass
+        return result
+
 
 class BuildItem(db.Model):
     __tablename__ = 'build_items'
@@ -97,3 +110,15 @@ class StoreItem(db.Model):
             'type': self.type.to_json(),
             'qty': self.qty,
         }
+
+
+class Price(db.Model):
+    __tablename__ = 'prices'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    value = db.Column(db.Float)
+    source = db.Column(db.String)
+    updated_at = db.Column(db.String)
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType")
+
+

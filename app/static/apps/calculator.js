@@ -248,7 +248,17 @@ var calculator = new Vue({
 
         IsOreChecked: function(id){
             return this.calc.ore_settings.indexOf(id.toString()) > -1;
-        }
+        },
+
+        CalcOres: function(){
+            var vm = this;
+            console.log('CalcOres');
+            axios.get('/calc/result').then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
 
     }
 

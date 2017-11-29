@@ -1,10 +1,13 @@
-from app.models import OreCalc, BuildItem, StoreItem
-from .static import Static
+from app.models import OreCalc, BuildItem, StoreItem, Price
+from .static import Static, ReprocessByTypeId, TypeById
 from app import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
 from .components import ComponentsService
 from .reprocess import ReprocessService
+from .optimize import OptimizeService
+from .price import PriceService
+
 
 class OreCalcService:
 
@@ -20,17 +23,14 @@ class OreCalcService:
             )
             db.session.add(temp)
             db.session.commit()
-
         self.characters = load_chars(user.id)
 
     def to_json(self):
         model = self.user.ore_calc
 
-        reprocessed = ReprocessService(model).reprocess(only_ore = True)
+        reprocessed = ReprocessService(model).reprocess_store(only_ore=True)
 
         minerals = ComponentsService(model).only_minerals(reprocessed)
-
-        checked_ores = model.ore_settings.split(',') if model.ore_settings else []
 
         return {
             "settings": {
@@ -48,7 +48,7 @@ class OreCalcService:
             'minerals': minerals,
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
-            "ore_settings": checked_ores,
+            "ore_settings": model.checked_ores(),
         }
 
 
@@ -104,3 +104,43 @@ class OreCalcService:
         ore_calc.ore_settings = text
         db.session.add(ore_calc)
         db.session.commit()
+
+
+    def calc_result(self):
+        model = self.user.ore_calc
+        service = ReprocessService(model)
+        reprocessed = service.reprocess_store(only_ore=True)
+        goal_minerals = ComponentsService(model).only_minerals(reprocessed)
+
+        ordered_minerals = []
+        minerals = []
+        for goal_mineral in goal_minerals:
+            if goal_mineral['need_qty']>0:
+                ordered_minerals.append(goal_mineral['type_id'])
+                minerals.append(goal_mineral['need_qty'])
+
+        ordered_ores = model.checked_ores()
+
+        PriceService().esi(ordered_ores)
+
+        ores = []
+        ore_prices = []
+        for ore_id in ordered_ores:
+            ore = []
+            for mineral_id in ordered_minerals:
+                qty = ReprocessByTypeId[ore_id].get(mineral_id,0)
+                if mineral_id in ReprocessByTypeId[ore_id]:
+                    rqty = service.reprocess_ore(ore_id, qty, mineral_id)
+                    ore.append(rqty)
+                else:
+                    ore.append(0)
+            ores.append(ore)
+
+            price = Price.query.filter(Price.source=='esi', Price.type_id==ore_id).one()
+            ore_prices.append(price.value)
+
+        result_ores = OptimizeService().calc(minerals=minerals, ores=ores, ore_prices=ore_prices)
+
+        for index, x in enumerate(result_ores):
+            print( TypeById[ordered_ores[index]].name, x )
+

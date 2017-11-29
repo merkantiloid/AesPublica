@@ -4,6 +4,8 @@ from pymprog import *
 class OptimizeService:
 
     def calc(self, minerals, ores, ore_prices):
+        result = []
+
 
         # minerals = [10000, 800, 125]
         # ores = [
@@ -32,6 +34,8 @@ class OptimizeService:
         p.sensitivity()
 
         for i in range(ore_cnt):
-            print(x[i].primal)
+            result.append(x[i].primal)
 
         p.end()
+
+        return result
