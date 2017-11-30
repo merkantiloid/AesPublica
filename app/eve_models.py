@@ -16,6 +16,7 @@ class EveType(db.Model):
             'id': self.id,
             'name': self.name,
             'portion_size': self.portion_size,
+            'group_id': self.group_id,
         }
 
 

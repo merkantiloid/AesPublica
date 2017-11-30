@@ -2,7 +2,7 @@ from .static import MaterialsByProductId, TypeById, CalcIDs
 from math import ceil
 
 def sort_key(item):
-    return '%d-%s' % (TypeById[item['type_id']].group_id , item['type_name'])
+    return '%d-%s' % (item['type']['group_id'] , item['type']['name'])
 
 class ComponentsService:
 
@@ -16,8 +16,7 @@ class ComponentsService:
         for key in all:
             if key in CalcIDs:
                 result.append({
-                    'type_id': key,
-                    'type_name': TypeById[key].name,
+                    'type': TypeById[key].to_json(),
                     'all_qty': all[key],
                     'need_qty': need.get(key,0),
                     'odd_qty': after_refine.get(key,0) - need.get(key,0),

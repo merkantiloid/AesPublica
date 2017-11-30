@@ -1,5 +1,5 @@
 from app.models import OreCalc, BuildItem, StoreItem, Price, CalcResult
-from .static import Static, ReprocessByTypeId, TypeById
+from .static import Static, ReprocessByTypeId, TypeById, BlueprintByProductId
 from app import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
@@ -46,7 +46,7 @@ class OreCalcService:
                 "rig3_id": model.rig3_id,
             },
             "build_items_text": model.build_items_text,
-            "build_items": [x.to_json() for x in model.build_items],
+            "build_items": [x.to_json(blueprint_id=getattr(BlueprintByProductId.get(x.type_id,{}),'id',None) ) for x in model.build_items],
             'minerals': minerals,
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],

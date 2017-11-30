@@ -83,8 +83,8 @@ class BuildItem(db.Model):
     ore_calc_id = db.Column(db.BigInteger, ForeignKey('ore_calcs.id'), nullable=False)
     ore_calc = db.relationship("OreCalc")
 
-    def to_json(self):
-        return {
+    def to_json(self, **kwargs):
+        temp = {
             'id': self.id,
             'type': self.type.to_json(),
             'me': self.me,
@@ -93,6 +93,8 @@ class BuildItem(db.Model):
             'qty': self.qty,
             'excess': ceil(self.qty/self.type.portion_size)*self.type.portion_size-self.qty
         }
+
+        return {**temp, **kwargs}
 
 
 class StoreItem(db.Model):

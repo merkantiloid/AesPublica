@@ -31,8 +31,12 @@
                     <span class="light-gray">(+<% item.excess | fi %>) <% item.runs | fi %> * <% item.type.portion_size | fi %> = </span>
                     <% item.qty | fi %>
                 </td>
-                <td class="text-right">ME<% item.me %></td>
-                <td class="text-right">TE<% item.te %></td>
+                <td class="text-right">
+                    <span v-show="!!item.blueprint_id">ME<% item.me %></span>
+                </td>
+                <td class="text-right">
+                    <span v-show="!!item.blueprint_id">TE<% item.te %></span>
+                </td>
             </tr>
         </table>
     </div>
