@@ -20,6 +20,8 @@ class ComponentsService:
                     'all_qty': all[key],
                     'need_qty': need.get(key,0),
                     'odd_qty': after_refine.get(key,0) - need.get(key,0),
+                    'after_qty': after_refine.get(key,0),
+                    'percent': 100.0 * (after_refine.get(key,0) - need.get(key,0)) / need.get(key,0),
                 })
 
         result = sorted(result, key=sort_key)

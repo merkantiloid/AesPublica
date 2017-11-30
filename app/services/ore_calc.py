@@ -119,7 +119,7 @@ class OreCalcService:
         minerals = []
         for goal_mineral in goal_minerals:
             if goal_mineral['need_qty']>0:
-                ordered_minerals.append(goal_mineral['type_id'])
+                ordered_minerals.append(goal_mineral['type']['id'])
                 minerals.append(goal_mineral['need_qty'])
 
         ordered_ores = model.checked_ores()

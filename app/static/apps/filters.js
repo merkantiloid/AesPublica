@@ -22,3 +22,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 Vue.filter("fi", function (value) {
     return number_format(value, 0, '.', ' ')
 });
+
+Vue.filter("fp", function (value) {
+    return number_format(value, 2, '.', ' ')
+});
