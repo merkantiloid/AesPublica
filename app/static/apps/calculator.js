@@ -107,7 +107,7 @@ var calculator = new Vue({
                 '/calc/save_settings',
                 vm.calc.settings
             ).then(function (response) {
-
+                vm.calc.minerals = response.data.minerals;
             }).catch(function (error) {
                 console.log(error);
             });
