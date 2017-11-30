@@ -4,9 +4,6 @@ from pymprog import *
 class OptimizeService:
 
     def calc(self, minerals, ores, ore_prices):
-        result = []
-
-
         # minerals = [10000, 800, 125]
         # ores = [
         #     [1000,   0,  50],
@@ -15,6 +12,7 @@ class OptimizeService:
         # ore_prices = [ 55000, 3500 ]
         # x1 = 2.5
         # x2 = 15.0
+
 
         ore_cnt = len(ores)
         mnr_cnt = len(minerals)
@@ -31,11 +29,12 @@ class OptimizeService:
 
         p.solve()
 
-        p.sensitivity()
+        # p.sensitivity()
 
-        for i in range(ore_cnt):
-            result.append(x[i].primal)
-
+        result = []
+        if p.get_status() == glpk.GLP_OPT or p.get_status() == glpk.GLP_FEAS:
+            for i in range(ore_cnt):
+                result.append(x[i].primal)
         p.end()
 
         return result

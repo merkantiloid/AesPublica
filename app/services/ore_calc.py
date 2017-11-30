@@ -1,4 +1,4 @@
-from app.models import OreCalc, BuildItem, StoreItem, Price
+from app.models import OreCalc, BuildItem, StoreItem, Price, CalcResult
 from .static import Static, ReprocessByTypeId, TypeById
 from app import db
 from .loaders import load_chars
@@ -7,6 +7,7 @@ from .components import ComponentsService
 from .reprocess import ReprocessService
 from .optimize import OptimizeService
 from .price import PriceService
+from math import ceil
 
 
 class OreCalcService:
@@ -27,10 +28,11 @@ class OreCalcService:
 
     def to_json(self):
         model = self.user.ore_calc
+        rservice = ReprocessService(model)
 
-        reprocessed = ReprocessService(model).reprocess_store(only_ore=True)
-
-        minerals = ComponentsService(model).only_minerals(reprocessed)
+        reprocessed = rservice.reprocess_store(only_ore=True)
+        after_refine = rservice.reprocess_result()
+        minerals = ComponentsService(model).only_minerals(reprocessed, after_refine)
 
         return {
             "settings": {
@@ -49,6 +51,7 @@ class OreCalcService:
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
             "ore_settings": model.checked_ores(),
+            "calc_results": [x.to_json() for x in model.calc_results],
         }
 
 
@@ -128,9 +131,8 @@ class OreCalcService:
         for ore_id in ordered_ores:
             ore = []
             for mineral_id in ordered_minerals:
-                qty = ReprocessByTypeId[ore_id].get(mineral_id,0)
                 if mineral_id in ReprocessByTypeId[ore_id]:
-                    rqty = service.reprocess_ore(ore_id, qty, mineral_id)
+                    rqty = service.reprocess_ore(ore_id, TypeById[ore_id].portion_size, mineral_id)
                     ore.append(rqty)
                 else:
                     ore.append(0)
@@ -139,8 +141,22 @@ class OreCalcService:
             price = Price.query.filter(Price.source=='esi', Price.type_id==ore_id).one()
             ore_prices.append(price.value)
 
+        # print('minerals')
+        # print(minerals)
+        #
+        # print('ores')
+        # for index, d in enumerate(ores):
+        #   print(TypeById[ordered_ores[index]].name, d)
+        #
+        # print('ore_prices')
+        # print(ore_prices)
+
         result_ores = OptimizeService().calc(minerals=minerals, ores=ores, ore_prices=ore_prices)
-
+        db.session.execute('delete from calc_results where ore_calc_id = :id',  params={'id': model.id} )
         for index, x in enumerate(result_ores):
-            print( TypeById[ordered_ores[index]].name, x )
-
+            if x>0:
+                # print( TypeById[ordered_ores[index]].name, x, ceil(x)*TypeById[ordered_ores[index]].portion_size )
+                ore_id = ordered_ores[index]
+                calc_result = CalcResult(ore_calc_id=model.id, type_id=ore_id, qty=ceil(x)*TypeById[ore_id].portion_size)
+                db.session.add(calc_result)
+        db.session.commit()

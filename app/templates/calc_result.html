@@ -1,1 +1,14 @@
 <button class="btn btn-primary" v-on:click="CalcOres">Calc</button>
+
+<table class="table table-sm">
+    <tr>
+        <th></th>
+        <th></th>
+        <th class="text-right">Qty</th>
+    </tr>
+    <tr v-for="result in calc.calc_results">
+        <td><img width="24" height="24" v-bind:src="IURL(result.type.id)"/></td>
+        <td><% result.type.name %></td>
+        <td class="text-right"><% result.qty|fi %></td>
+    </tr>
+</table>

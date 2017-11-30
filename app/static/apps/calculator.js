@@ -227,7 +227,7 @@ var calculator = new Vue({
         },
 
         TouchOreSettings: function(){
-            var values = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray();
+            var values = $('.ore-input:checked').map(function(i,x){ return parseInt(x.value) }).toArray();
             this.calc.ore_settings = values;
             this.oreSettingsChanged = true;
         },
@@ -247,14 +247,13 @@ var calculator = new Vue({
         },
 
         IsOreChecked: function(id){
-            return this.calc.ore_settings.indexOf(id.toString()) > -1;
+            return this.calc.ore_settings.indexOf(id) > -1;
         },
 
         CalcOres: function(){
             var vm = this;
-            console.log('CalcOres');
             axios.get('/calc/result').then(function (response) {
-                console.log(response);
+                vm.calc.calc_results = response.data.calc_results;
             }).catch(function (error) {
                 console.log(error);
             });

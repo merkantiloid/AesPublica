@@ -54,6 +54,8 @@ class OreCalc(db.Model):
     store_items_text = db.Column(db.Text)
     store_items = db.relationship("StoreItem", back_populates="ore_calc")
 
+    calc_results = db.relationship("CalcResult", back_populates="ore_calc")
+
     def checked_ores(self):
         if not self.ore_settings:
             return []
@@ -122,3 +124,21 @@ class Price(db.Model):
     type = db.relationship("EveType")
 
 
+class CalcResult(db.Model):
+    __tablename__ = 'calc_results'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    ore_calc_id = db.Column(db.BigInteger, ForeignKey('ore_calcs.id'), nullable=False)
+    ore_calc = db.relationship("OreCalc")
+
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType")
+
+    qty = db.Column(db.BigInteger, nullable=False)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'type': self.type.to_json(),
+            'qty': self.qty,
+        }

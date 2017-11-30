@@ -3,15 +3,15 @@
     <tr>
         <th></th>
         <th></th>
+        <th class="text-right gray">All</th>
         <th class="text-right red">Need</th>
         <th class="text-right green">Odd</th>
-        <th class="text-right gray">All</th>
     </tr>
     <tr v-for="mineral in calc.minerals">
         <td><img width="24" height="24" v-bind:src="IURL(mineral.type_id)"/></td>
         <td><% mineral.type_name %></td>
-        <td class="text-right red"><% mineral.need_qty|fi %></td>
-        <td class="text-right green"><% 0|fi %></td>
         <td class="text-right"><% mineral.all_qty|fi %></td>
+        <td class="text-right red"><% mineral.need_qty|fi %></td>
+        <td class="text-right green"><% mineral.odd_qty|fi %></td>
     </tr>
 </table>

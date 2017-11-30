@@ -9,7 +9,7 @@ class ComponentsService:
     def __init__(self, ore_calc):
         self.ore_calc = ore_calc
 
-    def only_minerals(self, store={}):
+    def only_minerals(self, store={}, after_refine={}):
         all = self.reverse_assembly({})
         need = self.reverse_assembly(store)
         result = []
@@ -20,6 +20,7 @@ class ComponentsService:
                     'type_name': TypeById[key].name,
                     'all_qty': all[key],
                     'need_qty': need.get(key,0),
+                    'odd_qty': after_refine.get(key,0) - need.get(key,0),
                 })
 
         result = sorted(result, key=sort_key)
@@ -64,6 +65,8 @@ class ComponentsService:
                             process[imt_key] = record
                         else:
                             result[mid] = result.get(mid,0) + store_real_qty
+                else:
+                    result[i_type_id] = result.get(i_type_id,0) + queue[pkey]['qty']
 
             if len(process) == 0:
                 break

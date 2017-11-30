@@ -39,12 +39,21 @@ class ReprocessService:
             (1+2*ore_skill/100)
         )
 
+
+    def reprocess_result(self):
+        return self.reprocess(self.ore_calc.calc_results, True, False)
+
+
     def reprocess_store(self, only_ore = False, deep = True):
+        return self.reprocess(self.ore_calc.store_items, only_ore, deep)
+
+
+    def reprocess(self, items, only_ore, deep):
         result = {}
         process = {}
         queue = {}
 
-        for item in self.ore_calc.store_items:
+        for item in items:
             queue[item.type_id] = queue.get(item.type_id,0) + item.qty
 
         while True:
@@ -78,7 +87,6 @@ class ReprocessService:
             else:
                 queue = process
                 process = {}
-
 
         # for key in result:
         #     print(TypeById[key].name, result[key])
