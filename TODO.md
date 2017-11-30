@@ -1,0 +1,7 @@
+- remove me&te from items with no blueprints
+- recalc after save settings
+- optimize N+1 sql 
+- silence glpk
+- add volumes & total volumes to result
+- add exact prices
+- python bundle install ???

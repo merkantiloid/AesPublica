@@ -20,7 +20,8 @@ body{
 }
 
 h6{
-    text-align: center
+    text-align: center;
+    font-size: 14px;
 }
 
 [v-cloak] {
@@ -67,7 +68,7 @@ h6{
 .icon {
   color: #007bff;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 button .icon {
@@ -130,3 +131,9 @@ span.light-gray{
 label.label-sm{
     margin: 0;
 }
+
+.form-control-sm{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
