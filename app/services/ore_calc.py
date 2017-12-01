@@ -124,7 +124,7 @@ class OreCalcService:
 
         ordered_ores = model.checked_ores()
 
-        PriceService().esi(ordered_ores)
+        PriceService().evemarketer(ordered_ores)
 
         ores = []
         ore_prices = []
@@ -138,8 +138,8 @@ class OreCalcService:
                     ore.append(0)
             ores.append(ore)
 
-            price = Price.query.filter(Price.source=='esi', Price.type_id==ore_id).one()
-            ore_prices.append(price.value)
+            price = Price.query.filter(Price.source=='evemarketer', Price.type_id==ore_id).one()
+            ore_prices.append(price.sell)
 
         # print('minerals')
         # print(minerals)

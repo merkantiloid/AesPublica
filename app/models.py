@@ -119,7 +119,8 @@ class StoreItem(db.Model):
 class Price(db.Model):
     __tablename__ = 'prices'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    value = db.Column(db.Float)
+    buy = db.Column(db.Float)
+    sell = db.Column(db.Float)
     source = db.Column(db.String)
     updated_at = db.Column(db.String)
     type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)

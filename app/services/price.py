@@ -2,11 +2,54 @@ from app import db, preston
 from app.models import Price, EveType
 from sqlalchemy import text
 from datetime import datetime
+import requests
 
 
 class PriceService:
 
     def esi(self, type_ids = []):
+        db_types = self.outdated(type_ids,'esi')
+        if len(db_types)>0:
+            all_prices = preston.markets.prices()
+            all_prices_hash = {}
+            for r in all_prices:
+                all_prices_hash[r['type_id']] = r['adjusted_price']
+            ts = datetime.now().isoformat()
+            for db_type in db_types:
+                db_price = Price.query.filter(Price.source=='esi', Price.type_id==db_type.id).first()
+                if not db_price:
+                    db_price = Price(source='esi', type_id=db_type.id)
+                db_price.buy = all_prices_hash[db_price.type_id]
+                db_price.sell = all_prices_hash[db_price.type_id]
+                db_price.updated_at = ts
+                db.session.add(db_price)
+            db.session.commit()
+
+
+    def evemarketer(self, type_ids = []):
+        db_types = self.outdated(type_ids,'evemarketer')
+        if len(db_types)>0:
+            ids = ','.join([str(x.id) for x in db_types])
+            all_prices = requests.get(url='https://api.evemarketer.com/ec/marketstat/json?typeid='+ids+'&regionlimit=10000002')
+
+            all_prices_hash = {}
+            for r in all_prices.json():
+                type_id = r['sell']['forQuery']['types'][0]
+                all_prices_hash[type_id] = r
+
+            ts = datetime.now().isoformat()
+            for db_type in db_types:
+                db_price = Price.query.filter(Price.source=='esi', Price.type_id==db_type.id).first()
+                if not db_price:
+                    db_price = Price(source='evemarketer', type_id=db_type.id)
+                db_price.buy = all_prices_hash[db_type.id]['buy']['fivePercent']
+                db_price.sell = all_prices_hash[db_type.id]['sell']['fivePercent']
+                db_price.updated_at = ts
+                db.session.add(db_price)
+            db.session.commit()
+
+
+    def outdated(self, type_ids, source):
         db_types = EveType.query.from_statement(
             text(
                 'select eve_types.* '
@@ -15,26 +58,9 @@ class PriceService:
                 '  where eve_types.id in :ids '
                 '    and (now()-cast(updated_at as datetime)>3600 or prices.id is null)'
             )
-        ).params(source='esi', ids=type_ids).all()
+        ).params(source=source, ids=type_ids).all()
+        return db_types
 
-        if len(db_types)>0:
-
-            all_prices = preston.markets.prices()
-            all_prices_hash = {}
-            for r in all_prices:
-                all_prices_hash[r['type_id']] = r['adjusted_price']
-
-            ts = datetime.now().isoformat()
-
-            for db_type in db_types:
-                db_price = Price.query.filter(Price.source=='esi', Price.type_id==db_type.id).first()
-                if not db_price:
-                    db_price = Price(source='esi', type_id=db_type.id)
-                db_price.value = all_prices_hash[db_price.type_id]
-                db_price.updated_at = ts
-                db.session.add(db_price)
-
-            db.session.commit()
 
 
 

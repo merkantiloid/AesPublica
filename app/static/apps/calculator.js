@@ -234,7 +234,7 @@ var calculator = new Vue({
 
         SaveOreSettings: function(){
             var vm = this,
-                values = $('.ore-input:checked').map(function(i,x){ return x.value }).toArray();
+                values = $('.ore-input:checked').map(function(i,x){ return parseInt(x.value) }).toArray();
             axios.post(
                 '/calc/save_ore_settings',
                 {text: values.join(',')}
