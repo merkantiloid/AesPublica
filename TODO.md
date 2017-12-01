@@ -1,4 +1,3 @@
-- silence glpk
 - add prices, volumes & total volumes to result
 - add exact prices https://api.evemarketer.com/ec/marketstat/json?typeid=34&typeid=35&regionlimit=10000002
 - python bundle install ???

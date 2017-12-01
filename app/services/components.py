@@ -15,13 +15,16 @@ class ComponentsService:
         result = []
         for key in all:
             if key in CalcIDs:
+                need_qty = need.get(key,0)
+                after_qty = after_refine.get(key,0)
+                percent = 100.0 * (after_qty - need_qty) / need_qty if need_qty>0 else 0
                 result.append({
                     'type': TypeById[key].to_json(),
                     'all_qty': all[key],
-                    'need_qty': need.get(key,0),
-                    'odd_qty': after_refine.get(key,0) - need.get(key,0),
-                    'after_qty': after_refine.get(key,0),
-                    'percent': 100.0 * (after_refine.get(key,0) - need.get(key,0)) / need.get(key,0),
+                    'need_qty': need_qty,
+                    'odd_qty': after_qty - need_qty,
+                    'after_qty': after_qty,
+                    'percent': percent,
                 })
 
         result = sorted(result, key=sort_key)

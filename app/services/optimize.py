@@ -13,7 +13,6 @@ class OptimizeService:
         # x1 = 2.5
         # x2 = 15.0
 
-
         ore_cnt = len(ores)
         mnr_cnt = len(minerals)
 
@@ -27,9 +26,11 @@ class OptimizeService:
         for im in range(mnr_cnt):
             sum( ores[io][im] * x[io] for io in range(ore_cnt) ) >= minerals[im]
 
+        p.solver(solver='simplex', msg_lev=glpk.GLP_MSG_OFF)
+
         p.solve()
 
-        # p.sensitivity()
+        #p.sensitivity()
 
         result = []
         if p.get_status() == glpk.GLP_OPT or p.get_status() == glpk.GLP_FEAS:
