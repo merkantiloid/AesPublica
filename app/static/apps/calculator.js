@@ -32,6 +32,7 @@ var calculator = new Vue({
             store_items_text: '',
             store_items: [],
             ore_settings: [],
+            calc_results: {},
         },
         static: gStatic,
         rigs: [],

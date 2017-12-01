@@ -1,0 +1,1 @@
+create index prices_source_type_id on prices(source,type_id);
