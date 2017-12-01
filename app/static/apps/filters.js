@@ -26,3 +26,7 @@ Vue.filter("fi", function (value) {
 Vue.filter("fp", function (value) {
     return number_format(value, 2, '.', ' ')
 });
+
+Vue.filter("ff", function (value) {
+    return number_format(value, 2, '.', ' ')
+});

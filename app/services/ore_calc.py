@@ -51,7 +51,22 @@ class OreCalcService:
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
             "ore_settings": model.checked_ores(),
-            "calc_results": [x.to_json() for x in model.calc_results],
+            "calc_results": self._calc_results(model),
+        }
+
+    def _calc_results(self, model):
+        total_price = 0
+        total_volume = 0
+        items = []
+        for x in model.calc_results:
+            item = x.to_json(price_source='evemarketer')
+            items.append(item)
+            total_price += item['price']
+            total_volume += item['volume']
+        return {
+            'items': items,
+            'total_price': total_price,
+            'total_volume': total_volume,
         }
 
 

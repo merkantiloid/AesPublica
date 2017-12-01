@@ -3,10 +3,24 @@
         <th><button class="btn btn-primary btn-sm" v-on:click="CalcOres">Calc</button></th>
         <th></th>
         <th class="text-right">Qty</th>
+        <th class="text-right">Price 1u</th>
+        <th class="text-right">Price</th>
+        <th class="text-right">Volume</th>
     </tr>
-    <tr v-for="result in calc.calc_results">
+    <tr v-for="result in calc.calc_results.items">
         <td><img width="24" height="24" v-bind:src="IURL(result.type.id)"/></td>
         <td><% result.type.name %></td>
         <td class="text-right"><% result.qty|fi %></td>
+        <td class="text-right"><% result.price_1u|fi %></td>
+        <td class="text-right"><% result.price|ff %></td>
+        <td class="text-right"><span class="gray"><% result.qty|fi %> * <% result.type.volume|ff %> = </span> <% result.volume|ff %></td>
+    </tr>
+    <tr>
+        <th></th>
+        <th></th>
+        <th class="text-right"></th>
+        <th class="text-right"></th>
+        <th class="text-right"><% calc.calc_results.total_price|ff %></th>
+        <th class="text-right"><% calc.calc_results.total_volume|ff %></th>
     </tr>
 </table>

@@ -139,9 +139,14 @@ class CalcResult(db.Model):
 
     qty = db.Column(db.BigInteger, nullable=False)
 
-    def to_json(self):
+    def to_json(self, **kwargs):
+        source = kwargs ['price_source'] if 'price_source' in kwargs else 'esi'
+        price = Price.query.filter(Price.source == source, Price.type_id == self.type_id).one()
         return {
             'id': self.id,
             'type': self.type.to_json(),
             'qty': self.qty,
+            'price_1u': price.sell,
+            'price': self.qty * price.sell,
+            'volume': self.qty * self.type.volume,
         }
