@@ -141,6 +141,10 @@ class CalcResult(db.Model):
 
     def to_json(self, **kwargs):
         source = kwargs ['price_source'] if 'price_source' in kwargs else 'esi'
+
+        print(source, self.type_id, kwargs)
+
+
         price = Price.query.filter(Price.source == source, Price.type_id == self.type_id).one()
         return {
             'id': self.id,

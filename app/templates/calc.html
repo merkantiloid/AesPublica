@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block scripts%}
+<script src="{{ url_for('static', filename='vendor/clipboard.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/auto-complete.min.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>

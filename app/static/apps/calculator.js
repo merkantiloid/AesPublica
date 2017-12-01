@@ -66,6 +66,12 @@ var calculator = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
+
+        new Clipboard('#copy-result', {
+            text: function(trigger) {
+                return vm.ResultText();
+            }
+        });
     },
 
     methods: {
@@ -258,6 +264,14 @@ var calculator = new Vue({
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+
+        ResultText: function(){
+            result = "";
+            this.calc.calc_results.items.forEach(function(el){
+                result = result + el.type.name + "\t" + el.qty + "\n";
+            });
+            return result;
         },
 
     }

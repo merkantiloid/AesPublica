@@ -75,8 +75,12 @@ button .icon {
   font-size: 12px;
 }
 
-.ion-ios-checkmark, .ion-plus-circled{
+.ion-ios-checkmark, .ion-plus-circled, .ion-ios-copy, .ion-gear-b{
   cursor: pointer;
+}
+
+.icon.ion-ios-copy, .ion-gear-b{
+    font-size: 24px;
 }
 
 .autocomplete-suggestions {

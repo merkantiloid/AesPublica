@@ -34,6 +34,8 @@ class OreCalcService:
         after_refine = rservice.reprocess_result()
         minerals = ComponentsService(model).only_minerals(reprocessed, after_refine)
 
+        PriceService().evemarketer(model.checked_ores())
+
         return {
             "settings": {
                 "space": model.space,
