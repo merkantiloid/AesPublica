@@ -6,3 +6,4 @@ preston
 bcrypt
 pymysql
 pymprog
+Flask-Migrate
