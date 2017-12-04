@@ -9,29 +9,29 @@ print("Importing SDE dump from %s" % path)
 src = open(path, "rb")
 zf = zipfile.ZipFile(src)
 
-# with zf.open('sde/fsd/typeIDs.yaml') as datafile:
-#     parse_type_ids(datafile)
-#
-# with zf.open('sde/bsd/invMarketGroups.yaml') as datafile:
-#     parse_market_groups(datafile)
-#
-# with zf.open('sde/fsd/groupIDs.yaml') as datafile:
-#    parse_groups(datafile)
-#
-# with zf.open('sde/fsd/categoryIDs.yaml') as datafile:
-#    parse_categories(datafile)
-#
-# with zf.open('sde/fsd/categoryIDs.yaml') as datafile:
-#    parse_categories(datafile)
-#
-# with zf.open('sde/bsd/dgmAttributeTypes.yaml') as datafile:
-#     parse_attrs(datafile)
-#
-# with zf.open('sde/bsd/dgmTypeAttributes.yaml') as datafile:
-#     parse_type_attrs(datafile)
-#
-# with zf.open('sde/fsd/blueprints.yaml') as datafile:
-#     parse_blueprints_attrs(datafile)
+with zf.open('sde/fsd/typeIDs.yaml') as datafile:
+    parse_type_ids(datafile)
+
+with zf.open('sde/bsd/invMarketGroups.yaml') as datafile:
+    parse_market_groups(datafile)
+
+with zf.open('sde/fsd/groupIDs.yaml') as datafile:
+   parse_groups(datafile)
+
+with zf.open('sde/fsd/categoryIDs.yaml') as datafile:
+   parse_categories(datafile)
+
+with zf.open('sde/fsd/categoryIDs.yaml') as datafile:
+   parse_categories(datafile)
+
+with zf.open('sde/bsd/dgmAttributeTypes.yaml') as datafile:
+    parse_attrs(datafile)
+
+with zf.open('sde/bsd/dgmTypeAttributes.yaml') as datafile:
+    parse_type_attrs(datafile)
+
+with zf.open('sde/fsd/blueprints.yaml') as datafile:
+    parse_blueprints_attrs(datafile)
 
 with zf.open('sde/bsd/invTypeMaterials.yaml') as datafile:
     parse_type_materials(datafile)
