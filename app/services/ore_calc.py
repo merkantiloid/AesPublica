@@ -21,6 +21,7 @@ class OreCalcService:
                 citadel_id=Static.DEFAULT_CITADEL,
                 implant_id= -1,
                 rig1_id= -1,
+                esi_char_id=-1,
             )
             db.session.add(temp)
             db.session.commit()
