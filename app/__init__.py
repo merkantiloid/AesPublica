@@ -11,14 +11,11 @@ mainApp.config.from_envvar('ESI_CONFIG', silent=True)
 
 if not mainApp.debug:
     import logging
-    from logging import Formatter
-    file_handler = Formatter()
-    file_handler.setLevel(logging.WARNING)
-    file_handler.setFormatter(Formatter(
-        '%(asctime)s %(levelname)s: %(message)s '
-        '[in %(pathname)s:%(lineno)d]'
-    ))
-    mainApp.logger.addHandler(file_handler)
+    from logging.handlers import RotatingFileHandler
+    handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    mainApp.logger.addHandler(handler)
+
 
 mainApp.jinja_env.filters['fldate'] = fldate
 
