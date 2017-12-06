@@ -12,7 +12,7 @@ mainApp.config.from_envvar('ESI_CONFIG', silent=True)
 if not mainApp.debug:
     import logging
     from logging.handlers import RotatingFileHandler
-    handler = RotatingFileHandler('aes-publica.log', maxBytes=10000000, backupCount=3)
+    handler = RotatingFileHandler('log/aes-publica.log', maxBytes=10000000, backupCount=3)
     handler.setLevel(logging.INFO)
     mainApp.logger.addHandler(handler)
 
