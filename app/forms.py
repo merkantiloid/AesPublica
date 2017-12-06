@@ -16,7 +16,7 @@ class LoginForm(FlaskForm):
             raise ValidationError('Invalid name')
 
     def validate_password(form, field):
-        user = User.query.filter(User.name == form.name).first()
+        user = User.query.filter(User.name == form.name.data).first()
         if user and not bcrypt.hashpw(field.data.encode(), user.hash.encode()) == user.hash.encode():
             raise ValidationError('Invalid password')
 
