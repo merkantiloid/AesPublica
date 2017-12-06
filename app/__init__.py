@@ -9,6 +9,17 @@ mainApp = Flask(__name__)
 mainApp.config.from_object('config')
 mainApp.config.from_envvar('ESI_CONFIG', silent=True)
 
+if not mainApp.debug:
+    import logging
+    from logging import Formatter
+    file_handler = Formatter()
+    file_handler.setLevel(logging.WARNING)
+    file_handler.setFormatter(Formatter(
+        '%(asctime)s %(levelname)s: %(message)s '
+        '[in %(pathname)s:%(lineno)d]'
+    ))
+    mainApp.logger.addHandler(file_handler)
+
 mainApp.jinja_env.filters['fldate'] = fldate
 
 db = SQLAlchemy(mainApp)
