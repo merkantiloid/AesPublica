@@ -7,3 +7,4 @@ bcrypt
 pymysql
 pymprog
 sqlalchemy-migrate
+pyyaml

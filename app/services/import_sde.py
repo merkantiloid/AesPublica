@@ -6,7 +6,7 @@ from sqlalchemy.sql import text
 
 def parse_categories(file):
     print(".... loading categories")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
         print(key, data[key]['name'].get('en','N/A'))
         item = EveCategory.query.get(key)
@@ -19,8 +19,8 @@ def parse_categories(file):
     db.session.commit()
 
 def parse_groups(file):
-    print(".... loadinggroups")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    print(".... loading groups")
+    data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
         print(key, data[key]['name'].get('en','N/A'))
         item = EveGroup.query.get(key)
@@ -36,7 +36,7 @@ def parse_groups(file):
 
 def parse_market_groups(file):
     print(".... loading market groups")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for record in data:
         key = record['marketGroupID']
         # print(key, record['marketGroupName'])
@@ -54,7 +54,7 @@ def parse_market_groups(file):
 
 def parse_type_ids(file):
     print(".... loading type IDs")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
         print(key, data[key]['name'].get('en','N/A'))
         item = EveType.query.get(key)
@@ -72,7 +72,7 @@ def parse_type_ids(file):
 
 def parse_attrs(file):
     print(".... loading attributes")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for record in data:
         key = record['attributeID']
         print(key, record['attributeName'])
@@ -97,7 +97,7 @@ def parse_attrs(file):
 
 def parse_type_attrs(file):
     print(".... loading attribute values for types")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for record in data:
         print(record)
 
@@ -121,7 +121,7 @@ def parse_type_attrs(file):
 
 def parse_blueprints_attrs(file):
     print(".... loading blueprints")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
         print(key)
         item = EveBlueprint.query.filter(EveBlueprint.id == key).first()
@@ -136,7 +136,7 @@ def parse_blueprints_attrs(file):
 
 def parse_type_materials(file):
     print(".... loading type materials")
-    data = yaml.load(file, Loader=yaml.CLoader)
+    data = yaml.load(file, Loader=yaml.Loader)
     for record in data:
         item = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == record['typeID'], EveTypeMaterial.material_id == record['materialTypeID']).first()
         if not item:
