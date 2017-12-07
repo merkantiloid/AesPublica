@@ -2,19 +2,19 @@ import yaml
 
 from app import db
 from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute, EveBlueprint, EveTypeMaterial
-from sqlalchemy.sql import text
 
 def parse_categories(file):
     print(".... loading categories")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        print(key, data[key]['name'].get('en','N/A'))
+        name = data[key]['name'].get('en','N/A').decode("utf-8", "replace")
+        print(key, name)
         item = EveCategory.query.get(key)
         if not item:
             item = EveCategory(id=key)
         item.icon_id = data[key].get('iconID',None)
         item.published = data[key]['published']
-        item.name = data[key]['name']['en']
+        item.name = name
         db.session.add(item)
     db.session.commit()
 

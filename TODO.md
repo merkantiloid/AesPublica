@@ -1,6 +1,5 @@
 - manual
 - google analytics
 - google merchant
-- gunicorn
-- nginx
-- monit for gunicorn&nginx
+- https
+- domain spuffing

@@ -3,7 +3,7 @@
 
     python3 setup.py sdist
 
-    source ./probleme/bin/activate
+    source ./aes-env/bin/activate
     ESI_CONFIG=~/esi.conf SECRET_KEY=test ./run.py    
     
 
@@ -23,7 +23,8 @@
 
 
 #### SDE Import
-    ESI_CONFIG=~/esi.conf python3 ./sde.py ~/Downloads/sde-20171024-TRANQUILITY.zip
+    source ./aes-env/bin/activate
+    python3 ./sde.py ~/Downloads/sde-20171024-TRANQUILITY.zip
         
         
 #### TIPS
