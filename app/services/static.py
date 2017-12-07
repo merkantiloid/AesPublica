@@ -1,6 +1,7 @@
 from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids, load_ores
 from app.eve_models import EveType, EveBlueprint, EveTypeMaterial
 from app.esi_models import EsiChar
+from app import db
 
 
 BlueprintById = {}
@@ -21,8 +22,10 @@ for bp in bps:
 TypeHashes = {}
 TypeById = {}
 for type in EveType.query.all():
+    db.session.expunge(type)
     TypeHashes[type.name.lower()] = type.id
     TypeById[type.id] = type
+
 
 CalcIDs = load_calc_ids()
 
