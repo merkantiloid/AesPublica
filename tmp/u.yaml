@@ -1,7 +1,69 @@
-name:
-    de: Dossier – Author Unknown
-    en: Dossier – Author Unknown
-    fr: Dossier – Auteur inconnu
-    ja: 報告書–著者不明
-    ru: Dossier – Author Unknown
-    zh: 卷宗——作者不详
+30952:
+    description:
+        de: Dieses Dossier ist offensichtlich ein Auszug einer internen Mitarbeiterakte,
+            die die Nugoeihuvi Corporation angelegt hat.<br><br>" ... Isha ist eine
+            Art Rätsel für die meisten - selbst für die wenigen, die ihn kennen. Offensichtlich
+            hat er 30 Jahre hier bei NOH verbracht, aber niemand hat viele Details,
+            da er scheinbar keine Angestellten hat. Mir ist zu Ohren gekommen, dass
+            er Kapselpiloten engagiert, wenn er jemanden braucht, der etwas für ihn
+            erledigen soll, aber ehrlich gesagt ist mir nicht klar, wie er das finanziert.
+            Möglicherweise über den NOH-Aufsichtsrat. <br><br>"Meine Kontakte im House
+            of Records teilten mir mit, dass er seine Arbeit hier in der Abteilung
+            Interne Sicherheit von NOH begann. Er arbeitet inzwischen in einer anderen
+            Abteilung und wird inoffiziell als "Berater" betitelt. Jeder kann sich
+            selbst ausmalen, wann er diesen Schritt unternommen hat und was genau
+            in seinen Aufgabenbereich fällt. In Situationen wie dieser stellt schließlich
+            niemand Fragen."
+        en: "This dossier appears to be an excerpt of  internal employee profiling
+            done by Nugoeihuvi Corporation.<br><br>“…Isha is something of an enigma,
+            even to the few of us who know him. Apparently he's spent over 30 years
+            here at NOH. Nobody has many details since he doesn't seem to keep any
+            staff. I've heard he makes use of pod pilots whenever he needs anything
+            done but I've no idea where the funds for that come from, perhaps the
+            NOH directorate. <br><br>“My House of Records contacts tell me he started
+            work here in the Internal Security division of NOH. He now works in another
+            department, unofficially titled as “Advisory”. It's anyone's guess when
+            he moved across or what his work entails. In situations like these nobody
+            asks questions.”\r\n"
+        fr: 'Ce dossier semble être un extrait du profil d''un employé de la Nugoeihuvi
+            Corporation.<br><br>« ... Isha est une énigme, même pour les quelques
+            personnes qui le connaissent. Apparemment, il aurait passé plus de 30
+            ans à la NOH. Nous n''avons que très peu d''informations à ce sujet, puisque
+            son personnel est assez limité. Il paraît qu''il fait appel à des capsuliers
+            dès qu''il a besoin de quelque chose, mais je ne sais pas où il trouve
+            les fonds nécessaires pour les employer... peut-être auprès du comité
+            directoire de la NOH. <br><br>« Mes contacts à la House of Records m''ont
+            affirmé qu''il avait commencé à travailler ici, au département d''Internal
+            Security de la NOH. Il travaille désormais dans un autre service, officieusement
+            appelé « Conseil ». Toutefois, personne ne semble savoir réellement en
+            quoi consiste son travail. Dans ce genre de situation, il vaut mieux ne
+            pas trop en savoir. »
+
+'
+        ja: ノゴエイハヴィコーポレーションによる内部の社員プロファイリングの引用と思われる報告書。<br><br>「...イシャは、彼を知っているわずかな者である我々にとってさえも、謎に包まれている。30年以上NOHにいることは明らかだ。だが、誰かと一緒に仕事をしたことがないようで、詳しいことは誰も知らない。何かする時にはいつもポッドパイロットを利用すると聞いたことがあるが、その資金をどこから得ているのかは分からない。もしかしたら、NOH総局からかもしれない。」
+            <br><br>「記録保管所の窓口係が、奴がNOHの内部セキュリティ部門で働き始めたと言ってきた。今は他の部門で働いていて、非公式だが肩書きは「アドバイザリー」だ。いつ異動したのか、仕事がどうなっているかは誰にも分からない。こんな状況では、質問もありゃしない。」
+        ru: Похоже, это досье является выдержкой из личного дела сотрудника корпорации
+            Nugoeihuvi.<br><br>«…Isha в определенной мере остается загадкой даже для
+            тех немногих из нас, кто знаком с ним. Судя по всему, он провел здесь
+            в NOH более 30 лет. Ни у кого нет подробной информации, поскольку он,
+            кажется, не пользуется услугами персонала. Я слышал, что если ему что-нибудь
+            нужно, он привлекает капсулеров, но не представляю, откуда он получает
+            на это финансирование, вероятно из правления NOH. <br><br>«Мой источник
+            в House of Records сообщил мне, что он начинал работать в Internal Security,  подразделении
+            внутренней безопасности NOH. Сейчас он в другом отделе, неофициально именуемом
+            «Консультативный». Никому неизвестно когда он был перемещен и в чем конкретно
+            состоит его работа. В подобных ситуациях вопросы не задают».
+        zh: 这份卷宗看上去像是纳基维集团制作的部分内部员工资料。<br><br>“……伊沙是很神秘的，就算是对于我们这几个认识他的人来说也是这样。”显然他已经在NOH呆了有30年了。没有什么人知道这里的细节，因为他从来不会长久地保留一个员工。我听说当他需要完成什么事情的时候一般都会找克隆飞行员，但我不知道他是从哪儿找来那么多钱支持他干这个，或许是NOH的董事会。<br><br>“国家档案所告诉我他最初在这里任职的职位是NOH的内部安全部。现在他在另外一个部门工作，非官方的头衔是“顾问”。谁都不知道他什么时候调换岗位的以及他的工作细节。像是在这样的情况下，人们都不会提出任何问题。
+    groupID: 314
+    iconID: 2886
+    mass: 10.0
+    name:
+        de: Dossier – Author Unknown
+        en: Dossier – Author Unknown
+        fr: Dossier – Auteur inconnu
+        ja: 報告書–著者不明
+        ru: Dossier – Author Unknown
+        zh: 卷宗——作者不详
+    portionSize: 1
+    published: true
+    volume: 0.1
