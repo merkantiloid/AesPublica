@@ -1,4 +1,6 @@
 #### Dev server
+    python 3.6
+
     pip3 install -r requirements.txt
 
     python3 setup.py sdist

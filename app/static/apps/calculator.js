@@ -259,7 +259,7 @@ var calculator = new Vue({
 
         CalcOres: function(){
             var vm = this;
-            axios.get('/calc/result').then(function (response) {
+            axios.post('/calc/result').then(function (response) {
                 vm.calc.calc_results = response.data.calc_results;
                 vm.calc.minerals = response.data.minerals;
             }).catch(function (error) {

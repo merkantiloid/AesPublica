@@ -59,7 +59,7 @@ def save_ore_settings():
     return jsonify(s.to_json())
 
 
-@mainApp.route('/calc/result', methods=['GET'])
+@mainApp.route('/calc/result', methods=['POST'])
 @login_required
 def calc_result():
     s = OreCalcService(g.user)
