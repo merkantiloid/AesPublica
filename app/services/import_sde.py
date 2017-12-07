@@ -7,7 +7,7 @@ def parse_categories(file):
     print(".... loading categories")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        name = data[key]['name'].get('en','N/A').decode("utf-8", "replace")
+        name = data[key]['name'].get('en','N/A').encode("utf-8")
         print(key, name)
         item = EveCategory.query.get(key)
         if not item:
@@ -22,14 +22,15 @@ def parse_groups(file):
     print(".... loading groups")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        print(key, data[key]['name'].get('en','N/A'))
+        name = data[key]['name'].get('en','N/A').encode("utf-8")
+        print(key, name)
         item = EveGroup.query.get(key)
         if not item:
             item = EveGroup(id=key)
         item.category_id = data[key]['categoryID']
         item.icon_id = data[key].get('iconID',None)
         item.published = data[key]['published']
-        item.name = data[key]['name']['en']
+        item.name = name
         db.session.add(item)
     db.session.commit()
 
@@ -56,7 +57,7 @@ def parse_type_ids(file):
     print(".... loading type IDs")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        name = data[key]['name'].get('en','N/A').decode("utf-8", "replace")
+        name = data[key]['name'].get('en','N/A').encode("utf-8")
         print(key, name)
         item = EveType.query.get(key)
         if not item:
