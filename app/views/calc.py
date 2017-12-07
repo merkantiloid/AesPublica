@@ -61,7 +61,7 @@ def save_ore_settings():
 
 @mainApp.route('/calc/result.json', methods=['GET'])
 @login_required
-def calc_result():
+def calc_result_json():
     s = OreCalcService(g.user)
     s.calc_result()
 
