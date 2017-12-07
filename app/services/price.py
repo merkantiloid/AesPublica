@@ -50,6 +50,9 @@ class PriceService:
 
 
     def outdated(self, type_ids, source):
+        if len(type_ids)==0:
+            return []
+
         db_types = EveType.query.from_statement(
             text(
                 'select eve_types.* '

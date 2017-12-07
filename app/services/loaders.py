@@ -124,7 +124,7 @@ def load_repr_rigs():
 
 def load_repr_rigs_hash():
     rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
-    rigs = {"-1": {'value': 0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}}
+    rigs = {-1: {'value': 0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}}
     for record in rig_raws:
         rigs[record[0]] = {
             'id': record[0],
