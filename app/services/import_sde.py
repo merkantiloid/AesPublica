@@ -56,14 +56,15 @@ def parse_type_ids(file):
     print(".... loading type IDs")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        print(key, data[key]['name'].get('en','N/A'))
+        name = data[key]['name'].get('en','N/A').decode("utf-8", "replace")
+        print(key, name)
         item = EveType.query.get(key)
         if not item:
             item = EveType(id=key)
         item.group_id = data[key].get('groupID',None)
         item.market_group_id = data[key].get('marketGroupID',None)
         item.volume = data[key].get('volume',None)
-        item.name = data[key]['name'].get('en','N/A')
+        item.name = name
         item.portion_size = data[key]['portionSize']
         item.published = data[key]['published']
         db.session.add(item)
