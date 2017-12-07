@@ -130,6 +130,7 @@ class OreCalcService:
 
 
     def calc_result(self):
+        print("calc_result >>")
         model = self.user.ore_calc
         service = ReprocessService(model)
         reprocessed = service.reprocess_store(only_ore=True)
@@ -180,3 +181,5 @@ class OreCalcService:
                 calc_result = CalcResult(ore_calc_id=model.id, type_id=ore_id, qty=ceil(x)*TypeById[ore_id].portion_size)
                 db.session.add(calc_result)
         db.session.commit()
+
+        print("calc_result <<")
