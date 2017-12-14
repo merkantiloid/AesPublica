@@ -51,4 +51,3 @@ def before_request():
 
 
 from app import views
-import app.services.static

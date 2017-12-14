@@ -1,15 +1,13 @@
 from app import db
 from sqlalchemy import ForeignKey
 
-class EveType(db.Model):
-    __tablename__ = 'eve_types'
-    id = db.Column(db.BigInteger, primary_key=True)
-    group_id = db.Column(db.BigInteger)
-    market_group_id = db.Column(db.BigInteger)
-    volume = db.Column(db.Float)
-    name = db.Column(db.String)
-    portion_size = db.Column(db.BigInteger)
-    published = db.Column(db.Boolean)
+class EveTypeSimple():
+    def __init__(self, complex):
+        self.id = complex.id
+        self.name = complex.name
+        self.portion_size = complex.portion_size
+        self.group_id = complex.group_id
+        self.volume = complex.volume
 
     def to_json(self):
         return {
@@ -20,6 +18,21 @@ class EveType(db.Model):
             'volume': self.volume,
         }
 
+class EveType(db.Model):
+    __tablename__ = 'eve_types'
+    id = db.Column(db.BigInteger, primary_key=True)
+    group_id = db.Column(db.BigInteger)
+    market_group_id = db.Column(db.BigInteger)
+    volume = db.Column(db.Float)
+    name = db.Column(db.String)
+    portion_size = db.Column(db.BigInteger)
+    published = db.Column(db.Boolean)
+
+    def simple(self):
+        return EveTypeSimple(self)
+
+    def to_json(self):
+        return self.simple().to_json()
 
 class EveMarketGroup(db.Model):
     __tablename__ = 'eve_market_groups'
@@ -70,6 +83,11 @@ class EveAttribute(db.Model):
     high_is_good = db.Column(db.Boolean)
 
 
+class EveBlueprintSimple():
+    def __init__(self, complex):
+        self.id = complex.id
+        self.product_id = complex.product_id
+
 class EveBlueprint(db.Model):
     __tablename__ = 'eve_blueprints'
     id = db.Column(db.BigInteger, primary_key=True)
@@ -77,6 +95,9 @@ class EveBlueprint(db.Model):
     product_id = db.Column(db.BigInteger)
 
     props = db.Column(db.JSON)
+
+    def simple(self):
+        return EveBlueprintSimple(self)
 
 class EveTypeMaterial(db.Model):
     __tablename__ = 'eve_type_materials'
