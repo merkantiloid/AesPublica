@@ -9,6 +9,7 @@ BlueprintByProductId = {}
 MaterialsByProductId = {}
 bps = EveBlueprint.query.all()
 for bp in bps:
+    db.session.expunge(bp)
     BlueprintById[bp.id] = bp
     BlueprintByProductId[bp.product_id] = bp
     if 'manufacturing' in bp.props['activities'] and 'materials' in bp.props['activities']['manufacturing']:

@@ -1,5 +1,9 @@
 - manual
 - google analytics
 - google merchant
-- https
-- domain spuffing
+- prod esi config
+- bound to session error
+- http://docs.gunicorn.org/en/latest/settings.html#preload-app
+
+
+
