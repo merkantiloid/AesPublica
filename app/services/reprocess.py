@@ -1,4 +1,4 @@
-from app.services.static import ReprocessByTypeId, AllOres, ReprImplantsHash, TypeById, ReprRigsHash
+from app.services.static import AllOres, ReprImplantsHash, ReprRigsHash, Static
 from app.esi_models import EsiSkill
 import math
 
@@ -26,11 +26,12 @@ class ReprocessService:
 
 
     def reprocess_ore(self, ore_id, qty, mineral_id):
-        chunks = math.floor(qty / TypeById[ore_id].portion_size)
+        chunks = math.floor(qty / Static.type_by_id(ore_id).portion_size)
         ore_skill_id = AllOres[ore_id]['skill_id']
         ore_skill = self.skills.get(ore_skill_id, (5 if self.ore_calc.esi_char_id==-1 else 0) )
+        reprocessed = Static.reprocess_by_id(ore_id)
         return math.floor(
-            ReprocessByTypeId[ore_id][mineral_id] *
+            reprocessed[mineral_id] *
             chunks *
             self.base_ore *
             (1+self.implant/100) *
@@ -59,18 +60,22 @@ class ReprocessService:
         while True:
 
             for store_type_id in queue:
+                reprocessed = Static.reprocess_by_id(store_type_id)
+
+                print
+
                 if store_type_id in AllOres:
-                    for part_id in ReprocessByTypeId[store_type_id]:
+                    for part_id in reprocessed:
                         qty = self.reprocess_ore(store_type_id, queue[store_type_id], part_id)
                         if deep:
                             process[part_id] = process.get(part_id,0) + qty
                         else:
                             result[part_id] = result.get(part_id,0) + qty
-                elif not only_ore and store_type_id in ReprocessByTypeId:
-                    for part_id in ReprocessByTypeId[store_type_id]:
-                        chunks = math.floor(queue[store_type_id] / TypeById[store_type_id].portion_size)
+                elif not only_ore and reprocessed:
+                    for part_id in reprocessed:
+                        chunks = math.floor(queue[store_type_id] / Static.type_by_id(store_type_id).portion_size)
                         qty = math.floor(
-                            ReprocessByTypeId[store_type_id][part_id] *
+                            reprocessed[part_id] *
                             chunks *
                             self.base_scrap *
                             (1+2*self.skill_metallurgy/100)

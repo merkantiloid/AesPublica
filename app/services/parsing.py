@@ -1,5 +1,5 @@
 import re
-from .static import TypeHashes
+from .static import Static
 
 def parse_name_qty(text):
     lines = text.splitlines()
@@ -36,9 +36,9 @@ def name_qty_line(line):
     while index <= last and not type_is_found:
         possible = ' '.join([x.lower() for x in parts[0:index+1]])
         next_possible = ' '.join([x.lower() for x in parts[0:index+2]])
-        if possible in TypeHashes and (index == last or next_possible not in TypeHashes):
+        if Static.type_hash_to_id(possible) and (index == last or not Static.type_hash_to_id(next_possible)):
             type_is_found = True
-            result_type_id = TypeHashes[possible]
+            result_type_id = Static.type_hash_to_id(possible)
         index += 1
 
     qty_is_found = False

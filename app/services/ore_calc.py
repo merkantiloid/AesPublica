@@ -1,5 +1,5 @@
 from app.models import OreCalc, BuildItem, StoreItem, Price, CalcResult
-from .static import Static, ReprocessByTypeId, TypeById, BlueprintByProductId
+from .static import Static
 from app import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
@@ -51,7 +51,7 @@ class OreCalcService:
                 "rig3_id": model.rig3_id,
             },
             "build_items_text": model.build_items_text,
-            "build_items": [x.to_json(blueprint_id=getattr(BlueprintByProductId.get(x.type_id,{}),'id',None) ) for x in model.build_items],
+            "build_items": [x.to_json(blueprint_id=Static.bid_by_pid(x.type_id)) for x in model.build_items],
             'minerals': minerals,
             "store_items_text": model.store_items_text,
             "store_items": [x.to_json() for x in model.store_items],
@@ -152,8 +152,8 @@ class OreCalcService:
         for ore_id in ordered_ores:
             ore = []
             for mineral_id in ordered_minerals:
-                if mineral_id in ReprocessByTypeId[ore_id]:
-                    rqty = service.reprocess_ore(ore_id, TypeById[ore_id].portion_size, mineral_id)
+                if mineral_id in Static.reprocess_by_id(ore_id):
+                    rqty = service.reprocess_ore(ore_id, Static.type_by_id(ore_id).portion_size, mineral_id)
                     ore.append(rqty)
                 else:
                     ore.append(0)
@@ -162,10 +162,11 @@ class OreCalcService:
             price = Price.query.filter(Price.source=='evemarketer', Price.type_id==ore_id).one()
             ore_prices.append(price.sell)
 
-        # print('minerals')
-        # print(minerals)
+        #print('minerals')
+        #print(minerals)
         #
-        # print('ores')
+        #print('ores')
+        #print(ores)
         # for index, d in enumerate(ores):
         #   print(TypeById[ordered_ores[index]].name, d)
         #
@@ -178,7 +179,7 @@ class OreCalcService:
             if x>0:
                 # print( TypeById[ordered_ores[index]].name, x, ceil(x)*TypeById[ordered_ores[index]].portion_size )
                 ore_id = ordered_ores[index]
-                calc_result = CalcResult(ore_calc_id=model.id, type_id=ore_id, qty=ceil(x)*TypeById[ore_id].portion_size)
+                calc_result = CalcResult(ore_calc_id=model.id, type_id=ore_id, qty=ceil(x)*Static.type_by_id(ore_id).portion_size)
                 db.session.add(calc_result)
         db.session.commit()
 

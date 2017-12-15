@@ -1,4 +1,4 @@
-from .static import MaterialsByProductId, TypeById, CalcIDs
+from .static import CalcIDs, Static
 from math import ceil
 
 def sort_key(item):
@@ -12,6 +12,7 @@ class ComponentsService:
     def only_minerals(self, store={}, after_refine={}):
         all = self.reverse_assembly({})
         need = self.reverse_assembly(store)
+
         result = []
         for key in all:
             if key in CalcIDs:
@@ -19,7 +20,7 @@ class ComponentsService:
                 after_qty = after_refine.get(key,0)
                 percent = 100.0 * (after_qty - need_qty) / need_qty if need_qty>0 else 0
                 result.append({
-                    'type': TypeById[key].to_json(),
+                    'type': Static.type_by_id(key).toDict(),
                     'all_qty': all[key],
                     'need_qty': need_qty,
                     'odd_qty': after_qty - need_qty,
@@ -45,7 +46,7 @@ class ComponentsService:
             if store_qty > 0:
                 queue[key] = {
                     'type_id': item.type_id,
-                    'runs': ceil(store_qty / TypeById[item.type_id].portion_size),
+                    'runs': ceil(store_qty / Static.type_by_id(item.type_id).portion_size),
                     'qty': store_qty,
                     'me': item.me,
                     'te': item.te
@@ -55,17 +56,19 @@ class ComponentsService:
             for pkey in queue:
                 i_type_id = queue[pkey]['type_id']
 
-                if i_type_id in MaterialsByProductId:
-                    for mid in MaterialsByProductId[i_type_id]:
-                        mqty = MaterialsByProductId[i_type_id][mid]
+                materials = Static.materials_by_id(i_type_id)
+
+                if materials:
+                    for mid in materials:
+                        mqty = materials[mid]
                         real_qty = self.applyME(mqty, queue[pkey]['runs'], queue[pkey]['me'])
                         store_real_qty = self.apply_store(temp_store, mid, real_qty)
 
-                        if mid in MaterialsByProductId:
+                        if Static.materials_by_id(mid):
                             imt_key = "%d-%d-%d" % (mid, 10, 20)
                             record = process.get(imt_key, {'type_id': mid, 'runs': 0, 'qty': 0, 'me': 10, 'te': 20})
                             record['qty'] = record['qty'] + store_real_qty
-                            record['runs'] = ceil(record['qty']/TypeById[mid].portion_size)
+                            record['runs'] = ceil(record['qty']/Static.type_by_id(mid).portion_size)
                             process[imt_key] = record
                         else:
                             result[mid] = result.get(mid,0) + store_real_qty
