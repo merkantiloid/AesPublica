@@ -68,6 +68,9 @@ class OreCalcService:
             items.append(item)
             total_price += item['price']
             total_volume += item['volume']
+
+        items.sort(key=lambda r: r['type']['name'])
+
         return {
             'items': items,
             'total_price': total_price,
