@@ -24,7 +24,7 @@ def update_skills(cid):
             if not model:
                 model = EsiSkill(esi_char_id = char.id, skill_id = skill['skill_id'])
             model.skillpoints_in_skill = skill['skillpoints_in_skill']
-            model.current_skill_level = skill['current_skill_level']
+            model.current_skill_level = skill['active_skill_level']
             db.session.add(model)
             db.session.commit()
             ids.append(model.skill_id)
