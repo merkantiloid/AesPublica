@@ -15,7 +15,7 @@
         <td><img width="24" height="24" v-bind:src="IURL(result.type.id)"/></td>
         <td><% result.type.name %></td>
         <td class="text-right"><% result.qty|fi %></td>
-        <td class="text-right"><% result.price_1u|fi %></td>
+        <td class="text-right"><% result.price_1u|ff %></td>
         <td class="text-right"><% result.price|ff %></td>
         <td class="text-right"><span class="gray"><% result.qty|fi %> * <% result.type.volume|ff %> = </span> <% result.volume|ff %></td>
     </tr>

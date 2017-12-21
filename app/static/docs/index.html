@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<title>Aes Publica Tutorial</title>
+	</head>
+<body>
+	
+	<h1>This is tutorial page for Aes Publica project</h1>
+
+	<p>Aes Publica is help utility for <a href="http://eveonline.com">eveonline</a> game. Its main purpose is to calculate amounts and kinds of ores needed for building given set of items.</p>
+    <p>So, here you can found an answer for the question "How much veldspar I need to build one Avatar and 100500 Drakes"</p>
+    <p>This is achieved with help of <a href="https://en.wikipedia.org/wiki/Simplex_algorithm">simplex</a> method. God bless those mathematicians who invented this stuff.</p>
+    <p>All sources for this project can be found on <a href="https://github.com/sergey-koumirov/AesPublica">https://github.com/sergey-koumirov/AesPublica</a></p>
+    <p>Let's begin with the beginning.</p>
+     
+    <h2>Registration & Login</h2>
+    <p>Nothing unusual here.</p>
+    <p>Please <a href="https://forest-tales.tk:8089/register">register</a> and <a href="https://forest-tales.tk:8089/login">login</a></p>
+
+
+    <h2>General workflow</h2>
+
+    <p>
+    	There is 5 areas on main page (from left to right, from top to bottom): 
+    	<ul>
+    		<li>refinery settings</li> 
+    		<li>minerals info</li>
+    		<li>build list</li>
+    		<li>storage list</li>
+    		<li>ores result & settings</li>
+    	</ul>  
+    	<img width="800" src="all.png">
+    </p>
+
+    <p>
+    	<ol>
+    		<li>
+    		    Change refinery settings according to your situation. Don't forget choose at least one rig. You can add your actual characters, but usually All V is enought.
+    		    <br/><img width="400" src="ref.png">
+    	    </li>
+    		<li>
+    			Next thing you need to do is to add items to build. Use textarea or search field right under the text "Build list" and don't forget to click on blue mark for saving changes.
+    			<br/><img width="800" src="build.png">
+    		</li>
+    		<li>
+    			If you already have some ore, minerals or spare parts you can add them to storage. Ores will be refined to minerals and all items from storage will be subtracted from needed materials during calculation.
+    			<br/><img width="800" src="storage.png">
+    		</li>
+    		<li>
+                Next things to do is to choose ores which will be allowed in result. Don't forget save settings (click blue checkmark in the left top corner)
+                <br/><img width="800" src="orse.png">
+    		</li>
+    		<li>
+    			After all this preparations you click blue gear and should see smth like this. Click <img width="24" src="cb.png"> to copy result to clipboard.
+                <br/><img width="800" src="result.png">
+    		</li>
+    		<li>
+    			Next look at minerals area. There is four columns
+    			<ul>
+    				<li><b>All</b>: minerals need to build items from build list (storage is ignored)</li>
+    				<li><b>After</b>: minerals which will be received after reprocessing result ores</li>
+    				<li><b>Need</b>: minerals needed to build items from build list taking into account items from storage</li>
+    				<li><b>Odd</b>: After - Need</li>
+    			</ul>
+                <br/><img width="800" src="min.png">
+    		</li>
+
+    	</ol>
+    </p>
+
+    <h2>Feedback</h2>
+    <p>If you've found some bugs or have questions - please create issue on github</p>
+
+</body>
+</html>
