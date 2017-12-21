@@ -1,4 +1,4 @@
 - google
-- do smth about redis
+- waiting icon
 
 

@@ -2,6 +2,7 @@ from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_rep
 from app.eve_models import EveType, EveBlueprint, EveTypeMaterial
 from app.esi_models import EsiChar
 from munch import Munch
+from functools import lru_cache
 
 _HASHES = {}
 for type in EveType.query.filter(EveType.published==True).all():
@@ -60,14 +61,14 @@ class Static:
             "ores": AllOresGrouped,
         }
 
-    @staticmethod
+    @lru_cache()
     def type_hash_to_id(hash):
         if hash in _HASHES:
             return _HASHES[hash]
         else:
             return None
 
-    @staticmethod
+    @lru_cache()
     def type_by_id(id):
         type = EveType.query.get(id)
         if type:
@@ -75,7 +76,7 @@ class Static:
         else:
             return None
 
-    @staticmethod
+    @lru_cache()
     def materials_by_id(pid):
         bp = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
         if bp:
@@ -87,7 +88,7 @@ class Static:
                 return hash
         return None
 
-    @staticmethod
+    @lru_cache()
     def bid_by_pid(pid):
         data = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
 
@@ -96,7 +97,7 @@ class Static:
         else:
             return None
 
-    @staticmethod
+    @lru_cache()
     def reprocess_by_id(id):
         data = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == id).all()
         hash = {}
