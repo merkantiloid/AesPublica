@@ -1,6 +1,4 @@
-- manual
-- google merchant
-
+- google
 - do smth about redis
 
 

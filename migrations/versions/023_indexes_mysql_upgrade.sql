@@ -1,0 +1,1 @@
+create index eve_blueprints_product_id_idx on eve_blueprints(product_id);

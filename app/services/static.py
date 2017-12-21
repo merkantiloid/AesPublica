@@ -1,35 +1,13 @@
 from .loaders import load_citadels, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids, load_ores
 from app.eve_models import EveType, EveBlueprint, EveTypeMaterial
 from app.esi_models import EsiChar
-from app import r as redis
-import yaml
 from munch import Munch
 
-
-bps = EveBlueprint.query.all()
-for bp in bps:
-    if bp.product_id:
-        redis.set('bpr:%d' % (bp.product_id), bp.id)
-        if 'manufacturing' in bp.props['activities'] and 'materials' in bp.props['activities']['manufacturing']:
-            array = bp.props['activities']['manufacturing']['materials']
-            hash = {}
-            for el in array:
-                hash[el['typeID']] = el['quantity']
-            redis.set('m:%d' % (bp.product_id), yaml.dump(hash))
-
-for type in EveType.query.all():
-    redis.set('th:'+type.name.lower(),type.id)
-    redis.set('t:%d' %(type.id), yaml.dump(type.to_json()) )
+_HASHES = {}
+for type in EveType.query.filter(EveType.published==True).all():
+    _HASHES[type.name.lower()] = type.id
 
 CalcIDs = load_calc_ids()
-
-_ReprocessByTypeId = {}
-for r in EveTypeMaterial.query.all():
-    if r.type_id not in _ReprocessByTypeId:
-        _ReprocessByTypeId[r.type_id] = {}
-    _ReprocessByTypeId[r.type_id][r.material_id] = r.qty
-for key in _ReprocessByTypeId:
-    redis.set('r:%d' % (key), yaml.dump(_ReprocessByTypeId[key]))
 
 AllOres = load_ores()
 
@@ -82,43 +60,47 @@ class Static:
             "ores": AllOresGrouped,
         }
 
-
     @staticmethod
     def type_hash_to_id(hash):
-        i = redis.get('th:%s'%(hash))
-        if i:
-            return int(i)
+        if hash in _HASHES:
+            return _HASHES[hash]
         else:
             return None
 
     @staticmethod
     def type_by_id(id):
-        data = redis.get('t:%d'%(id))
-        if data:
-            return Munch(yaml.load(data.decode()))
+        type = EveType.query.get(id)
+        if type:
+            return Munch(type.to_json())
         else:
             return None
 
     @staticmethod
-    def materials_by_id(id):
-        data = redis.get('m:%d'%(id))
-        if data:
-            return Munch(yaml.load(data.decode()))
-        else:
-            return None
+    def materials_by_id(pid):
+        bp = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
+        if bp:
+            if 'manufacturing' in bp.props['activities'] and 'materials' in bp.props['activities']['manufacturing']:
+                array = bp.props['activities']['manufacturing']['materials']
+                hash = {}
+                for el in array:
+                    hash[el['typeID']] = el['quantity']
+                return hash
+        return None
 
     @staticmethod
     def bid_by_pid(pid):
-        data = redis.get('bpr:%d'%(pid))
+        data = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
+
         if data:
-            return int(data)
+            return data.id
         else:
             return None
 
     @staticmethod
     def reprocess_by_id(id):
-        data = redis.get('r:%d'%(id))
-        if data:
-            return Munch(yaml.load(data.decode()))
-        else:
-            return None
+        data = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == id).all()
+        hash = {}
+        for r in data:
+            hash[r.material_id] = r.qty
+        return hash
+

@@ -4,7 +4,6 @@ from flask_login import LoginManager, current_user
 from preston.esi import Preston
 from urllib.parse import quote
 from .filters import fldate
-import redis
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
@@ -32,8 +31,6 @@ preston = Preston(
     scope='esi-skills.read_skills.v1',
     user_agent='Probleme',
 )
-
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 from .models import User
 

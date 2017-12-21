@@ -8,5 +8,4 @@ pymysql
 pymprog
 sqlalchemy-migrate
 pyyaml
-redis
 munch

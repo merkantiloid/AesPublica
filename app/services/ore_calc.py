@@ -154,9 +154,11 @@ class OreCalcService:
         ore_prices = []
         for ore_id in ordered_ores:
             ore = []
+            ore_minerals = Static.reprocess_by_id(ore_id)
+            ore_portion = Static.type_by_id(ore_id).portion_size
             for mineral_id in ordered_minerals:
-                if mineral_id in Static.reprocess_by_id(ore_id):
-                    rqty = service.reprocess_ore(ore_id, Static.type_by_id(ore_id).portion_size, mineral_id)
+                if mineral_id in ore_minerals:
+                    rqty = service.reprocess_ore(ore_id, ore_portion, mineral_id)
                     ore.append(rqty)
                 else:
                     ore.append(0)
@@ -173,8 +175,8 @@ class OreCalcService:
         # for index, d in enumerate(ores):
         #   print(TypeById[ordered_ores[index]].name, d)
         #
-        # print('ore_prices')
-        # print(ore_prices)
+        #print('ore_prices')
+        #print(ore_prices)
 
         result_ores = OptimizeService().calc(minerals=minerals, ores=ores, ore_prices=ore_prices)
         db.session.execute('delete from calc_results where ore_calc_id = :id',  params={'id': model.id} )
