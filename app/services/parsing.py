@@ -43,9 +43,12 @@ def name_qty_line(line):
             last_result_index = index + 1
         index += 1
 
+    if last_result_index>-1:
+        index = last_result_index
+
     qty_is_found = False
-    if last_result_index != -1 and type_is_found:
-        ifrom = last_result_index
+    if index <= last and type_is_found:
+        ifrom = index
         while index <= last and not qty_is_found:
             if re.match('\d*$',parts[index]) and (index == last or not re.match('\d*$',parts[index+1])):
                 qty_is_found = True
