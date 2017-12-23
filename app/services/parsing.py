@@ -43,14 +43,10 @@ def name_qty_line(line):
             last_result_index = index + 1
         index += 1
 
-    print('result_type_id',result_type_id)
-
     qty_is_found = False
     if last_result_index != -1 and type_is_found:
         ifrom = last_result_index
         while index <= last and not qty_is_found:
-            print('parts[index]',parts[index], re.match('\d*$',parts[index]))
-
             if re.match('\d*$',parts[index]) and (index == last or not re.match('\d*$',parts[index+1])):
                 qty_is_found = True
                 pre_int = ''.join([x.lower() for x in parts[ifrom:index+1]])
