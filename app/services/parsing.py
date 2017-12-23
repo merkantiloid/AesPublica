@@ -33,21 +33,29 @@ def name_qty_line(line):
     index = 0
     last = len(parts)-1
     type_is_found = False
-    while index <= last and not type_is_found:
+    last_result_index = -1
+    while index <= last:
         possible = ' '.join([x.lower() for x in parts[0:index+1]])
         next_possible = ' '.join([x.lower() for x in parts[0:index+2]])
         if Static.type_hash_to_id(possible) and (index == last or not Static.type_hash_to_id(next_possible)):
             type_is_found = True
             result_type_id = Static.type_hash_to_id(possible)
+            last_result_index = index + 1
         index += 1
 
+    print('result_type_id',result_type_id)
+
     qty_is_found = False
-    if index <= last and type_is_found:
-        ifrom = index
+    if last_result_index != -1 and type_is_found:
+        ifrom = last_result_index
         while index <= last and not qty_is_found:
+            print('parts[index]',parts[index], re.match('\d*$',parts[index]))
+
             if re.match('\d*$',parts[index]) and (index == last or not re.match('\d*$',parts[index+1])):
                 qty_is_found = True
-                result_qty = int( ''.join([x.lower() for x in parts[ifrom:index+1]]) )
+                pre_int = ''.join([x.lower() for x in parts[ifrom:index+1]])
+                print('pre_int',pre_int)
+                result_qty = int( pre_int )
             index += 1
 
     if index <= last and type_is_found:
