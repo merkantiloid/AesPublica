@@ -2,6 +2,7 @@ from app.services.static import AllOres, ReprImplantsHash, ReprRigsHash, Static
 from app.esi_models import EsiSkill
 import math
 
+
 class ReprocessService:
 
     def __init__(self, ore_calc):
@@ -11,8 +12,12 @@ class ReprocessService:
 
         self.base_ore = 0
         for rid in [self.ore_calc.rig1_id,self.ore_calc.rig2_id,self.ore_calc.rig3_id]:
-            if self.base_ore < ReprRigsHash[rid]['value']:
-                self.base_ore = ReprRigsHash[rid]['value']
+            rig = ReprRigsHash[rid]['value']
+            space = ReprRigsHash[rid][self.ore_calc.space]
+            bonus = 1 + Static.CITADELS_HASH[self.ore_calc.citadel_id]['bonus']/100.0
+
+            if self.base_ore < rig * space * bonus:
+                self.base_ore = rig * space * bonus
 
         self.implant = ReprImplantsHash[self.ore_calc.implant_id]['value']
 
@@ -30,6 +35,7 @@ class ReprocessService:
         ore_skill_id = AllOres[ore_id]['skill_id']
         ore_skill = self.skills.get(ore_skill_id, (5 if self.ore_calc.esi_char_id==-1 else 0) )
         reprocessed = Static.reprocess_by_id(ore_id)
+
         return math.floor(
             reprocessed[mineral_id] *
             chunks *

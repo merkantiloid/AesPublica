@@ -1,28 +1,32 @@
 from sqlalchemy.sql import text
 from app import db
 
+CITADELS_SQL = text(
+    "SELECT t.id, t.name, ta.value as rig_size, coalesce(tab.value,0) as yield_bonus"
+    "  from eve_types t"
+    "         left join eve_type_attributes ta  on ta.type_id=t.id and ta.attribute_id in (1547)"
+    "         left join eve_type_attributes tab on tab.type_id=t.id and tab.attribute_id in (2722)"
+    "         inner join eve_groups g on t.group_id = g.id and g.category_id=65 and g.published=1"
+    "  where t.published=1"
+    "  order by t.name"
+)
 
 def load_citadels():
-    sql = text(
-        "SELECT t.id, t.name, ta.value as rig_size"
-        "  from eve_types t,"
-        "       eve_groups g,"
-        "       eve_type_attributes ta,"
-        "       eve_attributes a"
-        "  where g.category_id=65"
-        "    and g.published=1"
-        "    and t.group_id = g.id"
-        "    and t.published=1"
-        "    and ta.type_id=t.id"
-        "    and a.id=ta.attribute_id"
-        "    and a.id in (1547)"
-        "  order by t.name"
-    )
-    citadel_raws = db.session.execute(sql).fetchall()
+    citadel_raws = db.session.execute(CITADELS_SQL).fetchall()
     citadels = []
     for record in citadel_raws:
-        citadels.append({'id': record[0], 'name': record[1], 'rig_size': int(record[2])})
+        citadels.append({'id': record[0], 'name': record[1], 'rig_size': int(record[2]), 'bonus': int(record[3])})
     return citadels
+
+def load_citadels_hash():
+    citadels = load_citadels()
+    result = {}
+
+    for record in citadels:
+        result[record['id']] = record
+
+    return result
+
 
 
 def load_repr_implants():

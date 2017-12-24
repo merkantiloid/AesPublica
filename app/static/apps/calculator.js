@@ -81,12 +81,12 @@ var calculator = new Vue({
             this.calc.settings.rig2_id = -1;
             this.calc.settings.rig3_id = -1;
             this.rigs = gStatic.repr_rigs[ citadelByID(this.calc.settings.citadel_id).rig_size ];
-            this.recalcPercent(event);
+            this.recalcPercent();
             this.saveSettings();
         },
 
         changeNotCitadel: function() {
-            this.recalcPercent(event);
+            this.recalcPercent();
             this.saveSettings();
         },
 
@@ -96,6 +96,8 @@ var calculator = new Vue({
                 spaceOre = baseOre[this.calc.settings.space],
                 spaceIce = baseIce[this.calc.settings.space],
 
+                yieldBonus = 1+citadelByID(this.calc.settings.citadel_id).bonus/100.0,
+
                 implant = 1+recordById(gStatic.repr_implants, this.calc.settings.implant_id).value/100,
 
                 char = recordById(this.calc.settings.characters, this.calc.settings.esi_char_id),
@@ -103,8 +105,8 @@ var calculator = new Vue({
                 skill2 = char.skills[3389],
                 skillM = char.skills[12196];
 
-            this.kOre  = r4( 100 * baseOre.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceOre * implant);
-            this.kIce  = r4( 100 * baseIce.value * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * spaceIce * implant);
+            this.kOre  = r4( 100 * baseOre.value * spaceOre * yieldBonus * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * implant);
+            this.kIce  = r4( 100 * baseIce.value * spaceIce * yieldBonus * (1+2*5/100.0) * (1+3*skill1/100.0) * (1+2*skill2/100.0) * implant);
             this.kScrap  = r4( 100 * 0.5 * (1+2*skillM/100.0) );
         },
 

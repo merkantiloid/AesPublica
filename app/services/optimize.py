@@ -12,6 +12,8 @@ class OptimizeService:
 
         ore_cnt = len(ores)
         mnr_cnt = len(minerals)
+        if ore_cnt==0:
+            return []
 
         p = model('Aes')
         p.verbose(False)
