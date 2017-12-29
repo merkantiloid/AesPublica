@@ -264,6 +264,14 @@ var calculator = new Vue({
             axios.get('/calc/result.json').then(function (response) {
                 vm.calc.calc_results = response.data.calc_results;
                 vm.calc.minerals = response.data.minerals;
+
+                if(response.data.warnings.length>0){
+                    alert(
+                        "Warning Ore List may be empty because of:\n\n"+
+                        response.data.warnings.join('\n')
+                    );
+                }
+
             }).catch(function (error) {
                 console.log(error);
             });

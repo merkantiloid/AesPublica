@@ -57,7 +57,21 @@ class OreCalcService:
             "store_items": [x.to_json() for x in model.store_items],
             "ore_settings": model.checked_ores(),
             "calc_results": self._calc_results(model),
+            "warnings": self._warnings(model),
         }
+
+    def _warnings(self, model):
+        result = []
+        if (model.rig1_id==-1 or model.rig1_id == None) and (model.rig2_id==-1 or model.rig2_id == None) and (model.rig3_id==-1 or model.rig3_id == None):
+            result.append('No rig(s) selected')
+
+        if len(model.build_items) == 0:
+            result.append('No items to build')
+
+        if len(model.checked_ores()) == 0:
+            result.append('No allowed ores selected')
+
+        return result
 
     def _calc_results(self, model):
         total_price = 0
