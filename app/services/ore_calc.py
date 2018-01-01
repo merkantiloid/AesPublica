@@ -178,7 +178,7 @@ class OreCalcService:
                     ore.append(0)
             ores.append(ore)
 
-            price = Price.query.filter(Price.source=='evemarketer', Price.type_id==ore_id).one()
+            price = Price.query.filter(Price.source=='evemarketer', Price.type_id==ore_id).order_by(Price.id.desc()).first()
             ore_prices.append(price.sell)
 
         #print('minerals')

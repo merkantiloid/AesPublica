@@ -39,7 +39,7 @@ class PriceService:
 
             ts = datetime.now().isoformat()
             for db_type in db_types:
-                db_price = Price.query.filter(Price.source=='evemarketer', Price.type_id==db_type.id).first()
+                db_price = Price.query.filter(Price.source=='evemarketer', Price.type_id==db_type.id).order_by(Price.id.desc()).first()
                 if not db_price:
                     db_price = Price(source='evemarketer', type_id=db_type.id)
                 db_price.buy = all_prices_hash[db_type.id]['buy']['fivePercent']

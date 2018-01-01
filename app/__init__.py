@@ -14,6 +14,9 @@ if not mainApp.debug:
     from logging.handlers import RotatingFileHandler
     handler = RotatingFileHandler('log/aes-publica.log', maxBytes=10000000, backupCount=3)
     handler.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter(
+        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+    ))
     mainApp.logger.addHandler(handler)
 
 
