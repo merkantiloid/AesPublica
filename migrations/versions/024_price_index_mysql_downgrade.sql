@@ -1,0 +1,1 @@
+drop index prices_type_id_source_idx on prices;

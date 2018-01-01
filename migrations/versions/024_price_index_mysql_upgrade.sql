@@ -1,0 +1,1 @@
+create unique index prices_type_id_source_idx on prices(type_id, source);

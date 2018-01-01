@@ -1,6 +1,7 @@
 from app import db, preston
 from app.models import Price, EveType
 from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 import requests
 
@@ -45,8 +46,15 @@ class PriceService:
                 db_price.buy = all_prices_hash[db_type.id]['buy']['fivePercent']
                 db_price.sell = all_prices_hash[db_type.id]['sell']['fivePercent']
                 db_price.updated_at = ts
-                db.session.add(db_price)
-            db.session.commit()
+
+                db.session.begin_nested()
+                try:
+                    db.session.add(db_price)
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+
+
 
 
     def outdated(self, type_ids, source):
