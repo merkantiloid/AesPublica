@@ -1,5 +1,5 @@
 #### Changes
-2018-01-01 - changes price query method to avoid exception when multiply prices for type exists, possible fix for multiply prices
+2018-01-01 - changed price query method to avoid exception when multiply prices for type exists, possible fix for multiply prices
 2017-12-29 - added warnings for settings, which usually lead to empty result
 2017-12-27 - added user name uniqness validation
 2017-12-24 - fixed wrong yield bonus
