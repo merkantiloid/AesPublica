@@ -13,7 +13,9 @@ CITADELS_SQL = text(
 
 def load_citadels():
     citadel_raws = db.session.execute(CITADELS_SQL).fetchall()
-    citadels = []
+    citadels = [
+        {'id': -1, 'name': 'NPC Station', 'rig_size': 5, 'bonus': 0}
+    ]
     for record in citadel_raws:
         citadels.append({'id': record[0], 'name': record[1], 'rig_size': int(record[2]), 'bonus': int(record[3])})
     return citadels
@@ -103,18 +105,24 @@ def get_metas(record):
         return ['moon']
 
 def load_repr_rigs():
+    none_rig = {'id': -1, 'name': '-None-', 'value': 0.0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}
+
     rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
     rigs = {
-        2: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
-        3: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
-        4: [{'id': -1, 'name': '-None-', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}],
+        2: [none_rig],
+        3: [none_rig],
+        4: [none_rig],
+        5: [
+            none_rig,
+            {'id': -2, 'name': '- Base 50% -', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']},
+            {'id': -3, 'name': '- Base 30% -', 'value': 0.3, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']},
+        ],
     }
     for record in rig_raws:
         temp = {
             'id': record[0],
             'name': record[1],
             'value': record[2],
-            'size': record[3],
             'h': record[4],
             'l': record[5],
             'z': record[6],
@@ -127,21 +135,12 @@ def load_repr_rigs():
 
 
 def load_repr_rigs_hash():
-    rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
-    rigs = {-1: {'value': 0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}}
-    for record in rig_raws:
-        rigs[record[0]] = {
-            'id': record[0],
-            'name': record[1],
-            'value': record[2],
-            'size': record[3],
-            'h': record[4],
-            'l': record[5],
-            'z': record[6],
-            'metas': get_metas(record),
-        }
-
-    return rigs
+    result = {}
+    _rigs = load_repr_rigs()
+    for size in _rigs:
+        for rig in _rigs[size]:
+            result[rig['id']] = rig
+    return result
 
 
 ALL_ORES_SQL = text(
