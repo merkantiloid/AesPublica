@@ -161,5 +161,10 @@ label.label-sm{
 }
 
 .scanner .item .free-space{
-    width: calc(100% - 54px);
+    width: calc(100% - 64px);
+}
+
+
+.scanner .selected{
+    background-color: #b8ddff;
 }

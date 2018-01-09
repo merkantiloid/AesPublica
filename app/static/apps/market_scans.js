@@ -205,7 +205,7 @@ var scanner = new Vue({
         },
 
         IsSelected: function(item){
-            return this.selected != null && this.selected.Id == item.Id;
+            return this.selected != null && this.selected.id == item.id;
         }
 
     },

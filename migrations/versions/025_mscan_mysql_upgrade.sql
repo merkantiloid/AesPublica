@@ -1,6 +1,6 @@
 create table mscans (
   id int primary key not null auto_increment,
-  user_id int default not null,
+  user_id int not null,
   name varchar(255) default null,
   raw text,
   check_date varchar(32) default null,
