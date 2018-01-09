@@ -39,6 +39,13 @@ class MScanService:
             db.session.delete(temp)
             db.session.commit()
 
+    def update_mscan(self, mscan_id, params):
+        temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
+        if temp:
+            temp.raw = params.get('raw',None)
+            db.session.add(temp)
+            db.session.commit()
+
     def to_json(self, selected_id=None):
         selected = None
         if selected_id:

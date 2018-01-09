@@ -14,6 +14,11 @@
             {% include 'mscan/list.html' %}
         </div>
 
+        <div class="col-sm-2 bordered" v-if="selected != null">
+            {% include 'mscan/raw.html' %}
+        </div>
+
+
         <div class="col-sm-8">
             <div class="row" v-if="selected != null">
                 <div class="col-sm-6 bordered">
@@ -91,12 +96,6 @@
         </div>
         </div>
 
-        <div class="col-sm-2 bordered" v-if="selected != null">
-            <h5>
-                Raw Text <span v-on:click="UpdateRawText()" class="glyphicon glyphicon-save edit"></span>
-            </h5>
-            <textarea class="form-control" rows="30" wrap="off" v-model="selected.Raw"></textarea>
-        </div>
 
     </div>
 

@@ -52,3 +52,11 @@ def delete_mscan(mscan_id):
 def mscan_json(mscan_id):
     s = MScanService(g.user)
     return jsonify(s.to_json(selected_id=mscan_id))
+
+
+@mainApp.route('/mscans/<int:mscan_id>.json', methods=['POST'])
+@login_required
+def update_mscan_json(mscan_id):
+    s = MScanService(g.user)
+    s.update_mscan(mscan_id, request.get_json())
+    return jsonify(s.to_json(selected_id=mscan_id))

@@ -1,0 +1,6 @@
+<h6>
+    Fit Text
+    <i v-show="!selected.rawChanged" class="icon ion-ios-circle-outline"></i>
+    <i v-show="selected.rawChanged" v-on:click="UpdateRawText()" class="icon ion-ios-checkmark"></i>
+</h6>
+<textarea class="form-control" rows="30" wrap="off" v-model="selected.raw"  v-on:change="RawChanged" v-on:keyup="RawChanged"></textarea>

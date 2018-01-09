@@ -3,7 +3,11 @@ var scanner = new Vue({
     delimiters: ["<%","%>"],
 
     data: {
-        ask: {newName: ""},
+        ask: {
+            newName: "",
+            newNameChanged: false,
+            rawChanged: false,
+        },
         scanners: [],
         selected: null,
         loading: false,
@@ -32,6 +36,19 @@ var scanner = new Vue({
     },
 
     methods: {
+
+        NewNameChanged: function(){
+            if(!!this.ask.newName){
+                this.ask.newNameChanged = true;
+            }
+        },
+
+        RawChanged: function(){
+            if(this.selected && !!this.selected.raw){
+                Vue.set(this.selected, 'rawChanged', true);
+            }
+        },
+
         AddStation: function(){
             var vm = this;
             axios.post(
@@ -61,6 +78,7 @@ var scanner = new Vue({
                     vm.scanners = response.data.list;
                     vm.selected = response.data.selected;
                     vm.ask.newName = '';
+                    vm.ask.newNameChanged = false;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -105,9 +123,9 @@ var scanner = new Vue({
 
         UpdateRawText: function(){
             var vm = this;
-            axios.post('/scanner/'+this.selected.Id+'.json', {raw: this.selected.Raw})
+            axios.post('/mscans/'+this.selected.id+'.json', {raw: this.selected.raw})
                 .then(function (response) {
-                    vm.selected = response.data.Selected;
+                    vm.selected = response.data.selected;
                 })
                 .catch(function (error) {
                     console.log(error);

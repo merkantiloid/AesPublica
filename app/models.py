@@ -170,7 +170,8 @@ class MScan(db.Model):
     def to_json(self):
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'raw': self.raw,
         }
 
 
