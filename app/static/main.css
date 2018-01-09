@@ -75,7 +75,7 @@ button .icon {
   font-size: 12px;
 }
 
-.ion-ios-checkmark, .ion-plus-circled, .ion-ios-copy, .ion-gear-b, .ion-trash-a, .ion-edit, .ion-close{
+.pointer, .ion-ios-checkmark, .ion-plus-circled, .ion-ios-copy, .ion-gear-b, .ion-trash-a, .ion-edit, .ion-close{
   cursor: pointer;
 }
 

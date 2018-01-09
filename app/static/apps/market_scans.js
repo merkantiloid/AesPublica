@@ -177,9 +177,9 @@ var scanner = new Vue({
 
         SetSelected: function(item){
             var vm = this;
-            axios.get('/scanner/'+item.Id+'.json')
+            axios.get('/mscans/'+item.id+'.json')
                 .then(function (response) {
-                    vm.selected = response.data;
+                    vm.selected = response.data.selected;
                 })
                 .catch(function (error) {
                     console.log(error);

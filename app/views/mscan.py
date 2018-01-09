@@ -9,16 +9,12 @@ import json
 @mainApp.route('/mscan')
 @login_required
 def mscan():
-
     chars = EsiChar.query.filter(EsiChar.user_id == g.user.id).all()
-
     return render_template(
         'mscan/index.html',
         title='Fit on Market',
         characters=chars,
     )
-
-
 
 @mainApp.route('/mscans.json', methods=['GET'])
 @login_required
@@ -49,3 +45,10 @@ def delete_mscan(mscan_id):
     s = MScanService(g.user)
     s.delete_scan(mscan_id)
     return jsonify(s.to_json())
+
+
+@mainApp.route('/mscans/<int:mscan_id>.json', methods=['GET'])
+@login_required
+def mscan_json(mscan_id):
+    s = MScanService(g.user)
+    return jsonify(s.to_json(selected_id=mscan_id))

@@ -167,6 +167,12 @@ class MScan(db.Model):
     def short_json(self):
         return {'id': self.id, 'name': self.name}
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+
 
 class MScanLocation(db.Model):
     __tablename__ = 'mscan_locations'

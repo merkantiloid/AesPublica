@@ -42,7 +42,9 @@ class MScanService:
     def to_json(self, selected_id=None):
         selected = None
         if selected_id:
-            selected = {'id': selected_id}
+            temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == selected_id).first()
+            if temp:
+              selected = temp.to_json()
         return {
             'list': self.list(),
             'selected': selected
