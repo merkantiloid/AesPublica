@@ -9,17 +9,9 @@
 {% block content %}
 <div class="container-fluid scanner" id="scanner">
     <div class="row">
-        <div class="col-sm-2 bordered">
-            <h5>
-                Desc
-                <i data-toggle="modal" data-target="#askStringModal" v-on:click="AskScannerName()" class="icon ion-plus-circled"></i>
-            </h5>
 
-            <div class="item crop" v-for="item in scanners" v-bind:class="{selected: IsSelected(item)}" v-on:click="SetSelected(item)">
-                <span v-on:click="AskDeleteScanner(item.Id)" class="glyphicon glyphicon-remove edit"></span>
-                <span v-on:click="AskRenameScannerName(item)" class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#askStringModal"></span>
-                <% item.Name %>
-            </div>
+        <div class="col-sm-2 bordered">
+            {% include 'mscan/list.html' %}
         </div>
 
         <div class="col-sm-8">
@@ -108,23 +100,6 @@
 
     </div>
 
-    <div class="modal" id="askStringModal" tabindex="-1" role="dialog" aria-labelledby="askStringLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="askStringLabel">Enter Name</h4>
-                </div>
-                <div class="modal-body">
-                    <input size=64 type="text" v-model="ask.newName">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" v-on:click="ask.Func()">Set</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src="{{ url_for('static', filename='apps/filters.js') }}"></script>

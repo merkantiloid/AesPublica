@@ -1,0 +1,16 @@
+<div class="flex">
+    <i v-on:click="AddScanner()" class="icon ion-plus-circled"></i>
+    <input class="form-control form-control-sm" type="text" placeholder="New Fit Scan" v-model="ask.newName" v-on:keyup.enter="AddScanner()">
+</div>
+<div class="item crop" v-for="item in scanners" v-bind:class="{selected: IsSelected(item)}">
+    <i v-on:click="AskDeleteScanner(item.id)" class="icon ion-trash-a"></i>
+
+    <span v-show="!item.editing" v-on:click="SetSelected(item)"><% item.name %></span>
+    <span v-show="!!item.editing"><input class="free-space" type="text" v-model="item.name"></span>
+
+    <i v-show="!item.editing" v-on:click="StartRenameScanner(item)" class="icon ion-edit float-right"></i>
+
+    <i v-show="!!item.editing" v-on:click="CancelRenameScanner(item)" class="icon ion-close float-right"></i>
+    <span v-show="!!item.editing" class="float-right">&nbsp;</span>
+    <i v-show="!!item.editing" v-on:click="RenameScanner(item)" class="icon ion-ios-checkmark float-right"></i>
+</div>

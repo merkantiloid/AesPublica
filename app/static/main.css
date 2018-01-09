@@ -75,7 +75,7 @@ button .icon {
   font-size: 12px;
 }
 
-.ion-ios-checkmark, .ion-plus-circled, .ion-ios-copy, .ion-gear-b{
+.ion-ios-checkmark, .ion-plus-circled, .ion-ios-copy, .ion-gear-b, .ion-trash-a, .ion-edit, .ion-close{
   cursor: pointer;
 }
 
@@ -141,3 +141,25 @@ label.label-sm{
     padding-bottom: 0 !important;
 }
 
+.flex{
+    display: flex;
+}
+
+.crop{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.scanner .item{
+    border: 1px solid #A0C0ff;
+    border-radius: 8px;
+    padding: 4px;
+    background-color: #f0f0ff;
+    cursor: hand;
+    margin-bottom: 5px;
+}
+
+.scanner .item .free-space{
+    width: calc(100% - 54px);
+}

@@ -1,8 +1,9 @@
 var scanner = new Vue({
     el: '#scanner',
+    delimiters: ["<%","%>"],
 
     data: {
-        ask: {Id: null, newName: "", Func: null},
+        ask: {newName: ""},
         scanners: [],
         selected: null,
         loading: false,
@@ -13,7 +14,7 @@ var scanner = new Vue({
         var vm = this;
         axios.get('/mscans.json')
             .then(function (response) {
-                vm.scanners = response.data.List;
+                vm.scanners = response.data.list;
                 vm.selected = null;
             })
             .catch(function (error) {
@@ -53,17 +54,13 @@ var scanner = new Vue({
             });
         },
 
-        AskScannerName: function(){
-            this.ask.Func = this.AddScanner;
-            this.ask.newName = "New Fit on Market";
-        },
         AddScanner: function(){
-            $('#askStringModal').modal('hide');
             var vm = this;
-            axios.post('/scanners.json', {name: this.ask.newName})
+            axios.post('/mscans.json', {name: this.ask.newName})
                 .then(function (response) {
-                    vm.scanners = response.data.List;
-                    vm.selected = response.data.Selected;
+                    vm.scanners = response.data.list;
+                    vm.selected = response.data.selected;
+                    vm.ask.newName = '';
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -71,17 +68,21 @@ var scanner = new Vue({
 
         },
 
-        AskRenameScannerName: function(item){
-            this.ask.Func = this.RenameScanner;
-            this.ask.newName = item.Name;
-            this.ask.Id = item.Id;
+        StartRenameScanner: function(item){
+            item.oldName = item.name;
+            Vue.set(item, 'editing', true);
         },
-        RenameScanner: function(){
-            $('#askStringModal').modal('hide');
+
+        CancelRenameScanner: function(item){
+            item.name = item.oldName;
+            Vue.set(item, 'editing', false)
+        },
+
+        RenameScanner: function(item){
             var vm = this;
-            axios.post('/scanner/'+this.ask.Id+'/rename.json', {name: this.ask.newName})
+            axios.post('/mscans/'+item.id+'/rename.json', {name: item.name})
                 .then(function (response) {
-                    vm.scanners = response.data.List;
+                    vm.scanners = response.data.list;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -91,9 +92,9 @@ var scanner = new Vue({
         AskDeleteScanner: function(scannerId){
             if (confirm("Sure?")) {
                 var vm = this;
-                axios.post('/scanner/'+scannerId+'/delete.json')
+                axios.post('/mscans/'+scannerId+'/delete.json')
                     .then(function (response) {
-                        vm.scanners = response.data.List;
+                        vm.scanners = response.data.list;
                         vm.selected = null;
                     })
                     .catch(function (error) {
