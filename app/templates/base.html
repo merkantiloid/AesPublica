@@ -26,8 +26,12 @@
 <body>
 <div>
     {% if g.user.is_authenticated %}
-    <a href="/">Ore Calc</a> |
-    <a href="/reactions">Reactions Calc</a> |
+    <a href="/">Ore Calc</a>
+    |
+    Reactions Calc
+    |
+    <a href="/mscan">Fits on Market</a>
+    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
     <a href="/characters">Characters</a>
 
     <a href="/logout" class="float-right">Logout ({{ g.user.name }})</a>

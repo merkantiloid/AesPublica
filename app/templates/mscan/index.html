@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block scripts%}
+<script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/clipboard.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid scanner" id="scanner">
+    <div class="row">
+        <div class="col-sm-2 bordered">
+            <h5>
+                Desc
+                <i data-toggle="modal" data-target="#askStringModal" v-on:click="AskScannerName()" class="icon ion-plus-circled"></i>
+            </h5>
+
+            <div class="item crop" v-for="item in scanners" v-bind:class="{selected: IsSelected(item)}" v-on:click="SetSelected(item)">
+                <span v-on:click="AskDeleteScanner(item.Id)" class="glyphicon glyphicon-remove edit"></span>
+                <span v-on:click="AskRenameScannerName(item)" class="glyphicon glyphicon-edit edit" data-toggle="modal" data-target="#askStringModal"></span>
+                <% item.Name %>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <div class="row" v-if="selected != null">
+                <div class="col-sm-6 bordered">
+                    <h5>Stations</h5>
+                    #todo search station
+                    <ul class="list-unstyled">
+                        <li v-for="s in selected.Stations">
+                            [<%s.StationId%>] <%s.StationName%>
+                            <span class="glyphicon glyphicon-remove edit" v-on:click="DeleteStation(s.Id)"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 bordered">
+                    <h5>
+                        Last check  (<%selected.CheckedAgo%>) day(s) ago
+                        &nbsp;<span v-on:click="UpdateMarketInfo()" class="glyphicon glyphicon-refresh edit" v-show="!loading"></span>
+                        <img width=24 height=24 src="/static/loading.gif" v-show="loading">
+                    </h5>
+                    x <input type="number" v-model="selected.FitTimes" v-on:change="ChangeFitTimes()">
+
+                    Auditor
+                    <select v-model.number="selected.Cid" v-on:change="ChangeChar()">
+                        <option value="0">---</option>
+                        {% for char in chars %}
+                        <option value="{{ char.character_id }}">{{ char.character_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+            <div class="col-sm-12 bordered" v-if="selected != null">
+                <table class="table info table-sticky">
+                    <thead>
+                    <tr>
+                        <th class="w-sign"><span id="copy-point" class="glyphicon glyphicon-copy edit"></span></th>
+                        <th class="w-name"></th>
+                        <th class="w-num">Qty</th>
+                        <th class="w-num">On Market</th>
+                        <th class="w-num">In store</th>
+                        <th class="w-num">Need</th>
+
+                        <th class="w-num">Fit times</th>
+                        <th class="w-price">Min.Price</th>
+                        <th class="w-price">Avg.Price</th>
+                        <th class="w-price">Jita</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in selected.Items">
+                        <td class="w-sign">
+                            <span class="glyphicon glyphicon-check" v-show="item.HasWatcher"></span>
+                            <span class="glyphicon glyphicon-shopping-cart yellow-b" v-if="item.StoreQty == 0"></span>
+                        </td>
+                        <td class="crop w-name" :title="item.TypeName" v-bind:class="{ 'reded-b': item.MarketQty == 0}">
+                            <span class="glyphicon glyphicon-copy edit copy-item" :data-clipboard-text="item.TypeName"></span>
+                            <%item.TypeName%>
+                        </td>
+                        <td class="w-num text-right"><%item.Qty | number%></td>
+
+                        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.MarketQty == 0 }"><%item.MarketQty | number%></td>
+                        <td class="w-num text-right" v-bind:class="{ 'yellow-b': item.StoreQty == 0 }"><%item.StoreQty | number%></td>
+                        <td class="w-num text-right"><%item.NeedQty | number%></td>
+
+                        <td class="w-num text-right"><%item.FitTimes | number%></td>
+                        <td class="w-price text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.MarketPrice | price%></td>
+                        <td class="w-price text-right"><%item.Price.Sell | price%></td>
+                        <td class="w-num text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.Margin | price%></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        </div>
+
+        <div class="col-sm-2 bordered" v-if="selected != null">
+            <h5>
+                Raw Text <span v-on:click="UpdateRawText()" class="glyphicon glyphicon-save edit"></span>
+            </h5>
+            <textarea class="form-control" rows="30" wrap="off" v-model="selected.Raw"></textarea>
+        </div>
+
+    </div>
+
+    <div class="modal" id="askStringModal" tabindex="-1" role="dialog" aria-labelledby="askStringLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="askStringLabel">Enter Name</h4>
+                </div>
+                <div class="modal-body">
+                    <input size=64 type="text" v-model="ask.newName">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" v-on:click="ask.Func()">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='apps/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='apps/market_scans.js') }}"></script>
+{% endblock %}

@@ -31,3 +31,9 @@ class EsiSkill(db.Model):
 
     skill_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
     type = db.relationship("EveType", lazy="joined", order_by="EveType.name")
+
+
+class EsiLocation(db.Model):
+    __tablename__ = 'esi_locations'
+    id = db.Column(db.BigInteger, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)

@@ -7,6 +7,7 @@ from ..forms import LoginForm, RegisterForm
 from ..models import User
 
 import app.views.calc
+import app.views.mscan
 from .characters import characters
 from .search import search_type
 

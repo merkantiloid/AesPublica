@@ -150,3 +150,49 @@ class CalcResult(db.Model):
             'price': self.qty * price.sell,
             'volume': self.qty * self.type.volume,
         }
+
+
+class MScan(db.Model):
+    __tablename__ = 'mscans'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User")
+
+    name = db.Column(db.String)
+    raw = db.Column(db.Text)
+    check_date = db.Column(db.String)
+    fit_times = db.Column(db.BigInteger)
+
+    def short_json(self):
+        return {'id': self.id, 'name': self.name}
+
+
+class MScanLocation(db.Model):
+    __tablename__ = 'mscan_locations'
+
+    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'), primary_key=True)
+    mscan = db.relationship("MScan")
+
+    esi_location_id = db.Column(db.BigInteger, db.ForeignKey('esi_locations.id'), primary_key=True)
+    esi_location = db.relationship("EsiLocation")
+
+    esi_char_id = db.Column(db.BigInteger, db.ForeignKey('esi_chars.id'), primary_key=True)
+    esi_char = db.relationship("EsiChar")
+
+
+class MScanItem(db.Model):
+    __tablename__ = 'mscan_items'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'), primary_key=True)
+    mscan = db.relationship("MScan")
+
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType", lazy="joined")
+
+    qty = db.Column(db.BigInteger)
+    store_qty = db.Column(db.BigInteger)
+    market_qty = db.Column(db.BigInteger)
+    min_price = db.Column(db.Float)
+    avg_price = db.Column(db.Float)
