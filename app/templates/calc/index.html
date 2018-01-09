@@ -18,13 +18,13 @@
 
         <div class="col-sm-5">
             <div class="bordered">
-                {% include 'calc_settings.html' %}
+                {% include 'calc/settings.html' %}
             </div>
         </div>
 
         <div class="col-sm-7">
             <div class="bordered">
-                {% include 'calc_minerals.html' %}
+                {% include 'calc/minerals.html' %}
             </div>
         </div>
 
@@ -33,7 +33,7 @@
     <div class="row" v-cloak>
         <div class="col-sm-12">
             <div class="bordered build_list">
-                {% include 'calc_build_list.html' %}
+                {% include 'calc/build_list.html' %}
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="bordered storage">
-                {% include 'calc_storage.html' %}
+                {% include 'calc/storage.html' %}
             </div>
         </div>
 
@@ -60,10 +60,10 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="ore_list">
-                        {% include 'calc_result.html' %}
+                        {% include 'calc/result.html' %}
                     </div>
                     <div role="tabpanel" class="tab-pane fade in" id="ore_settings">
-                        {% include 'calc_ores.html' %}
+                        {% include 'calc/ores.html' %}
                     </div>
                 </div>
 

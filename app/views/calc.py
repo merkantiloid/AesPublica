@@ -10,7 +10,7 @@ import json
 @login_required
 def calc():
     return render_template(
-        'calc.html',
+        'calc/index.html',
         title='Calc',
         static=json.dumps(Static.to_json()),
     )
