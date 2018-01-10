@@ -8,6 +8,14 @@ import requests
 
 class PriceService:
 
+    def jita(self, source, type_id):
+        temp = Price.query.filter(Price.source == source, Price.type_id == type_id).order_by(Price.id.desc()).first()
+        return {
+            'buy': temp.buy,
+            'sell': temp.sell,
+            'updated_at': temp.updated_at,
+        }
+
     def esi(self, type_ids = []):
         db_types = self.outdated(type_ids,'esi')
         if len(db_types)>0:
@@ -32,7 +40,6 @@ class PriceService:
         if len(db_types)>0:
             ids = ','.join([str(x.id) for x in db_types])
             all_prices = requests.get(url='https://api.evemarketer.com/ec/marketstat/json?typeid='+ids+'&regionlimit=10000002')
-
             all_prices_hash = {}
             for r in all_prices.json():
                 type_id = r['sell']['forQuery']['types'][0]
@@ -53,7 +60,7 @@ class PriceService:
                     db.session.commit()
                 except IntegrityError:
                     db.session.rollback()
-
+                db.session.commit()
 
 
 

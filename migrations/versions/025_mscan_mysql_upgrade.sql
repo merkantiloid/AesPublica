@@ -6,6 +6,7 @@ create table mscans (
   check_date varchar(32) default null,
   fit_times bigint default 100
 );
+create index mscans_user_id_idx on mscans(user_id);
 
 create table esi_locations(
   id bigint primary key not null,
@@ -17,6 +18,7 @@ create table mscan_locations(
   esi_location_id bigint not null,
   esi_char_id bigint not null
 );
+create index mscan_locations_mscan_id_idx on mscan_locations(mscan_id);
 
 create table mscan_items (
   id int primary key not null auto_increment,
@@ -28,3 +30,5 @@ create table mscan_items (
   min_price double,
   avg_price double
 );
+create index mscan_items_mscan_id_idx on mscan_items(mscan_id);
+create index mscan_items_type_id_idx on mscan_items(type_id);

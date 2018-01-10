@@ -152,6 +152,9 @@ class CalcResult(db.Model):
         }
 
 
+def sort_key(item):
+    return '%d-%s' % (item['type']['group_id'] , item['type']['name'])
+
 class MScan(db.Model):
     __tablename__ = 'mscans'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -164,14 +167,20 @@ class MScan(db.Model):
     check_date = db.Column(db.String)
     fit_times = db.Column(db.BigInteger)
 
+    items = db.relationship("MScanItem", lazy="joined", back_populates="mscan")
+
     def short_json(self):
         return {'id': self.id, 'name': self.name}
 
     def to_json(self):
+        items = [x.to_json() for x in self.items]
+        items = sorted(items, key=sort_key)
         return {
             'id': self.id,
             'name': self.name,
             'raw': self.raw,
+            'fit_times': self.fit_times,
+            'items': items,
         }
 
 
@@ -203,3 +212,12 @@ class MScanItem(db.Model):
     market_qty = db.Column(db.BigInteger)
     min_price = db.Column(db.Float)
     avg_price = db.Column(db.Float)
+
+    def to_json(self):
+        return {
+            'type': self.type.to_json(),
+            'qty': self.qty,
+            'market_qty': self.market_qty,
+            'min_price': self.min_price,
+            'avg_price': self.avg_price,
+        }

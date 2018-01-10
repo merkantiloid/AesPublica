@@ -37,7 +37,7 @@
                         &nbsp;<span v-on:click="UpdateMarketInfo()" class="glyphicon glyphicon-refresh edit" v-show="!loading"></span>
                         <img width=24 height=24 src="/static/loading.gif" v-show="loading">
                     </h5>
-                    x <input type="number" v-model="selected.FitTimes" v-on:change="ChangeFitTimes()">
+                    x <input type="number" v-model="selected.fit_times" v-on:change="ChangeFitTimes()">
 
                     Auditor
                     <select v-model.number="selected.Cid" v-on:change="ChangeChar()">
@@ -51,46 +51,7 @@
 
             <div class="row">
             <div class="col-sm-12 bordered" v-if="selected != null">
-                <table class="table info table-sticky">
-                    <thead>
-                    <tr>
-                        <th class="w-sign"><span id="copy-point" class="glyphicon glyphicon-copy edit"></span></th>
-                        <th class="w-name"></th>
-                        <th class="w-num">Qty</th>
-                        <th class="w-num">On Market</th>
-                        <th class="w-num">In store</th>
-                        <th class="w-num">Need</th>
-
-                        <th class="w-num">Fit times</th>
-                        <th class="w-price">Min.Price</th>
-                        <th class="w-price">Avg.Price</th>
-                        <th class="w-price">Jita</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="item in selected.Items">
-                        <td class="w-sign">
-                            <span class="glyphicon glyphicon-check" v-show="item.HasWatcher"></span>
-                            <span class="glyphicon glyphicon-shopping-cart yellow-b" v-if="item.StoreQty == 0"></span>
-                        </td>
-                        <td class="crop w-name" :title="item.TypeName" v-bind:class="{ 'reded-b': item.MarketQty == 0}">
-                            <span class="glyphicon glyphicon-copy edit copy-item" :data-clipboard-text="item.TypeName"></span>
-                            <%item.TypeName%>
-                        </td>
-                        <td class="w-num text-right"><%item.Qty | number%></td>
-
-                        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.MarketQty == 0 }"><%item.MarketQty | number%></td>
-                        <td class="w-num text-right" v-bind:class="{ 'yellow-b': item.StoreQty == 0 }"><%item.StoreQty | number%></td>
-                        <td class="w-num text-right"><%item.NeedQty | number%></td>
-
-                        <td class="w-num text-right"><%item.FitTimes | number%></td>
-                        <td class="w-price text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.MarketPrice | price%></td>
-                        <td class="w-price text-right"><%item.Price.Sell | price%></td>
-                        <td class="w-num text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.Margin | price%></td>
-                    </tr>
-                    </tbody>
-                </table>
-
+                 {% include 'mscan/items.html' %}
             </div>
 
         </div>

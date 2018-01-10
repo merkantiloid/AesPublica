@@ -168,3 +168,47 @@ label.label-sm{
 .scanner .selected{
     background-color: #b8ddff;
 }
+
+table.info {
+    font-size: 12px;
+    background-color: #F0F0FF;
+}
+
+table.info th{
+    text-align: center;
+}
+table.info td{
+    padding: 2px !important;
+}
+
+table.info .reded{
+    color: #cc0000;
+}
+
+table.info .reded-b{
+    color: #cc0000;
+    font-weight: bold;
+}
+
+table.info .yellow{
+    color: #808000;
+}
+
+table.info .yellow-b{
+    color: #D07060;
+    font-weight: bold;
+}
+
+
+table.info .green{
+    color: #008000;
+}
+
+table.info .green-b{
+    color: #008000;
+    font-weight: bold;
+}
+
+table.info .reded{
+    color: #ff0000;
+}

@@ -206,19 +206,13 @@ var scanner = new Vue({
 
         IsSelected: function(item){
             return this.selected != null && this.selected.id == item.id;
-        }
+        },
+
+        IURL: function(type_id){
+            return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
+        },
 
     },
-    filters: {
-        number: function (value) {
-            return frm.format(value);
-        },
-        price: function (value) {
-            return frmFl.format(value);
-        }
-
-     }
-
 })
 
 

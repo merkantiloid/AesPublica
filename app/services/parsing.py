@@ -19,6 +19,9 @@ def parse_name_qty(text):
 
 
 def name_qty_line(line):
+    line = line.replace('[','')
+    line = line.replace(']','')
+
     raw_parts = re.split("\s|,",line)
     parts = []
     for part in raw_parts:
