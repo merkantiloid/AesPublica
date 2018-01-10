@@ -53,10 +53,10 @@ def name_qty_line(line):
     if index <= last and type_is_found:
         ifrom = index
         while index <= last and not qty_is_found:
-            if re.match('\d*$',parts[index]) and (index == last or not re.match('\d*$',parts[index+1])):
+            if re.match('x{0,1}\d*$',parts[index]) and (index == last or not re.match('x{0,1}\d*$',parts[index+1])):
                 qty_is_found = True
                 pre_int = ''.join([x.lower() for x in parts[ifrom:index+1]])
-                print('pre_int',pre_int)
+                pre_int = pre_int.replace('x','')
                 result_qty = int( pre_int )
             index += 1
 

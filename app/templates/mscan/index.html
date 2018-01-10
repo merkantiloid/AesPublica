@@ -18,45 +18,16 @@
             {% include 'mscan/raw.html' %}
         </div>
 
-
-        <div class="col-sm-8">
-            <div class="row" v-if="selected != null">
-                <div class="col-sm-6 bordered">
-                    <h6>Locations</h6>
-                    #todo search station
-                    <ul class="list-unstyled">
-                        <li v-for="s in selected.Stations">
-                            [<%s.StationId%>] <%s.StationName%>
-                            <span class="glyphicon glyphicon-remove edit" v-on:click="DeleteStation(s.Id)"></span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 bordered">
-                    <h5>
-                        Last check  (<%selected.CheckedAgo%>) day(s) ago
-                        &nbsp;<span v-on:click="UpdateMarketInfo()" class="glyphicon glyphicon-refresh edit" v-show="!loading"></span>
-                        <img width=24 height=24 src="/static/loading.gif" v-show="loading">
-                    </h5>
-                    x <input type="number" v-model="selected.fit_times" v-on:change="ChangeFitTimes()">
-
-                    Auditor
-                    <select v-model.number="selected.Cid" v-on:change="ChangeChar()">
-                        <option value="0">---</option>
-                        {% for char in chars %}
-                        <option value="{{ char.character_id }}">{{ char.character_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-
+        <div class="col-sm-8" v-if="selected != null">
             <div class="row">
-            <div class="col-sm-12 bordered" v-if="selected != null">
-                 {% include 'mscan/items.html' %}
+                {% include 'mscan/locations.html' %}
             </div>
-
+            <div class="row">
+                <div class="col-sm-12 bordered">
+                     {% include 'mscan/items.html' %}
+                </div>
+            </div>
         </div>
-        </div>
-
 
     </div>
 

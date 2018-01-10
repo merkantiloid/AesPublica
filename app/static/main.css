@@ -212,3 +212,38 @@ table.info .green-b{
 table.info .reded{
     color: #ff0000;
 }
+
+.table-sticky thead {
+  display: block;
+}
+
+.table-sticky tbody {
+  display: block;
+  height: calc( 100vh - 240px );
+  overflow-y: scroll;
+}
+
+.table-sticky td, .table-sticky th {
+    //border: 1px solid #000000;
+    padding: 2px !important;
+}
+
+.w-name{
+    max-width: 200px;
+    width: 200px;
+}
+
+.w-sign{
+    max-width: 32px;
+    width: 32px;
+}
+
+.w-num{
+    max-width: 64px;
+    width: 64px;
+}
+
+.w-price{
+    max-width: 128px;
+    width: 128px;
+}
