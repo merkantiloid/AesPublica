@@ -4,6 +4,7 @@
 <script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/clipboard.js') }}"></script>
 <script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/auto-complete.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -33,6 +34,7 @@
 
 </div>
 
+<script src="{{ url_for('static', filename='apps/components/location-select.js') }}"></script>
 <script src="{{ url_for('static', filename='apps/filters.js') }}"></script>
 <script src="{{ url_for('static', filename='apps/market_scans.js') }}"></script>
 {% endblock %}

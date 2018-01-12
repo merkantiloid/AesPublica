@@ -247,3 +247,14 @@ table.info .reded{
     max-width: 128px;
     width: 128px;
 }
+
+input[disabled]{
+    color: #808080;
+    background-color: #e0e0e0;
+    border: 1px solid #d0d0d0;
+}
+
+input.location-selector{
+    display: inline;
+    width: auto;
+}

@@ -13,7 +13,7 @@ def mscan():
     return render_template(
         'mscan/index.html',
         title='Fit on Market',
-        characters=chars,
+        chars=chars,
     )
 
 @mainApp.route('/mscans.json', methods=['GET'])

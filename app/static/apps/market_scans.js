@@ -7,6 +7,7 @@ var scanner = new Vue({
             newName: "",
             newNameChanged: false,
             rawChanged: false,
+            charId: 0,
         },
         scanners: [],
         selected: null,
