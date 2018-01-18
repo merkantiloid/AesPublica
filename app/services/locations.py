@@ -7,6 +7,20 @@ class LocationsService:
     def __init__(self, char):
         self.char = char
 
+
+    def search_location(self, term):
+        result = []
+
+        ids = EsiService(self.char).character_search('station,structure',term)
+
+        sids = ids.get('station',[])
+        if len(sids)>0:
+            names = self.station_names(sids)
+            result = result + names
+
+        return result
+
+
     def station_names(self, ids):
         result = []
 

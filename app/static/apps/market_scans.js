@@ -213,6 +213,10 @@ var scanner = new Vue({
             return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
         },
 
+        LocationSelected: function(event){
+            console.log(event)
+        },
+
     },
 })
 

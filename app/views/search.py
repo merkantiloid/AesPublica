@@ -1,5 +1,5 @@
 from app import mainApp, esiclient
-from flask import request, jsonify
+from flask import request, jsonify, g
 from flask_login import login_required
 from app.services import SearchService, EsiService, LocationsService
 from app.esi_models import EsiChar
@@ -19,15 +19,10 @@ def search_location():
     term = request.args.get('term', '')
     char_id = request.args.get('char_id', 0)
 
-    char = EsiChar.query.filter(EsiChar.id==char_id).first()
+    char = EsiChar.query.filter(EsiChar.user_id==g.user.id, EsiChar.id==char_id).first()
 
     if char:
-        ids = EsiService(char).character_search('station,structure',term)
-
-        sids = ids.get('station',[])
-        if len(sids)>0:
-            names = LocationsService(char).station_names(sids)
-            print('stations', names)
-
-
-    return jsonify({})
+        result = LocationsService(char).search_location(term)
+        return jsonify(result)
+    else:
+        return jsonify([])
