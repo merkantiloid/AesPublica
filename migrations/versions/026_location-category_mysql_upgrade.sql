@@ -1,0 +1,1 @@
+alter table esi_locations add column category varchar(255);

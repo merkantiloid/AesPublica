@@ -68,8 +68,6 @@ class ReprocessService:
             for store_type_id in queue:
                 reprocessed = Static.reprocess_by_id(store_type_id)
 
-                print
-
                 if store_type_id in AllOres:
                     for part_id in reprocessed:
                         qty = self.reprocess_ore(store_type_id, queue[store_type_id], part_id)

@@ -4,3 +4,5 @@ from .search import SearchService
 from .reprocess import ReprocessService
 from .components import ComponentsService
 from .mscan import MScanService
+from .esi import EsiService
+from .locations import LocationsService

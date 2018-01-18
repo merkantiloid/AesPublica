@@ -1,14 +1,15 @@
-from app import mainApp, preston, db
+from app import mainApp, db, esisecurity
 from app.esi_models import EsiChar, EsiSkill
 from flask import render_template, request, redirect, g
 from flask_login import login_required
-
+from app.services import EsiService
 
 @mainApp.route('/characters')
 @login_required
 def characters():
     characters = EsiChar.query.all()
-    return render_template('characters.html', title='Characters', url=preston.get_authorize_url(), characters=characters)
+    url = esisecurity.get_auth_uri(scopes=['esi-skills.read_skills.v1','esi-search.search_structures.v1'])
+    return render_template('characters.html', title='Characters', url=url, characters=characters)
 
 
 @mainApp.route('/characters/<int:cid>/update_skills')
@@ -16,10 +17,9 @@ def characters():
 def update_skills(cid):
     char = EsiChar.query.filter(EsiChar.user_id==g.user.id, EsiChar.character_id==cid).first()
     if char:
-        auth = preston.use_saved(char.refresh_token, char.access_token, char.access_expiration)
-        skills = auth.characters[cid].skills()['skills']
+        data = EsiService(char).character_skills()
         ids = []
-        for skill in skills:
+        for skill in data['skills']:
             model = EsiSkill.query.filter(EsiSkill.esi_char_id == char.id, EsiSkill.skill_id == skill['skill_id']).first()
             if not model:
                 model = EsiSkill(esi_char_id = char.id, skill_id = skill['skill_id'])
@@ -38,9 +38,9 @@ def update_skills(cid):
 @login_required
 def probleme_callback():
     code = request.args.get('code', '')
-    auth = preston.authenticate(code)
+    auth = esisecurity.auth(code)
 
-    response = auth.whoami()
+    response = esisecurity.verify()
 
     char = EsiChar.query.filter(EsiChar.user_id==g.user.id, EsiChar.character_id==response['CharacterID']).first()
     if not char:
@@ -48,9 +48,9 @@ def probleme_callback():
     char.character_name = response['CharacterName']
     char.scopes = response['Scopes']
     char.token_type = response['TokenType']
-    char.access_expiration = auth.access_expiration
-    char.refresh_token = auth.refresh_token
-    char.access_token = auth.access_token
+    char.access_expiration = esisecurity.token_expiry
+    char.refresh_token = auth['refresh_token']
+    char.access_token = auth['access_token']
 
     db.session.add(char)
     db.session.commit()

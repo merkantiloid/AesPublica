@@ -1,0 +1,1 @@
+alter table esi_locations drop column category;

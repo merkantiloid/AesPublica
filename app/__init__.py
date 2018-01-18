@@ -1,9 +1,11 @@
 from flask import Flask, g, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
-from preston.esi import Preston
-from urllib.parse import quote
 from .filters import fldate
+
+from esipy import App
+from esipy import EsiClient
+from esipy import EsiSecurity
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
@@ -27,13 +29,20 @@ db = SQLAlchemy(mainApp)
 lm = LoginManager()
 lm.init_app(mainApp)
 
-preston = Preston(
+esiapp = App.create(mainApp.config.get('ESI_SWAGGER_JSON',''))
+esisecurity = EsiSecurity(
+    app=esiapp,
+    redirect_uri=mainApp.config.get('ESI_CALLBACK_URL',''),
     client_id=mainApp.config.get('ESI_CLIENT_ID',''),
-    client_secret=mainApp.config.get('ESI_SECRET',''),
-    callback_url=quote(mainApp.config.get('ESI_CALLBACK_URL',''), safe=''),
-    scope='esi-skills.read_skills.v1 esi-search.search_structures.v1',
-    user_agent='Probleme',
+    secret_key=mainApp.config.get('ESI_SECRET',''),
 )
+
+esiclient = EsiClient(
+    security=esisecurity,
+    cache=None,
+    headers={'User-Agent': 'Aes Publica'}
+)
+
 
 from .models import User
 

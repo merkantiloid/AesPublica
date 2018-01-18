@@ -1,4 +1,4 @@
-from app import db, preston
+from app import db, esiclient
 from app.models import Price, EveType
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
@@ -19,7 +19,7 @@ class PriceService:
     def esi(self, type_ids = []):
         db_types = self.outdated(type_ids,'esi')
         if len(db_types)>0:
-            all_prices = preston.markets.prices()
+            all_prices = esiclient.markets.prices()
             all_prices_hash = {}
             for r in all_prices:
                 all_prices_hash[r['type_id']] = r['adjusted_price']

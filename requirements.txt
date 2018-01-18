@@ -2,10 +2,10 @@ flask
 flask_sqlalchemy
 flask_login
 flask_wtf
-preston
 bcrypt
 pymysql
 pymprog
 sqlalchemy-migrate
 pyyaml
 munch
+esipy

@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey
 from app import db
 from app.eve_models import EveType
+from time import time
 
 
 class EsiChar(db.Model):
@@ -18,6 +19,13 @@ class EsiChar(db.Model):
     access_token = db.Column(db.String(255))
 
     skills = db.relationship("EsiSkill", back_populates="esi_char")
+
+    def get_sso_data(self):
+        return {
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token,
+            'expires_in': int(self.access_expiration) - time()
+        }
 
 
 class EsiSkill(db.Model):
@@ -37,3 +45,4 @@ class EsiLocation(db.Model):
     __tablename__ = 'esi_locations'
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    category = db.Column(db.String(255))
