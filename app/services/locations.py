@@ -18,6 +18,11 @@ class LocationsService:
             names = self.station_names(sids)
             result = result + names
 
+        cids = ids.get('structure',[])
+        if len(cids)>0:
+            names = self.citadel_names(cids)
+            result = result + names
+
         return result
 
 
@@ -35,6 +40,26 @@ class LocationsService:
                 for st in data:
                     result.append({'id': st['id'], 'name': st['name'], 'category': st['category']})
                     temp = EsiLocation(id=st['id'], name=st['name'], category=st['category'])
+                    db.session.add(temp)
+                db.session.commit()
+
+        return result
+
+
+    def citadel_names(self, ids):
+        result = []
+
+        if len(ids)>0:
+            with_names = EsiLocation.query.filter(EsiLocation.id.in_(ids)).all()
+            for l in with_names:
+                result.append({'id': l.id, 'name': l.name, 'category': l.category})
+                ids.remove(l.id)
+
+            if len(ids)>0:
+                for id in ids:
+                    st = EsiService(self.char).universe_structures(id)
+                    result.append({'id': id, 'name': st['name'], 'category': 'citadel'})
+                    temp = EsiLocation(id=id, name=st['name'], category='citadel')
                     db.session.add(temp)
                 db.session.commit()
 

@@ -30,3 +30,10 @@ class EsiService:
         op = esiapp.op['post_universe_names'](ids=ids)
         data = esiclient.request(op).data
         return data
+
+    def universe_structures(self, id):
+        esisecurity.update_token(self.char.get_sso_data())
+        op = esiapp.op['get_universe_structures_structure_id'](structure_id=id)
+        data = esiclient.request(op).data
+        self._update_token()
+        return data

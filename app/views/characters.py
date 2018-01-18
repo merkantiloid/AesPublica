@@ -8,7 +8,13 @@ from app.services import EsiService
 @login_required
 def characters():
     characters = EsiChar.query.all()
-    url = esisecurity.get_auth_uri(scopes=['esi-skills.read_skills.v1','esi-search.search_structures.v1'])
+    url = esisecurity.get_auth_uri(
+        scopes=[
+            'esi-skills.read_skills.v1',
+            'esi-search.search_structures.v1',
+            'esi-universe.read_structures.v1',
+        ]
+    )
     return render_template('characters.html', title='Characters', url=url, characters=characters)
 
 
