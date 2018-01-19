@@ -61,9 +61,6 @@ def unauthorized_callback():
 
 @mainApp.after_request
 def save_user_action(response):
-    print(str(request.url_rule), type(request.url_rule))
-    print(datetime.now().isoformat(), type(datetime.now().isoformat()))
-
     db.session.add( models.UserAction(user_id=g.user.id, path=str(request.url_rule), created_at=datetime.now().isoformat()) )
     db.session.commit()
     return response
