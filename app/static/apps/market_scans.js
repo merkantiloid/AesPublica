@@ -216,6 +216,14 @@ var scanner = new Vue({
             this.ask.assetsLocationId = event.id;
         },
 
+        IsRedItem: function(item){
+            return item.market_qty < item.qty;
+        },
+
+        IsPinkItem: function(item){
+            return item.market_qty > item.qty && item.market_qty < item.need_qty;
+        },
+
     },
 })
 

@@ -191,7 +191,7 @@ class MScan(db.Model):
         last_checked = 'never'
         if self.check_date:
             delta = datetime.utcnow()-datetime.strptime(self.check_date, "%Y-%m-%dT%H:%M:%S.%f")
-            last_checked = '%d:%02d' % (delta.seconds // 3600, delta.seconds % 3600 // 60)
+            last_checked = '%d:%02d hours ago' % (delta.seconds // 3600, delta.seconds % 3600 // 60)
 
         return {
             'id': self.id,
@@ -250,8 +250,8 @@ class MScanItem(db.Model):
     def to_json(self):
         return {
             'type': self.type.to_json(),
-            'qty': self.qty,
-            'market_qty': self.market_qty,
+            'qty': self.qty or 0,
+            'market_qty': self.market_qty or 0,
             'min_price': self.min_price,
             'avg_price': self.avg_price,
         }

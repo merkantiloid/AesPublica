@@ -1,14 +1,16 @@
 <table class="table info table-sticky">
     <thead>
     <tr>
-        <th class="w-sign"><span id="copy-point" class="glyphicon glyphicon-copy edit"></span></th>
-        <th class="w-sign"></th>
+        <th class="w-sign">
+            <i id="copy-point" class="icon ion-ios-copy"></i>
+        </th>
         <th class="w-name"></th>
         <th class="w-num">Qty</th>
-        <th class="w-num">On Market</th>
         <th class="w-num">Need</th>
-
+        <th class="w-num">Market</th>
         <th class="w-num">x N</th>
+        <th class="w-num">Store</th>
+
         <th class="w-price">Min.Price</th>
         <th class="w-price">Avg.Price</th>
         <th class="w-price">Jita</th>
@@ -16,20 +18,21 @@
     </thead>
     <tbody>
     <tr v-for="item in selected.items">
-        <td class="w-sign">
-            <span class="glyphicon glyphicon-shopping-cart yellow-b" v-if="item.StoreQty == 0"></span>
-        </td>
         <td class="w-sign"><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
         <td class="crop w-name" :title="item.type.name" v-bind:class="{ 'reded-b': item.MarketQty == 0}">
             <span class="glyphicon glyphicon-copy edit copy-item" :data-clipboard-text="item.type.name"></span>
             <% item.type.name %>
         </td>
         <td class="w-num text-right"><%item.qty | fi%></td>
-
-        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.MarketQty == 0 }"><%item.MarketQty | fi%></td>
         <td class="w-num text-right"><%item.need_qty | fi%></td>
 
+        <td class="w-num text-right" v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }">
+            <%item.market_qty | fi%>
+        </td>
+
         <td class="w-num text-right"><%item.FitTimes | fi%></td>
+        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.store_qty == 0 }"><%item.store_qty | fi%></td>
+
         <td class="w-price text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.MarketPrice | ff%></td>
         <td class="w-price text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}"><%item.Margin | ff%></td>
         <td class="w-price text-right"><%item.price.sell | ff%></td>

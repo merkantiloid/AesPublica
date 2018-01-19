@@ -188,6 +188,12 @@ table.info .reded{
 table.info .reded-b{
     color: #cc0000;
     font-weight: bold;
+    background: #fff0ff;
+}
+
+table.info .pinked-b{
+    font-weight: bold;
+    background: #fff0ff;
 }
 
 table.info .yellow{
