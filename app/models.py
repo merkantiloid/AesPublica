@@ -221,3 +221,10 @@ class MScanItem(db.Model):
             'min_price': self.min_price,
             'avg_price': self.avg_price,
         }
+
+class UserAction(db.Model):
+    __tablename__ = 'user_actions'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer)
+    path = db.Column(db.String)
+    created_at = db.Column(db.String)

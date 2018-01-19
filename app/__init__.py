@@ -1,4 +1,4 @@
-from flask import Flask, g, redirect
+from flask import Flask, g, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from .filters import fldate
@@ -6,6 +6,9 @@ from .filters import fldate
 from esipy import App
 from esipy import EsiClient
 from esipy import EsiSecurity
+
+from datetime import datetime
+
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
@@ -56,10 +59,17 @@ def load_user(id):
 def unauthorized_callback():
     return redirect('/login')
 
+@mainApp.after_request
+def save_user_action(response):
+    print(str(request.url_rule), type(request.url_rule))
+    print(datetime.now().isoformat(), type(datetime.now().isoformat()))
+
+    db.session.add( models.UserAction(user_id=g.user.id, path=str(request.url_rule), created_at=datetime.now().isoformat()) )
+    db.session.commit()
+    return response
 
 @mainApp.before_request
 def before_request():
     g.user = current_user
-
 
 from app import views
