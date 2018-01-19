@@ -58,9 +58,12 @@ class LocationsService:
             if len(ids)>0:
                 for id in ids:
                     st = EsiService(self.char).universe_structures(id)
-                    result.append({'id': id, 'name': st['name'], 'category': 'citadel'})
-                    temp = EsiLocation(id=id, name=st['name'], category='citadel')
-                    db.session.add(temp)
+                    if 'error' in st:
+                        print(st['error'])
+                    else:
+                        result.append({'id': id, 'name': st['name'], 'category': 'citadel'})
+                        temp = EsiLocation(id=id, name=st['name'], category='citadel')
+                        db.session.add(temp)
                 db.session.commit()
 
         return result

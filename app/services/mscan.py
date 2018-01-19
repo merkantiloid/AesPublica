@@ -1,4 +1,4 @@
-from app.models import MScan, MScanItem
+from app.models import MScan, MScanItem, MScanLocation
 from app.esi_models import EsiChar
 from app import db
 from .parsing import parse_name_qty
@@ -46,10 +46,35 @@ class MScanService:
     def update_mscan(self, mscan_id, params):
         temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
         if temp:
-            temp.raw = params.get('raw',None)
+            if 'raw' in params:
+                temp.raw = params.get('raw',None)
             db.session.add(temp)
             db.session.commit()
             self.parse_raw(temp)
+
+    def add_location(self, mscan_id, params):
+        temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
+        if temp:
+            location = MScanLocation(
+                mscan_id=mscan_id,
+                esi_location_id=params['location_id'],
+                esi_char_id=params['char_id']
+            )
+            db.session.add(location)
+            db.session.commit()
+
+    def delete_location(self, mscan_id, params):
+        temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
+        if temp:
+            db.session.execute(
+                'delete from mscan_locations where mscan_id = :id and esi_char_id = :esi_char_id and esi_location_id = :esi_location_id',
+                params={
+                    'id': temp.id,
+                    'esi_location_id': params['location_id'],
+                    'esi_char_id': params['char_id']
+                }
+            )
+            db.session.commit()
 
     def to_json(self, selected_id=None):
         selected = None

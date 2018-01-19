@@ -155,6 +155,9 @@ class CalcResult(db.Model):
 def sort_key(item):
     return '%d-%s' % (item['type']['group_id'] , item['type']['name'])
 
+def sort_location(item):
+    return '%s-%s' % (item['char_name'], item['location_name'])
+
 class MScan(db.Model):
     __tablename__ = 'mscans'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -169,18 +172,24 @@ class MScan(db.Model):
 
     items = db.relationship("MScanItem", lazy="joined", back_populates="mscan")
 
+    locations = db.relationship("MScanLocation", lazy="joined", back_populates="mscan")
+
     def short_json(self):
         return {'id': self.id, 'name': self.name}
 
     def to_json(self):
         items = [x.to_json() for x in self.items]
         items = sorted(items, key=sort_key)
+
+        locations = [x.to_json() for x in self.locations]
+        locations = sorted(locations, key=sort_location)
         return {
             'id': self.id,
             'name': self.name,
             'raw': self.raw,
             'fit_times': self.fit_times,
             'items': items,
+            'locations': locations,
         }
 
 
@@ -195,6 +204,14 @@ class MScanLocation(db.Model):
 
     esi_char_id = db.Column(db.BigInteger, db.ForeignKey('esi_chars.id'), primary_key=True)
     esi_char = db.relationship("EsiChar")
+
+    def to_json(self):
+        return {
+            'location_id': self.esi_location_id,
+            'location_name': self.esi_location.name,
+            'char_id': self.esi_char_id,
+            'char_name': self.esi_char.character_name,
+        }
 
 
 class MScanItem(db.Model):

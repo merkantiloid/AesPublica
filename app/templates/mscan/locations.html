@@ -1,6 +1,9 @@
 <div class="col-sm-6 bordered">
     <h6>Locations & Auditors</h6>
 
+    <i v-show="ask.charId==0 || ask.locationId==0"  class="icon ion-ios-circle-outline"></i>
+    <i v-show="ask.charId!=0 && ask.locationId!=0" v-on:click="AddLocation" class="icon ion-plus-circled"></i>
+
     Auditor
     <select v-model.number="ask.charId">
         <option value="0">---</option>
@@ -11,6 +14,14 @@
 
     Location
     <type-select v-on:location-selected="LocationSelected($event)" :char_id="ask.charId"></type-select>
+
+    <ul class="list-unstyled">
+        <li v-for="s in selected.locations">
+            <i v-on:click="DeleteLocation(s.location_id, s.char_id)" class="icon ion-trash-a"></i>
+            [<%s.char_name%>] <%s.location_name%>
+        </li>
+    </ul>
+
 
 </div>
 <div class="col-sm-6 bordered">

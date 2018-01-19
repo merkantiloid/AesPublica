@@ -1,5 +1,5 @@
 Vue.component('type-select', {
-    template: '<input ref="selector" :disabled="char_id==0" class="location-selector form-control form-control-sm" type="text" size="36"/>',
+    template: '<input ref="selector" :disabled="char_id==0" class="location-selector form-control form-control-sm" type="text" size="34"/>',
 
     props: ['char_id'],
 

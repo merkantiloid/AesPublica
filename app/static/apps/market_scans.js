@@ -8,6 +8,7 @@ var scanner = new Vue({
             newNameChanged: false,
             rawChanged: false,
             charId: 0,
+            locationId: 0,
         },
         scanners: [],
         selected: null,
@@ -50,23 +51,25 @@ var scanner = new Vue({
             }
         },
 
-        AddStation: function(){
+        AddLocation: function(){
             var vm = this;
             axios.post(
-                '/scanner/'+this.selected.Id+'/add_station.json', {station_id: this.newStationId}
+                '/mscans/'+vm.selected.id+'/locations.json', {char_id: vm.ask.charId, location_id: vm.ask.locationId}
             ).then(function (response) {
-                vm.selected = response.data.Selected;
+                vm.selected = response.data.selected;
+                vm.ask.charId = 0;
+                vm.ask.locationId = 0;
             }).catch(function (error) {
                 console.log(error);
             });
         },
 
-        DeleteStation: function(stationId){
+        DeleteLocation: function(location_id, char_id){
             var vm = this;
             axios.post(
-                '/scanner/'+this.selected.Id+'/delete_station.json', {station_id: stationId}
+                '/mscans/'+vm.selected.id+'/location_delete.json', {char_id: char_id, location_id: location_id}
             ).then(function (response) {
-                vm.selected = response.data.Selected;
+                vm.selected = response.data.selected;
             }).catch(function (error) {
                 console.log(error);
             });
@@ -80,6 +83,7 @@ var scanner = new Vue({
                     vm.selected = response.data.selected;
                     vm.ask.newName = '';
                     vm.ask.newNameChanged = false;
+                    $('.location-selector').val('');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -214,7 +218,7 @@ var scanner = new Vue({
         },
 
         LocationSelected: function(event){
-            console.log(event)
+            this.ask.locationId = event.id;
         },
 
     },
