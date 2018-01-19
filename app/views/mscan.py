@@ -76,3 +76,11 @@ def delete_mscan_location_json(mscan_id,loc_id):
     s = MScanService(g.user)
     s.delete_location(mscan_id, loc_id)
     return jsonify(s.to_json(selected_id=mscan_id))
+
+
+@mainApp.route('/mscans/<int:mscan_id>/market_info.json', methods=['POST'])
+@login_required
+def market_info_json(mscan_id):
+    s = MScanService(g.user)
+    s.market_info(mscan_id)
+    return jsonify(s.to_json(selected_id=mscan_id))

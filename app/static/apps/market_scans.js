@@ -155,31 +155,9 @@ var scanner = new Vue({
 
         ChangeFitTimes: function(){
             var vm = this;
-            axios.post('/scanner/'+this.selected.Id+'.json', {fit_times: parseInt(this.selected.FitTimes)})
+            axios.post('/mscans/'+this.selected.id+'.json', {fit_times: parseInt(this.selected.fit_times)})
                 .then(function (response) {
-                    vm.selected = response.data.Selected;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        ChangeChar: function(){
-            var vm = this;
-            axios.post('/scanner/'+this.selected.Id+'.json', {cid: parseInt(this.selected.Cid)})
-                .then(function (response) {
-                    vm.selected = response.data.Selected;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-
-        UpdateStationId: function(){
-            var vm = this;
-            axios.post('/scanner/'+this.selected.Id+'.json', {station_id: parseInt(this.selected.StationId)})
-                .then(function (response) {
-                    vm.selected = response.data.Selected;
+                    vm.selected = response.data.selected;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -190,18 +168,15 @@ var scanner = new Vue({
             var vm = this;
             this.loading=true;
 
-            setTimeout(function(){
-              axios.post('/scanner/'+vm.selected.Id+'/market_info.json')
-                            .then(function (response) {
-                                vm.selected = response.data.Selected;
-                                vm.loading=false;
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-            }, 1500);
-
-
+            axios.post(
+                '/mscans/'+vm.selected.id+'/market_info.json'
+            ).then(function (response) {
+                vm.selected = response.data.selected;
+                vm.loading=false;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         },
 
         CopyNeed: function(vm){

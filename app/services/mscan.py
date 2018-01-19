@@ -4,7 +4,7 @@ from app import db
 from .parsing import parse_name_qty
 from .static import Static
 from .price import PriceService
-
+from datetime import datetime
 
 class MScanService:
 
@@ -48,6 +48,8 @@ class MScanService:
         if temp:
             if 'raw' in params:
                 temp.raw = params.get('raw',None)
+            if 'fit_times' in params:
+                temp.fit_times = params.get('fit_times',None)
             db.session.add(temp)
             db.session.commit()
             self.parse_raw(temp)
@@ -110,3 +112,9 @@ class MScanService:
             db.session.add(db_item)
         db.session.commit()
 
+    def market_info(self,mscan_id):
+        temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
+        if temp:
+            temp.check_date = datetime.isoformat(datetime.utcnow())
+            db.session.add(temp)
+            db.session.commit()

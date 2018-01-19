@@ -2,6 +2,7 @@ from app import db
 from app.eve_models import EveType
 from sqlalchemy import ForeignKey
 from math import ceil
+from datetime import datetime, timedelta
 
 
 class User(db.Model):
@@ -187,11 +188,17 @@ class MScan(db.Model):
         assets_locations = [x.to_json() for x in self.locations.filter(MScanLocation.kind == 'asset').all()]
         assets_locations = sorted(assets_locations, key=sort_location)
 
+        last_checked = 'never'
+        if self.check_date:
+            delta = datetime.utcnow()-datetime.strptime(self.check_date, "%Y-%m-%dT%H:%M:%S.%f")
+            last_checked = '%d:%02d' % (delta.seconds // 3600, delta.seconds % 3600 // 60)
+
         return {
             'id': self.id,
             'name': self.name,
             'raw': self.raw,
             'fit_times': self.fit_times,
+            'last_checked': last_checked,
             'items': items,
             'locations': locations,
             'assets_locations': assets_locations,
