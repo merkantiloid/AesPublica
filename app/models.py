@@ -172,7 +172,7 @@ class MScan(db.Model):
 
     items = db.relationship("MScanItem", lazy="joined", back_populates="mscan")
 
-    locations = db.relationship("MScanLocation", lazy="joined", back_populates="mscan")
+    locations = db.relationship("MScanLocation", lazy="dynamic", back_populates="mscan")
 
     def short_json(self):
         return {'id': self.id, 'name': self.name}
@@ -181,8 +181,12 @@ class MScan(db.Model):
         items = [x.to_json() for x in self.items]
         items = sorted(items, key=sort_key)
 
-        locations = [x.to_json() for x in self.locations]
+        locations = [x.to_json() for x in self.locations.filter(MScanLocation.kind == 'audit').all()]
         locations = sorted(locations, key=sort_location)
+
+        assets_locations = [x.to_json() for x in self.locations.filter(MScanLocation.kind == 'asset').all()]
+        assets_locations = sorted(assets_locations, key=sort_location)
+
         return {
             'id': self.id,
             'name': self.name,
@@ -190,11 +194,14 @@ class MScan(db.Model):
             'fit_times': self.fit_times,
             'items': items,
             'locations': locations,
+            'assets_locations': assets_locations,
         }
 
 
 class MScanLocation(db.Model):
     __tablename__ = 'mscan_locations'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'), primary_key=True)
     mscan = db.relationship("MScan")
@@ -205,8 +212,11 @@ class MScanLocation(db.Model):
     esi_char_id = db.Column(db.BigInteger, db.ForeignKey('esi_chars.id'), primary_key=True)
     esi_char = db.relationship("EsiChar")
 
+    kind = db.Column(db.String, nullable=False)
+
     def to_json(self):
         return {
+            'id': self.id,
             'location_id': self.esi_location_id,
             'location_name': self.esi_location.name,
             'char_id': self.esi_char_id,

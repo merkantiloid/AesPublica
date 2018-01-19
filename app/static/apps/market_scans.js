@@ -9,6 +9,8 @@ var scanner = new Vue({
             rawChanged: false,
             charId: 0,
             locationId: 0,
+            assetsCharId: 0,
+            assetsLocationId: 0,
         },
         scanners: [],
         selected: null,
@@ -54,20 +56,35 @@ var scanner = new Vue({
         AddLocation: function(){
             var vm = this;
             axios.post(
-                '/mscans/'+vm.selected.id+'/locations.json', {char_id: vm.ask.charId, location_id: vm.ask.locationId}
+                '/mscans/'+vm.selected.id+'/locations.json', {char_id: vm.ask.charId, location_id: vm.ask.locationId, kind: 'audit'}
             ).then(function (response) {
                 vm.selected = response.data.selected;
                 vm.ask.charId = 0;
                 vm.ask.locationId = 0;
+                $('.auditors .location-selector').val('');
             }).catch(function (error) {
                 console.log(error);
             });
         },
 
-        DeleteLocation: function(location_id, char_id){
+        AddAssetsLocation: function(){
             var vm = this;
             axios.post(
-                '/mscans/'+vm.selected.id+'/location_delete.json', {char_id: char_id, location_id: location_id}
+                '/mscans/'+vm.selected.id+'/locations.json', {char_id: vm.ask.assetsCharId, location_id: vm.ask.assetsLocationId, kind: 'asset'}
+            ).then(function (response) {
+                vm.selected = response.data.selected;
+                vm.ask.assetsCharId = 0;
+                vm.ask.assetsLocationId = 0;
+                $('.assets .location-selector').val('');
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+
+        DeleteLocation: function(id){
+            var vm = this;
+            axios.delete(
+                '/mscans/'+vm.selected.id+'/locations/'+id+'.json'
             ).then(function (response) {
                 vm.selected = response.data.selected;
             }).catch(function (error) {
@@ -83,7 +100,6 @@ var scanner = new Vue({
                     vm.selected = response.data.selected;
                     vm.ask.newName = '';
                     vm.ask.newNameChanged = false;
-                    $('.location-selector').val('');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -217,8 +233,12 @@ var scanner = new Vue({
             return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
         },
 
-        LocationSelected: function(event){
+        AuditorLocationSelected: function(event){
             this.ask.locationId = event.id;
+        },
+
+        AssetsLocationSelected: function(event){
+            this.ask.assetsLocationId = event.id;
         },
 
     },

@@ -58,20 +58,20 @@ class MScanService:
             location = MScanLocation(
                 mscan_id=mscan_id,
                 esi_location_id=params['location_id'],
-                esi_char_id=params['char_id']
+                esi_char_id=params['char_id'],
+                kind=params['kind']
             )
             db.session.add(location)
             db.session.commit()
 
-    def delete_location(self, mscan_id, params):
+    def delete_location(self, mscan_id, loc_id):
         temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
         if temp:
             db.session.execute(
-                'delete from mscan_locations where mscan_id = :id and esi_char_id = :esi_char_id and esi_location_id = :esi_location_id',
+                'delete from mscan_locations where mscan_id = :mid and id = :id',
                 params={
-                    'id': temp.id,
-                    'esi_location_id': params['location_id'],
-                    'esi_char_id': params['char_id']
+                    'mid': temp.id,
+                    'id': loc_id,
                 }
             )
             db.session.commit()

@@ -70,9 +70,9 @@ def add_mscan_location_json(mscan_id):
     return jsonify(s.to_json(selected_id=mscan_id))
 
 
-@mainApp.route('/mscans/<int:mscan_id>/location_delete.json', methods=['POST'])
+@mainApp.route('/mscans/<int:mscan_id>/locations/<int:loc_id>.json', methods=['DELETE'])
 @login_required
-def delete_mscan_location_json(mscan_id):
+def delete_mscan_location_json(mscan_id,loc_id):
     s = MScanService(g.user)
-    s.delete_location(mscan_id, request.get_json())
+    s.delete_location(mscan_id, loc_id)
     return jsonify(s.to_json(selected_id=mscan_id))
