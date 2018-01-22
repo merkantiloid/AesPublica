@@ -8,7 +8,7 @@ from esipy import EsiClient
 from esipy import EsiSecurity
 
 from datetime import datetime
-
+import os
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
@@ -32,7 +32,13 @@ db = SQLAlchemy(mainApp)
 lm = LoginManager()
 lm.init_app(mainApp)
 
-esiapp = App.create(mainApp.config.get('ESI_SWAGGER_JSON',''))
+
+
+def _hook(url):
+    return 'file://'+os.getcwd()+'/swagger.t.json'
+
+esiapp = App.load(mainApp.config.get('ESI_SWAGGER_JSON',''), url_load_hook=_hook)
+esiapp.prepare()
 esisecurity = EsiSecurity(
     app=esiapp,
     redirect_uri=mainApp.config.get('ESI_CALLBACK_URL',''),
@@ -61,8 +67,13 @@ def unauthorized_callback():
 
 @mainApp.after_request
 def save_user_action(response):
-    db.session.add( models.UserAction(user_id=g.user.id, path=str(request.url_rule), created_at=datetime.now().isoformat()) )
-    db.session.commit()
+    if g.user.is_authenticated:
+      db.session.add( models.UserAction(user_id=g.user.id, path=str(request.url_rule), created_at=datetime.now().isoformat()) )
+      db.session.commit()
+    else:
+      db.session.add( models.UserAction(user_id=-1, path=str(request.url_rule), created_at=datetime.now().isoformat()) )
+      db.session.commit()
+
     return response
 
 @mainApp.before_request

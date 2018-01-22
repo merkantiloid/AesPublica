@@ -4,6 +4,7 @@ from app import db
 from .parsing import parse_name_qty
 from .static import Static
 from .price import PriceService
+from .market import MarketService
 from datetime import datetime
 
 class MScanService:
@@ -118,3 +119,9 @@ class MScanService:
             temp.check_date = datetime.isoformat(datetime.utcnow())
             db.session.add(temp)
             db.session.commit()
+
+            locations = [x for x in temp.locations.filter(MScanLocation.kind == 'audit').all()]
+            types = [x for x in temp.items]
+            MarketService().info(locations, types, temp.fit_times)
+
+

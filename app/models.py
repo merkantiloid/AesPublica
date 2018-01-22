@@ -1,7 +1,7 @@
 from app import db
 from app.eve_models import EveType
 from sqlalchemy import ForeignKey
-from math import ceil
+from math import ceil, floor
 from datetime import datetime, timedelta
 
 
@@ -191,7 +191,7 @@ class MScan(db.Model):
         last_checked = 'never'
         if self.check_date:
             delta = datetime.utcnow()-datetime.strptime(self.check_date, "%Y-%m-%dT%H:%M:%S.%f")
-            last_checked = '%d:%02d hours ago' % (delta.seconds // 3600, delta.seconds % 3600 // 60)
+            last_checked = '%dd %d:%02d ago' % (delta.days, delta.seconds // 3600, delta.seconds % 3600 // 60)
 
         return {
             'id': self.id,
@@ -254,6 +254,7 @@ class MScanItem(db.Model):
             'market_qty': self.market_qty or 0,
             'min_price': self.min_price,
             'avg_price': self.avg_price,
+            'fit_times': floor((self.market_qty or 0) / (1.0*(self.qty or 1))),
         }
 
 class UserAction(db.Model):

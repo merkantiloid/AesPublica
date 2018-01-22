@@ -1,17 +1,18 @@
 from app.esi_models import EsiLocation
-from app.services import EsiService
+from .esi import EsiService
 from app import db
 
 class LocationsService:
 
-    def __init__(self, char):
+    def __init__(self, char=None):
         self.char = char
+        self.esi = EsiService(self.char)
 
 
     def search_location(self, term):
         result = []
 
-        ids = EsiService(self.char).character_search('station,structure',term)
+        ids = self.esi.character_search('station,structure',term)
 
         sids = ids.get('station',[])
         if len(sids)>0:
@@ -36,7 +37,7 @@ class LocationsService:
                 ids.remove(l.id)
 
             if len(ids)>0:
-                data = EsiService(self.char).universe_names(ids)
+                data = self.esi.universe_names(ids)
                 for st in data:
                     result.append({'id': st['id'], 'name': st['name'], 'category': st['category']})
                     temp = EsiLocation(id=st['id'], name=st['name'], category=st['category'])
@@ -57,7 +58,7 @@ class LocationsService:
 
             if len(ids)>0:
                 for id in ids:
-                    st = EsiService(self.char).universe_structures(id)
+                    st = self.esi.universe_structures(id)
                     if 'error' in st:
                         print(st['error'])
                     else:
@@ -67,3 +68,12 @@ class LocationsService:
                 db.session.commit()
 
         return result
+
+    def update_region_id(self, location, system_id):
+        sys_data = self.esi.universe_systems(system_id)
+        con_data = self.esi.universe_constellations(sys_data["constellation_id"])
+        location.system_id = system_id
+        location.region_id = con_data["region_id"]
+        db.session.add(location)
+        db.session.commit()
+        return location.region_id

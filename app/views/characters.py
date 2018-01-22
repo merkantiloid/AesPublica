@@ -13,6 +13,7 @@ def characters():
             'esi-skills.read_skills.v1',
             'esi-search.search_structures.v1',
             'esi-universe.read_structures.v1',
+            'esi-markets.structure_markets.v1',
         ]
     )
     return render_template('characters.html', title='Characters', url=url, characters=characters)

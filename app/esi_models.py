@@ -46,3 +46,5 @@ class EsiLocation(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(255))
+    system_id = db.Column(db.BigInteger)
+    region_id = db.Column(db.BigInteger)
