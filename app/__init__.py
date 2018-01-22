@@ -34,10 +34,11 @@ lm.init_app(mainApp)
 
 
 
-def _hook(url):
-    return 'file://'+os.getcwd()+'/swagger.t.json'
+# def _hook(url):
+#     return 'file://'+os.getcwd()+'/swagger.t.json'
+# esiapp = App.load(mainApp.config.get('ESI_SWAGGER_JSON',''), url_load_hook=_hook)
 
-esiapp = App.load(mainApp.config.get('ESI_SWAGGER_JSON',''), url_load_hook=_hook)
+esiapp = App.load(mainApp.config.get('ESI_SWAGGER_JSON',''))
 esiapp.prepare()
 esisecurity = EsiSecurity(
     app=esiapp,
