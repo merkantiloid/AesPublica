@@ -47,17 +47,10 @@
 </div>
 
 <div class="col-sm-2 bordered">
-    <h6>Warning qty:</h6>
-    <input type="number" v-model="selected.fit_times" v-on:change="ChangeFitTimes()">
+    <b>Goal: <input type="number" class="inline" v-model="selected.goal_fit_times" v-on:change="ChangeGoalFitTimes()"></b><br>
+    <b>Warn: <input type="number" class="inline" v-model="selected.fit_times" v-on:change="ChangeFitTimes()"></b><br>
+    <b>Store: <input type="number" class="inline" v-model="selected.store_fit_times" v-on:change="ChangeStoreFitTimes()"></b><br>
 
-
-    <h6>Last checked:</h6>
-    <%selected.last_checked%>
-
-    <h6>
-      <i class="icon ion-gear-b" v-on:click="UpdateMarketInfo()" v-show="!loading"></i>
-      <img width=24 height=24 src="/static/loading.gif" v-show="loading">
-    </h6>
-
+    <b>Checked: </b><%selected.last_checked%><br>
 </div>
 

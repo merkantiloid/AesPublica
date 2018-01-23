@@ -170,6 +170,8 @@ class MScan(db.Model):
     raw = db.Column(db.Text)
     check_date = db.Column(db.String)
     fit_times = db.Column(db.BigInteger)
+    goal_fit_times = db.Column(db.BigInteger)
+    store_fit_times = db.Column(db.BigInteger)
 
     items = db.relationship("MScanItem", lazy="joined", back_populates="mscan")
 
@@ -198,6 +200,8 @@ class MScan(db.Model):
             'name': self.name,
             'raw': self.raw,
             'fit_times': self.fit_times,
+            'goal_fit_times': self.goal_fit_times,
+            'store_fit_times': self.store_fit_times,
             'last_checked': last_checked,
             'items': items,
             'locations': locations,
@@ -255,6 +259,7 @@ class MScanItem(db.Model):
             'min_price': self.min_price,
             'avg_price': self.avg_price,
             'fit_times': floor((self.market_qty or 0) / (1.0*(self.qty or 1))),
+            'store_fit_times': floor((self.store_qty or 0) / (1.0*(self.qty or 1))),
         }
 
 class UserAction(db.Model):

@@ -51,6 +51,10 @@ class MScanService:
                 temp.raw = params.get('raw',None)
             if 'fit_times' in params:
                 temp.fit_times = params.get('fit_times',None)
+            if 'goal_fit_times' in params:
+                temp.goal_fit_times = params.get('goal_fit_times',None)
+            if 'store_fit_times' in params:
+                temp.store_fit_times = params.get('store_fit_times',None)
             db.session.add(temp)
             db.session.commit()
             self.parse_raw(temp)

@@ -158,10 +158,21 @@ var scanner = new Vue({
             axios.post('/mscans/'+this.selected.id+'.json', {fit_times: parseInt(this.selected.fit_times)})
                 .then(function (response) {
                     vm.selected = response.data.selected;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                }).catch(function (error) {console.log(error);});
+        },
+        ChangeGoalFitTimes: function(){
+            var vm = this;
+            axios.post('/mscans/'+this.selected.id+'.json', {goal_fit_times: parseInt(this.selected.goal_fit_times)})
+                .then(function (response) {
+                    vm.selected = response.data.selected;
+                }).catch(function (error) {console.log(error);});
+        },
+        ChangeStoreFitTimes: function(){
+            var vm = this;
+            axios.post('/mscans/'+this.selected.id+'.json', {store_fit_times: parseInt(this.selected.store_fit_times)})
+                .then(function (response) {
+                    vm.selected = response.data.selected;
+                }).catch(function (error) {console.log(error);});
         },
 
         UpdateMarketInfo: function(){
@@ -217,11 +228,19 @@ var scanner = new Vue({
         },
 
         IsRedItem: function(item){
-            return item.market_qty < item.qty;
+            return item.fit_times < this.selected.fit_times;
         },
 
         IsPinkItem: function(item){
-            return item.market_qty > item.qty && item.market_qty < item.need_qty;
+            return item.fit_times < this.selected.goal_fit_times;
+        },
+
+        IsYellowItem: function(item){
+            return item.store_fit_times < this.selected.store_fit_times;
+        },
+
+        IsOverpriced: function(price, jita){
+            return price > 1.5*jita;
         },
 
     },

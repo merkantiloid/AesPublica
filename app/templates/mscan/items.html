@@ -1,12 +1,13 @@
 <table class="table info table-sticky">
     <thead>
     <tr>
-        <th class="w-sign">
+        <th class="w-sign"></th>
+        <th class="w-name">
             <i id="copy-point" class="icon ion-ios-copy"></i>
+            <i class="icon ion-gear-b" v-on:click="UpdateMarketInfo()" v-show="!loading"></i>
+            <img width=24 height=24 src="/static/loading.gif" v-show="loading">
         </th>
-        <th class="w-name"></th>
         <th class="w-num">Qty</th>
-        <th class="w-num">Need</th>
         <th class="w-num">Market</th>
         <th class="w-num">x N</th>
         <th class="w-num">Store</th>
@@ -18,22 +19,20 @@
     <tbody>
     <tr v-for="item in selected.items">
         <td class="w-sign"><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
-        <td class="crop w-name" :title="item.type.name" v-bind:class="{ 'reded-b': item.MarketQty == 0}">
-            <span class="glyphicon glyphicon-copy edit copy-item" :data-clipboard-text="item.type.name"></span>
-            <% item.type.name %>
+        <td class="crop w-name" :title="item.type.name">
+            <i class="copy-item icon ion-ios-copy" :data-clipboard-text="item.type.name"></i>
+            <span v-bind:class="{ 'reded-text': IsYellowItem(item)||IsRedItem(item)||IsPinkItem(item)||IsOverpriced(item.min_price,item.price.sell)}"><% item.type.name %></span>
         </td>
         <td class="w-num text-right"><%item.qty | fi%></td>
-        <td class="w-num text-right"><%item.need_qty | fi%></td>
 
-        <td class="w-num text-right" v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }">
-            <%item.market_qty | fi%>
-        </td>
+        <td class="w-num text-right"><%item.market_qty | fi%></td>
+        <td class="w-num text-right" v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></td>
 
-        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.fit_times < selected.fit_times}"><%item.fit_times | fi%></td>
-        <td class="w-num text-right" v-bind:class="{ 'reded-b': item.store_qty == 0 }"><%item.store_qty | fi%></td>
+        <td class="w-num text-right" v-bind:class="{ 'yellow-b': IsYellowItem(item)}"><%item.store_qty | fi%></td>
 
-        <td class="w-price text-right" v-bind:class="{'green': item.Margin > 10, 'green-b': item.Margin > 20, 'reded': item.Margin < 0, 'reded-b': item.Margin < -10}">
-            <%item.min_price | ff%><br><%item.avg_price | ff%>
+        <td class="w-price text-right">
+            <span v-bind:class="{ 'reded-text': IsOverpriced(item.min_price,item.price.sell)}"><%item.min_price | ff%></span><br>
+            <span v-bind:class="{ 'reded-text': IsOverpriced(item.avg_price,item.price.sell)}"><%item.avg_price | ff%></span>
         </td>
         <td class="w-price text-right"><%item.price.sell | ff%></td>
     </tr>

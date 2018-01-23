@@ -83,6 +83,10 @@ button .icon {
     font-size: 24px;
 }
 
+.icon.ion-ios-copy.copy-item{
+    font-size: 16px;
+}
+
 .autocomplete-suggestions {
     text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
 
@@ -188,12 +192,18 @@ table.info .reded{
 table.info .reded-b{
     color: #cc0000;
     font-weight: bold;
-    background: #fff0ff;
+    background: #ffe0e0;
 }
+
+table.info span.reded-text{
+    color: #cc0000;
+    font-weight: bold;
+}
+
 
 table.info .pinked-b{
     font-weight: bold;
-    background: #fff0ff;
+    background: #ffe0e0;
 }
 
 table.info .yellow{
@@ -229,9 +239,15 @@ table.info .reded{
   overflow-y: scroll;
 }
 
-.table-sticky td, .table-sticky th {
-    //border: 1px solid #000000;
+.table-sticky th{
+    border: none !important;
     padding: 2px !important;
+}
+
+.table-sticky td{
+    border: 1px solid #e0e0e0 !important;
+    padding: 2px !important;
+    line-height: 14px;
 }
 
 .w-name{
@@ -245,13 +261,16 @@ table.info .reded{
 }
 
 .w-num{
-    max-width: 90px;
-    width: 90px;
+    max-width: 94px;
+    width: 94px;
+    white-space: nowrap;
+    font-family: monospace;
 }
 
 .w-price{
     max-width: 128px;
     width: 128px;
+    font-family: monospace;
 }
 
 input[disabled]{
@@ -263,4 +282,12 @@ input[disabled]{
 input.location-selector{
     display: inline;
     width: auto;
+}
+
+input.inline{
+    width: 100px;
+}
+
+.list-unstyled{
+    margin-bottom: 0px;
 }
