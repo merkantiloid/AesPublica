@@ -4,14 +4,16 @@
         <th class="w-sign"></th>
         <th class="w-name">
             <i id="copy-point" class="icon ion-ios-copy"></i>
+
+            &nbsp;&nbsp;&nbsp;
+
             <i class="icon ion-gear-b" v-on:click="UpdateMarketInfo()" v-show="!loading"></i>
             <img width=24 height=24 src="/static/loading.gif" v-show="loading">
         </th>
         <th class="w-num">Qty</th>
         <th class="w-num">Market</th>
-        <th class="w-num">x N</th>
         <th class="w-num">Store</th>
-
+        <th class="w-num">x M/S</th>
         <th class="w-price">Min./Avg.Price</th>
         <th class="w-price">Jita</th>
     </tr>
@@ -24,11 +26,14 @@
             <span v-bind:class="{ 'reded-text': IsYellowItem(item)||IsRedItem(item)||IsPinkItem(item)||IsOverpriced(item.min_price,item.price.sell)}"><% item.type.name %></span>
         </td>
         <td class="w-num text-right"><%item.qty | fi%></td>
-
-        <td class="w-num text-right"><%item.market_qty | fi%></td>
-        <td class="w-num text-right" v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></td>
-
-        <td class="w-num text-right" v-bind:class="{ 'yellow-b': IsYellowItem(item)}"><%item.store_qty | fi%></td>
+        <td class="w-num text-right">
+            <%item.market_qty | fi%><br>
+            <span class="light-gray">x[</span><span v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></span><span class="light-gray">]</span>
+        </td>
+        <td class="w-num text-right">
+            <%item.store_qty | fi%><br>
+            <span class="light-gray">x[</span><span v-bind:class="{ 'yellow-b': IsYellowItem(item)}"><%item.store_fit_times | fi%></span><span class="light-gray">]</span>
+        </td>
 
         <td class="w-price text-right">
             <span v-bind:class="{ 'reded-text': IsOverpriced(item.min_price,item.price.sell)}"><%item.min_price | ff%></span><br>

@@ -41,7 +41,6 @@ class EsiService:
         data = esiclient.request(op).data
         return data
 
-
     def universe_stations(self, id):
         op = esiapp.op['get_universe_stations_station_id'](station_id=id)
         data = esiclient.request(op).data
@@ -69,3 +68,43 @@ class EsiService:
         pages = req.header.get('X-Pages',[1])[0]
         self._update_token()
         return data, pages
+
+    def characters_assets(self, page):
+        esisecurity.update_token(self.char.get_sso_data())
+        op = esiapp.op['get_characters_character_id_assets'](character_id=self.char.character_id, page=page)
+        req = esiclient.request(op)
+        if req.status == 200:
+            data = req.data
+            pages = req.header.get('X-Pages',[1])[0]
+            self._update_token()
+            return data, pages
+        else:
+            print(req.data)
+            return [], 1
+
+    def _deep_set_rid(self, hash, current_id):
+        if hash[current_id]['location_id'] in hash:
+            hash[current_id]['rid'] = self._deep_set_rid(hash,hash[current_id]['location_id'])
+        else:
+            hash[current_id]['rid'] = hash[current_id]['location_id']
+            return hash[current_id]['rid']
+
+    def characters_assets_full(self):
+        current = 1
+        max_page = None
+        hash_assets = {}
+        while True:
+            assets, pages = self.characters_assets(current)
+            for asset in assets:
+                hash_assets[ asset['item_id'] ] = asset
+            if not max_page:
+                max_page = pages
+            current += 1
+            if current > max_page:
+                break
+
+        for asset_id in hash_assets:
+            if not 'rid' in hash_assets[asset_id]:
+                self._deep_set_rid(hash_assets, asset_id)
+
+        return hash_assets

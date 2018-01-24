@@ -126,6 +126,7 @@ class MScanService:
 
             locations = [x for x in temp.locations.filter(MScanLocation.kind == 'audit').all()]
             types = [x for x in temp.items]
-            MarketService().info(locations, types, temp.fit_times)
+            assets = [x for x in temp.locations.filter(MScanLocation.kind == 'asset').all()]
+            MarketService().info(locations, assets, types, temp.fit_times)
 
 

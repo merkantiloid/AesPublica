@@ -14,6 +14,7 @@ def characters():
             'esi-search.search_structures.v1',
             'esi-universe.read_structures.v1',
             'esi-markets.structure_markets.v1',
+            'esi-assets.read_assets.v1',
         ]
     )
     return render_template('characters.html', title='Characters', url=url, characters=characters)

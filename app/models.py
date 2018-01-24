@@ -256,6 +256,7 @@ class MScanItem(db.Model):
             'type': self.type.to_json(),
             'qty': self.qty or 0,
             'market_qty': self.market_qty or 0,
+            'store_qty': self.store_qty or 0,
             'min_price': self.min_price,
             'avg_price': self.avg_price,
             'fit_times': floor((self.market_qty or 0) / (1.0*(self.qty or 1))),
