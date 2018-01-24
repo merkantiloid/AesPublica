@@ -13,7 +13,7 @@
         <th class="w-num">Qty</th>
         <th class="w-num">Market</th>
         <th class="w-num">Store</th>
-        <th class="w-num">x M/S</th>
+        <th class="w-num">x[M] x[S]</th>
         <th class="w-price">Min./Avg.Price</th>
         <th class="w-price">Jita</th>
     </tr>
@@ -27,14 +27,15 @@
         </td>
         <td class="w-num text-right"><%item.qty | fi%></td>
         <td class="w-num text-right">
-            <%item.market_qty | fi%><br>
-            <span class="light-gray">x[</span><span v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></span><span class="light-gray">]</span>
+            <%item.market_qty | fi%>
         </td>
         <td class="w-num text-right">
-            <%item.store_qty | fi%><br>
+            <%item.store_qty | fi%>
+        </td>
+        <td class="w-num text-right">
+            <span class="light-gray">x[</span><span v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></span><span class="light-gray">]</span>
             <span class="light-gray">x[</span><span v-bind:class="{ 'yellow-b': IsYellowItem(item)}"><%item.store_fit_times | fi%></span><span class="light-gray">]</span>
         </td>
-
         <td class="w-price text-right">
             <span v-bind:class="{ 'reded-text': IsOverpriced(item.min_price,item.price.sell)}"><%item.min_price | ff%></span><br>
             <span v-bind:class="{ 'reded-text': IsOverpriced(item.avg_price,item.price.sell)}"><%item.avg_price | ff%></span>
