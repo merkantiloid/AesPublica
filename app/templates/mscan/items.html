@@ -13,7 +13,7 @@
         <th class="w-num">Qty</th>
         <th class="w-num">Market</th>
         <th class="w-num">Store</th>
-        <th class="w-num">x[M] x[S]</th>
+        <th class="w-num-num">x[M] x[S]</th>
         <th class="w-price">Min./Avg.Price</th>
         <th class="w-price">Jita</th>
     </tr>
@@ -23,7 +23,7 @@
         <td class="w-sign"><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
         <td class="crop w-name" :title="item.type.name">
             <i class="copy-item icon ion-ios-copy" :data-clipboard-text="item.type.name"></i>
-            <span v-bind:class="{ 'reded-text': IsYellowItem(item)||IsRedItem(item)||IsPinkItem(item)||IsOverpriced(item.min_price,item.price.sell)}"><% item.type.name %></span>
+            <span v-bind:class="{ 'reded-text': IsYellowItem(item)||IsRedItem(item)}"><% item.type.name %></span>
         </td>
         <td class="w-num text-right"><%item.qty | fi%></td>
         <td class="w-num text-right">
@@ -32,7 +32,7 @@
         <td class="w-num text-right">
             <%item.store_qty | fi%>
         </td>
-        <td class="w-num text-right">
+        <td class="w-num-num text-right">
             <span class="light-gray">x[</span><span v-bind:class="{ 'reded-b': IsRedItem(item), 'pinked-b': IsPinkItem(item) }"><%item.fit_times | fi%></span><span class="light-gray">]</span>
             <span class="light-gray">x[</span><span v-bind:class="{ 'yellow-b': IsYellowItem(item)}"><%item.store_fit_times | fi%></span><span class="light-gray">]</span>
         </td>

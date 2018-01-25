@@ -267,6 +267,13 @@ table.info .reded{
     font-family: monospace;
 }
 
+.w-num-num{
+    max-width: 160px;
+    width: 160px;
+    white-space: nowrap;
+    font-family: monospace;
+}
+
 .w-price{
     max-width: 128px;
     width: 128px;

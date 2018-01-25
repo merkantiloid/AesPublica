@@ -61,11 +61,11 @@ class MarketService:
                         and self._appropriate(hash[id]['location_flag']):
                     temp = result[hash[id]['type_id']]
                     temp['store'] += hash[id]['quantity']
-                    print(
-                        hash[id]['location_flag'],
-                        Static.type_by_id(hash[id]['type_id']).name,
-                        hash[id]['quantity'],
-                    )
+                    # print(
+                    #     hash[id]['location_flag'],
+                    #     Static.type_by_id(hash[id]['type_id']).name,
+                    #     hash[id]['quantity'],
+                    # )
 
         self.post_processing(fit_times, items, result)
 

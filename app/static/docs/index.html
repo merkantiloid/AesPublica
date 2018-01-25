@@ -13,9 +13,24 @@
 	
 	<h1>This is tutorial page for Aes Publica project</h1>
 
-	<p>Aes Publica is help utility for <a href="http://eveonline.com">eveonline</a> game. Its main purpose is to calculate amounts and kinds of ores needed for building given set of items.</p>
-    <p>So, here you can found an answer for the question "How much veldspar I need to build one Avatar and 100500 Drakes"</p>
-    <p>This is achieved with help of <a href="https://en.wikipedia.org/wiki/Simplex_algorithm">simplex</a> method. God bless those mathematicians who invented this stuff.</p>
+	<p>
+        Aes Publica is help utility for <a href="http://eveonline.com">eveonline</a> game.
+        It has two module:
+        <ul>
+            <li>
+                <p><b>Ore Calc</b> - its main purpose is to calculate amounts and kinds of ores needed for building given set of items.</p>
+                <p>So, here you can found an answer for the question "How much veldspar I need to build one Avatar and 100500 Drakes"</p>
+                <p>This is achieved with help of <a href="https://en.wikipedia.org/wiki/Simplex_algorithm">simplex</a> method. God bless those mathematicians who invented this stuff.</p>
+            </li>
+            <li>
+                <p><b>Fits on Market</b> - checks availability of given sets of items on given citadel/stations markets.</p>
+                <p>Helps to check if it's possible to fit 100500 Drakes in given citadel.</p>
+                <p>Useful for alliance market suppliers for fast checking before CTA</p>
+            </li>
+        </ul>
+
+    </p>
+
     <p>All sources for this project can be found on <a href="https://github.com/sergey-koumirov/AesPublica">https://github.com/sergey-koumirov/AesPublica</a></p>
     <p>Let's begin with the beginning.</p>
      
@@ -24,7 +39,7 @@
     <p>Please <a href="https://forest-tales.tk:8089/register">register</a> and <a href="https://forest-tales.tk:8089/login">login</a></p>
 
 
-    <h2>General workflow</h2>
+    <h2>Ore Calc</h2>
 
     <p>
     	There is 5 areas on main page (from left to right, from top to bottom): 
@@ -70,6 +85,84 @@
     			</ul>
                 <br/><img width="800" src="min.png">
     		</li>
+
+    	</ol>
+    </p>
+
+    <h2>Fits on Market</h2>
+     <p>
+    	<ol>
+    		<li>Go to "Characters" and authorize characters who have dock rights on citadel/stations with checked market (click <img width="100" src="m_new.png">)</li>
+    		<li>
+                Add new "Fit Scan"
+                <img width="200" src="m_new_scan.png">.
+            </li>
+            <li>
+                You will see
+                <br/><img width="800" src="m_main.png">.
+            </li>
+            <li>
+                Copy & Paste fit text to "Fit Text" field
+                <br/><img width="200" src="m_fit1.png">.
+            </li>
+            <li>
+                Click blue checkmark, fit will be parsed and you should see
+                <br/><img width="800" src="m_fit2.png">.
+                <br/>
+                <p>
+                  Parsed items are shown in table:<br>
+                  <b>Qty</b> - the total number of item in fit<br>
+                  <b>Market</b> - the total number of item on market(s)<br>
+                  <b>Store</b> - the total number of item in your store(s)<br>
+                  <b>x[M] x[S]</b> - floor(Market/Qty), floor(Store/Qty) <br>
+                  <b>Min./Avg.Price</b> - minimum price on market, average price for first Qty*Goal items on market ordered by price<br>
+                  <b>Jita</b> - Jita sell price (<a href="https://evemarketer.com/">evemarketer.com</a>)
+                </p>
+            </li>
+            <li>
+                Add character(s) who will check orders on market and station/citadel where those orders should be checked.
+                <br/><img width="200" src="m_a1.png">
+                <img width="200" src="m_a2.png">
+                <img width="200" src="m_a3.png">
+                <br/>Autocomplete list may wait for a while before appearing. It takes time to receive citadel names.
+            </li>
+            <li>
+                (Optional) Add character(s) who posses your items stocks in "Check Assets for:" area
+                <br/><img width="600" src="m_store.png">.
+            </li>
+            <li>
+                Set warning values<br/>
+                <b>Goal</b>: <br/>
+                if floor(Market/Qty) >= Goal there is no warnings<br/>
+                <img src="m_t1.png"><br/>
+
+                <b>Warn</b>: <br/>if Warn <= floor(Market/Qty) and floor(Market/Qty) < Goal <br/>
+                <img src="m_t3.png"><br/>
+                if floor(Market/Qty) < Warn <br/>
+                <img src="m_t2.png"><br/>
+
+                <b>Store:</b><br/>
+                if floor(Store(from table)/Qty) < Store <br/>
+                <img src="m_t4.png"><br/>
+            </li>
+            <li>
+                Click gear icon <img src="m_gear.png"> and wait for a while. Market and your assets will be checked using esi api and shown in table.
+            </li>
+            <li>
+                <b>Result:</b><br/>
+                <img src="m_result.png"><br/>
+                * click  <img src="m_copy.png"> to copy list of needed items
+                <pre>
+                Ferox, 155
+                250mm Railgun II, 517
+                </pre>
+                ( Ferox, 155 = Goal * Qty - Market = 200 * 1 - 45)<br/>
+                ( 250mm Railgun II, 517 = Goal * Qty - Market = 200 * 6 - 683)<br/><br/>
+
+                * Red prices mean more than 150% of Jita sell
+
+            </li>
+
 
     	</ol>
     </p>
