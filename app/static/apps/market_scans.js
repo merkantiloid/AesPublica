@@ -192,9 +192,9 @@ var scanner = new Vue({
 
         CopyNeed: function(vm){
             result = "";
-            this.selected.Items.forEach(function(el){
-                if(el.NeedQty>0){
-                    result = result + el.TypeName + ", " + el.NeedQty + "\n";
+            this.selected.items.forEach(function(el){
+                if(el.need_qty>0){
+                    result = result + el.type.name + ", " + el.need_qty + "\n";
                 }
             });
             return result;

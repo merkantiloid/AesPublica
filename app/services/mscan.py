@@ -94,7 +94,7 @@ class MScanService:
                 ps.evemarketer(type_ids=ids)
                 for x in selected['items']:
                     x['price'] = ps.jita('evemarketer', x['type']['id'])
-                    x['need_qty'] = x['qty'] * temp.fit_times
+                    x['need_qty'] = x['qty'] * temp.goal_fit_times - x['market_qty']
         return {
             'list': self.list(),
             'selected': selected
