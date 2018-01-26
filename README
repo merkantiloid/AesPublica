@@ -33,7 +33,7 @@
 
 #### SDE Import
     source ./aes-env/bin/activate
-    python3 ./sde.py ~/Downloads/sde-20171024-TRANQUILITY.zip
+    python3 ./sde.py ~/Downloads/sde-20180110-TRANQUILITY.zip
         
         
 #### TIPS

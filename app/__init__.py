@@ -12,7 +12,7 @@ import os
 
 mainApp = Flask(__name__)
 mainApp.config.from_object('config')
-mainApp.config.from_envvar('ESI_CONFIG', silent=False)
+mainApp.config.from_envvar('ESI_CONFIG', silent=True)
 
 if not mainApp.debug:
     import logging

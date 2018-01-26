@@ -132,6 +132,10 @@ def parse_blueprints_attrs(file):
         item.props = data[key]
         if "manufacturing" in data[key]["activities"] and "products" in data[key]["activities"]["manufacturing"]:
             item.product_id = data[key]["activities"]["manufacturing"]["products"][0]["typeID"]
+
+        if "reaction" in data[key]["activities"] and "products" in data[key]["activities"]["reaction"]:
+            item.product_id = data[key]["activities"]["reaction"]["products"][0]["typeID"]
+
         db.session.add(item)
     db.session.commit()
 
