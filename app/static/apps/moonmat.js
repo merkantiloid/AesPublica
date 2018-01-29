@@ -5,10 +5,12 @@ var scanner = new Vue({
     data: {
         ask: {
             rig_id: 0,
+            rawChanged: false,
         },
         settings: {},
         rigs: [],
-        spaces: []
+        spaces: [],
+        raw: null,
     },
 
     created: function () {
@@ -18,6 +20,7 @@ var scanner = new Vue({
                 vm.spaces = response.data.spaces;
                 vm.settings = response.data.settings;
                 vm.rigs = response.data.rigs;
+                vm.raw = response.data.raw;
             })
             .catch(function (error) {
                 console.log(error);
@@ -46,6 +49,23 @@ var scanner = new Vue({
             axios.delete('/moonmat/rigs/'+rig_id+'.json')
                 .then(function (response) {
                     vm.settings = response.data.settings;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        RawChanged: function(){
+            if(!!this.raw){
+                this.ask.rawChanged = true;
+            }
+        },
+
+        UpdateRawText: function(){
+            var vm = this;
+            axios.post('/moonmat.json', {raw: this.raw})
+                .then(function (response) {
+                    vm.ask.rawChanged = false;
                 })
                 .catch(function (error) {
                     console.log(error);

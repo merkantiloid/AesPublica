@@ -30,6 +30,14 @@ class MoonMatService:
             db.session.delete(temp)
             db.session.commit()
 
+
+    def update(self, params):
+        model = self.user.moon_mat
+        if 'raw' in params:
+            model.raw = params.get('raw',None)
+        db.session.add(model)
+        db.session.commit()
+
     def to_json(self):
         model = self.user.moon_mat
 
@@ -39,6 +47,7 @@ class MoonMatService:
             "settings": {
                 "space": model.space,
                 "rigs": [x.to_json() for x in model.rigs],
-            }
+            },
+            "raw": model.raw,
         }
 
