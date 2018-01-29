@@ -206,10 +206,6 @@ var calculator = new Vue({
             this.storeItemsTextChanged = true;
         },
 
-        IURL: function(type_id){
-            return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
-        },
-
         SetOres: function(selector){
             $(selector).prop('checked', true);
             this.TouchOreSettings();

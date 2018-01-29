@@ -215,10 +215,6 @@ var scanner = new Vue({
             return this.selected != null && this.selected.id == item.id;
         },
 
-        IURL: function(type_id){
-            return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
-        },
-
         AuditorLocationSelected: function(event){
             this.ask.locationId = event.id;
         },

@@ -10,7 +10,7 @@
         <th class="gray">%</th>
     </tr>
     <tr v-for="mineral in calc.minerals">
-        <td><img width="24" height="24" v-bind:src="IURL(mineral.type.id)"/></td>
+        <td><img width="24" height="24" v-bind:src="mineral.type.id|url"/></td>
         <td><% mineral.type.name %></td>
         <td class="text-right"><% mineral.all_qty|fi %></td>
         <td class="text-right red"><% mineral.after_qty|fi %></td>

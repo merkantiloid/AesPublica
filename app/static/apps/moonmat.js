@@ -10,6 +10,7 @@ var scanner = new Vue({
         settings: {},
         rigs: [],
         spaces: [],
+        items: [],
         raw: null,
     },
 
@@ -21,6 +22,7 @@ var scanner = new Vue({
                 vm.settings = response.data.settings;
                 vm.rigs = response.data.rigs;
                 vm.raw = response.data.raw;
+                vm.items = response.data.items;
             })
             .catch(function (error) {
                 console.log(error);
@@ -65,6 +67,7 @@ var scanner = new Vue({
             var vm = this;
             axios.post('/moonmat.json', {raw: this.raw})
                 .then(function (response) {
+                    vm.items = response.data.items;
                     vm.ask.rawChanged = false;
                 })
                 .catch(function (error) {

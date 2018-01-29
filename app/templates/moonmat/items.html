@@ -1,0 +1,13 @@
+<h6 class="text-left">Need:</h6>
+<table class="table table-sm">
+    <tr>
+        <th></th>
+        <th></th>
+        <th class="text-right gray">Qty</th>
+    </tr>
+    <tr v-for="item in items">
+        <td><img width="24" height="24" v-bind:src="item.type.id|url"/></td>
+        <td><% item.type.name %></td>
+        <td class="text-right"><% item.qty|fi %></td>
+    </tr>
+</table>

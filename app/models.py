@@ -281,6 +281,7 @@ class MoonMat(db.Model):
     space = db.Column(db.String)
 
     rigs = db.relationship("MoonMatRig", lazy="dynamic", back_populates="moon_mat")
+    items = db.relationship("MoonMatItem", lazy="dynamic", back_populates="moon_mat")
 
 
 class MoonMatRig(db.Model):
@@ -307,3 +308,11 @@ class MoonMatItem(db.Model):
     type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
     type = db.relationship("EveType")
     qty = db.Column(db.BigInteger, nullable=False)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'type_id': self.type_id,
+            'type': self.type.to_json(),
+            'qty': self.qty,
+        }

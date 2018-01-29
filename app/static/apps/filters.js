@@ -19,6 +19,10 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
+function IURL(type_id){
+    return "https://imageserver.eveonline.com/Type/"+type_id+"_32.png"
+};
+
 Vue.filter("fi", function (value) {
     return number_format(value, 0, '.', ' ')
 });
@@ -29,4 +33,8 @@ Vue.filter("fp", function (value) {
 
 Vue.filter("ff", function (value) {
     return number_format(value, 2, '.', ' ')
+});
+
+Vue.filter("url", function (type_id) {
+    return IURL(type_id)
 });

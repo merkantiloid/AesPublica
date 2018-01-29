@@ -22,7 +22,7 @@
     <div class="col-sm-6">
         <table class="table table-sm">
             <tr v-for="item in calc.store_items">
-                <td><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
+                <td><img width="24" height="24" v-bind:src="item.type.id|url"/></td>
                 <td><% item.type.name %></td>
                 <td class="text-right">
                     <% item.qty | fi %>

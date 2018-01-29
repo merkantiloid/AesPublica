@@ -12,7 +12,7 @@
         <th class="text-right">Volume</th>
     </tr>
     <tr v-for="result in calc.calc_results.items">
-        <td><img width="24" height="24" v-bind:src="IURL(result.type.id)"/></td>
+        <td><img width="24" height="24" v-bind:src="result.type.id|url"/></td>
         <td><% result.type.name %></td>
         <td class="text-right"><% result.qty|fi %></td>
         <td class="text-right"><% result.price_1u|ff %></td>

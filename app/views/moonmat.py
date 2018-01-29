@@ -39,5 +39,9 @@ def delete_rigs_json(rig_id):
 @login_required
 def update_moonmat_json():
     s = MoonMatService(g.user)
+
     s.update(request.get_json())
+
+    s.parse()
+
     return jsonify(s.to_json())

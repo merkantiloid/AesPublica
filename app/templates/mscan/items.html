@@ -20,7 +20,7 @@
     </thead>
     <tbody>
     <tr v-for="item in selected.items">
-        <td class="w-sign"><img width="24" height="24" v-bind:src="IURL(item.type.id)"/></td>
+        <td class="w-sign"><img width="24" height="24" v-bind:src="item.type.id|url"/></td>
         <td class="crop w-name" :title="item.type.name">
             <i class="copy-item icon ion-ios-copy" :data-clipboard-text="item.type.name"></i>
             <span v-bind:class="{ 'reded-text': IsYellowItem(item)||IsRedItem(item)}"><% item.type.name %></span>
