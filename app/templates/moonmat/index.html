@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block scripts%}
+<script src="{{ url_for('static', filename='vendor/axios.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/clipboard.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/auto-complete.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid moonmat" id="moonmat">
+    <div class="row">
+
+        <div class="col-sm-3 bordered">
+            <h6>Settings:</h6>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label small" for="space">Space</label>
+                <div class="col-sm-5">
+                    <select id="space" class="form-control form-control-sm" v-model="settings.space" v-on:change="OnSettingsChange">
+                        <option v-for="(name,code) in spaces" v-bind:value="code"><% name %></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label small" for="rigs">
+                    Rigs
+                    <i v-show="ask.rig_id==0"  class="icon ion-ios-circle-outline"></i>
+                    <i v-show="ask.rig_id!=0" v-on:click="AddRig" class="icon ion-plus-circled"></i>
+                </label>
+                <div class="col-sm-9">
+                    <select id="rigs" class="form-control form-control-sm" v-model="ask.rig_id">
+                        <option v-for="obj in rigs" v-bind:value="obj.id"><% obj.name %> (m:<% obj.mat_bonus %>%, t:<% obj.time_bonus %>%)</option>
+                    </select>
+                </div>
+            </div>
+
+                <ul class="list-unstyled">
+                    <li v-for="obj in settings.rigs">
+                        <i v-on:click="DeleteRig(obj.rig_id)" class="icon ion-trash-a"></i>
+                        <% obj.type_name %>
+                    </li>
+                </ul>
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='apps/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='apps/moonmat.js') }}"></script>
+{% endblock %}

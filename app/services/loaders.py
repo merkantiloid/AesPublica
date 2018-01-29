@@ -233,3 +233,47 @@ def load_calc_ids():
     for record in records:
         ids.append(record[0])
     return ids
+
+
+REACTOR_RIGS_SQL = text(
+    "SELECT t.id,"
+    "       t.name,"
+    "       coalesce(ta.value,0)  as time_bonus,"
+    "       coalesce(ta2.value,0) as mat_bonus,"
+    "       ta3.value as low_m,"
+    "       ta4.value as null_m,"
+    "       ta6.value as rig_size"
+    "  FROM eve_groups g,"
+    "       eve_types t"
+    "         left join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2713)"
+    "         left join eve_attributes a on a.id=ta.attribute_id"
+    "         left join eve_type_attributes ta2 on ta2.type_id = t.id and ta2.attribute_id in (2714)"
+    "         left join eve_attributes a2 on a2.id=ta2.attribute_id"
+    "         left join eve_type_attributes ta3 on ta3.type_id = t.id and ta3.attribute_id in (2356)"
+    "         left join eve_attributes a3 on a3.id=ta3.attribute_id"
+    "         left join eve_type_attributes ta4 on ta4.type_id = t.id and ta4.attribute_id in (2357)"
+    "         left join eve_attributes a4 on a4.id=ta4.attribute_id"
+    "         left join eve_type_attributes ta6 on ta6.type_id = t.id and ta6.attribute_id in (1547)"
+    "         left join eve_attributes a6 on a6.id=ta6.attribute_id"
+    "  where g.published=1"
+    "    and g.category_id=66"
+    "    and t.group_id = g.id"
+    "    and (ta.value is not null or ta2.value is not null)"
+    "    and t.published=1"
+    "  order by ta6.value, t.name;"
+)
+def load_reactor_rigs():
+    records = db.session.execute(REACTOR_RIGS_SQL).fetchall()
+    result = []
+    for record in records:
+        result.append({
+            "id": record[0],
+            "name": record[1],
+            "time_bonus": record[2],
+            "mat_bonus": record[3],
+            "low_m": record[4],
+            "null_m": record[5],
+            "rig_size": record[6],
+        })
+
+    return result

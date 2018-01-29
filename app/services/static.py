@@ -1,4 +1,5 @@
-from .loaders import load_citadels, load_citadels_hash, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, load_calc_ids, load_ores
+from .loaders import load_citadels, load_citadels_hash, load_repr_implants, load_repr_rigs, load_repr_rigs_hash, \
+    load_calc_ids, load_ores, load_reactor_rigs
 from app.eve_models import EveType, EveBlueprint, EveTypeMaterial
 from app.esi_models import EsiChar
 from munch import Munch
@@ -42,6 +43,7 @@ for x in ReprImplants:
 
 class Static:
     SPACES = {'h':'Hi-Sec', 'l':'Low-Sec', 'z':'Zero/WH'}
+    RSPACES = {'l':'Low-Sec', 'z':'Zero/WH'}
     DEFAULT_SPACE = 'z'
 
     CITADELS = load_citadels()
@@ -50,6 +52,8 @@ class Static:
     DEFAULT_CITADEL = 35825 #Raitaru
 
     REPR_RIGS = load_repr_rigs()
+
+    RRIGS = load_reactor_rigs()
 
 
     @staticmethod

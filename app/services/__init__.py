@@ -8,3 +8,4 @@ from .esi import EsiService
 from .locations import LocationsService
 from .market import MarketService
 from .price import PriceService
+from .moon_mat import MoonMatService

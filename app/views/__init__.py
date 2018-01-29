@@ -8,6 +8,7 @@ from ..models import User
 
 import app.views.calc
 import app.views.mscan
+import app.views.moonmat
 from .characters import characters
 from .search import search_type
 

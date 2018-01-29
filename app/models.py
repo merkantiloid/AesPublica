@@ -13,6 +13,7 @@ class User(db.Model):
     lang = db.Column(db.String(255))
 
     ore_calc = db.relationship("OreCalc", uselist=False, back_populates="user")
+    moon_mat = db.relationship("MoonMat", uselist=False, back_populates="user")
     esi_chars = db.relationship("EsiChar", back_populates="user")
 
     @property
@@ -214,13 +215,13 @@ class MScanLocation(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'), primary_key=True)
+    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'))
     mscan = db.relationship("MScan")
 
-    esi_location_id = db.Column(db.BigInteger, db.ForeignKey('esi_locations.id'), primary_key=True)
+    esi_location_id = db.Column(db.BigInteger, db.ForeignKey('esi_locations.id'))
     esi_location = db.relationship("EsiLocation")
 
-    esi_char_id = db.Column(db.BigInteger, db.ForeignKey('esi_chars.id'), primary_key=True)
+    esi_char_id = db.Column(db.BigInteger, db.ForeignKey('esi_chars.id'))
     esi_char = db.relationship("EsiChar")
 
     kind = db.Column(db.String, nullable=False)
@@ -239,7 +240,7 @@ class MScanItem(db.Model):
     __tablename__ = 'mscan_items'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'), primary_key=True)
+    mscan_id = db.Column(db.Integer, db.ForeignKey('mscans.id'))
     mscan = db.relationship("MScan")
 
     type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
@@ -269,3 +270,40 @@ class UserAction(db.Model):
     user_id = db.Column(db.Integer)
     path = db.Column(db.String)
     created_at = db.Column(db.String)
+
+
+class MoonMat(db.Model):
+    __tablename__ = 'moon_mats'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", back_populates="moon_mat")
+    raw = db.Column(db.Text)
+    space = db.Column(db.String)
+
+    rigs = db.relationship("MoonMatRig", lazy="dynamic", back_populates="moon_mat")
+
+
+class MoonMatRig(db.Model):
+    __tablename__ = 'moon_mat_rigs'
+
+    moon_mat_id = db.Column(db.Integer, db.ForeignKey('moon_mats.id'), nullable=False, primary_key=True)
+    moon_mat = db.relationship("MoonMat")
+
+    rig_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False, primary_key=True)
+    rig = db.relationship("EveType")
+
+    def to_json(self):
+        return {
+            'rig_id': self.rig_id,
+            'type_name': self.rig.name,
+        }
+
+
+class MoonMatItem(db.Model):
+    __tablename__ = 'moon_mat_items'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    moon_mat_id = db.Column(db.Integer, db.ForeignKey('moon_mats.id'), nullable=False)
+    moon_mat = db.relationship("MoonMat")
+    type_id = db.Column(db.BigInteger, ForeignKey('eve_types.id'), nullable=False)
+    type = db.relationship("EveType")
+    qty = db.Column(db.BigInteger, nullable=False)
