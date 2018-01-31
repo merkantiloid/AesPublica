@@ -11,6 +11,8 @@ var scanner = new Vue({
         rigs: [],
         spaces: [],
         items: [],
+        materials: [],
+        totals: [],
         raw: null,
     },
 
@@ -23,6 +25,8 @@ var scanner = new Vue({
                 vm.rigs = response.data.rigs;
                 vm.raw = response.data.raw;
                 vm.items = response.data.items;
+                vm.materials = response.data.materials;
+                vm.totals = response.data.totals;
             })
             .catch(function (error) {
                 console.log(error);

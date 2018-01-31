@@ -95,15 +95,15 @@ class Static:
         return None
 
     @lru_cache()
-    def materials_by_reaction_id(rid):
-        bp = EveBlueprint.query.filter(EveBlueprint.product_id==rid).first()
+    def materials_by_reaction_pid(rpid):
+        bp = EveBlueprint.query.filter(EveBlueprint.product_id==rpid).first()
         if bp:
             if 'reaction' in bp.props['activities'] and 'materials' in bp.props['activities']['reaction']:
                 array = bp.props['activities']['reaction']['materials']
                 hash = {}
                 for el in array:
                     hash[el['typeID']] = el['quantity']
-                return hash
+                return {'qty': bp.props['activities']['reaction']['products'][0]['quantity'], 'input': hash}
         return None
 
     @lru_cache()

@@ -1,13 +1,16 @@
 <h6 class="text-left">Need:</h6>
-<table class="table table-sm">
-    <tr>
-        <th></th>
-        <th></th>
-        <th class="text-right gray">Qty</th>
-    </tr>
-    <tr v-for="item in items">
-        <td><img width="24" height="24" v-bind:src="item.type.id|url"/></td>
-        <td><% item.type.name %></td>
-        <td class="text-right"><% item.qty|fi %></td>
-    </tr>
-</table>
+<ul class="list-unstyled">
+    <li v-for="item in materials">
+        <div class="inline w-name" v-bind:class="'pad-'+item.level">
+            <img width="24" height="24" v-bind:src="item.type.id|url"/>
+            <% item.type.name %>
+        </div>
+        <div class="inline text-right w-num">
+            <span v-show="item.level==0"><% item.qty|fi %></span>
+        </div>
+        <div class="inline text-right w-num-num">
+            <span class="gray"><% item.k|fi %> * <% item.iqty|fi %> =</span>
+            <span class="green"><% item.k * item.iqty | fi %></span>
+        </div>
+    </li>
+</ul>

@@ -280,6 +280,10 @@ table.info .reded{
     font-family: monospace;
 }
 
+.inline{
+    display: inline-block;
+}
+
 input[disabled]{
     color: #808080;
     background-color: #e0e0e0;
@@ -297,4 +301,23 @@ input.inline{
 
 .list-unstyled{
     margin-bottom: 0px;
+}
+
+.pad-1 {
+    padding-left: 24px;
+}
+.pad-2 {
+    padding-left: 48px;
+}
+.pad-3 {
+    padding-left: 72px;
+}
+.pad-4 {
+    padding-left: 96px;
+}
+.pad-5 {
+    padding-left: 120px;
+}
+.pad-6 {
+    padding-left: 144px;
 }
