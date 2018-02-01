@@ -6,11 +6,12 @@
             <% item.type.name %>
         </div>
         <div class="inline text-right w-num">
-            <span v-show="item.level==0"><% item.qty|fi %></span>
+            <span v-show="item.level==0"><% item.initial|fi %></span>
         </div>
         <div class="inline text-right w-num-num">
+            <span class="gray" v-show="item.level>0"><% 100+item.mbonus|ff %>% * </span>
             <span class="gray"><% item.k|fi %> * <% item.iqty|fi %> =</span>
-            <span class="green"><% item.k * item.iqty | fi %></span>
+            <span class="green"><% item.qty | fi %></span>
         </div>
     </li>
 </ul>

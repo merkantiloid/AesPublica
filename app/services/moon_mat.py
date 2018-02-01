@@ -59,11 +59,34 @@ class MoonMatService:
             db.session.execute('delete from moon_mat_items where moon_mat_id = :id and type_id not in :ids',  params={'id': model.id, 'ids': ids} )
         db.session.commit()
 
-    def materials(self):
+    def get_max_bonus(self, type_id):
+        model = self.user.moon_mat
 
+        mbonus = 0
+        tbonus = 0
+        bid = Static.bid_by_pid(type_id)
+        type_group_id = Static.type_by_id(bid).group_id
+
+        for rig in model.rigs:
+            rig_info = Static.RRIGS_HASH[rig.rig_id]
+            rig_mbonus = rig_info['mat_bonus']*rig_info[model.space]
+            m_applicable = rig_info['group_id'] in Static.RIG_APPLY['materials'].get(type_group_id,[])
+            if m_applicable and mbonus > rig_mbonus:
+                mbonus = rig_mbonus
+
+            rig_tbonus = rig_info['time_bonus']*rig_info[model.space]
+            t_applicable = rig_info['group_id'] in Static.RIG_APPLY['time'].get(type_group_id,[])
+            if t_applicable and tbonus > rig_tbonus:
+                tbonus = rig_tbonus
+
+        return mbonus, tbonus
+
+    def materials(self):
+        model = self.user.moon_mat
         result = []
 
-        for item in self.user.moon_mat.items:
+        for item in model.items:
+            mbonus, tbonus = self.get_max_bonus(item.type_id)
 
             materials = Static.materials_by_reaction_pid(item.type_id)
             if materials:
@@ -71,18 +94,19 @@ class MoonMatService:
 
                 result.append({
                     'type': Static.type_by_id(item.type_id),
-                    'qty': item.qty,
+                    'initial': item.qty,
+                    'qty': materials['qty']*k,
                     'k': k,
                     'iqty': materials['qty'],
                     'level': 0,
                 })
 
-                self.add_materials(result, 1, k, materials)
+                self.add_materials(result, 1, k, materials, mbonus, tbonus)
 
         hash = {}
         for r in result:
             if r.get('leaf',False):
-                hash[r['type']['id']] = hash.get(r['type']['id'], 0) + r['iqty']*r['k']
+                hash[r['type']['id']] = hash.get(r['type']['id'], 0) + r['qty']
 
         total = []
         for x in hash:
@@ -94,32 +118,34 @@ class MoonMatService:
 
         return result, total
 
-    def add_materials(self, result, level, k, materials):
+    def add_materials(self, result, level, k, materials, mbonus, tbonus):
         parts = []
         input = materials['input']
         for mid in input:
             parts.append({
                 'type': Static.type_by_id(mid),
-                'qty': k * input[mid],
                 'iqty': input[mid],
             })
         parts.sort(key=lambda r: r['type']['name'])
+
         for p in parts:
             sub_materials = Static.materials_by_reaction_pid(p['type']['id'])
 
             temp = {
                 'type': p['type'],
-                'qty': p['qty'],
+                'qty': ceil(p['iqty']*k*(1+mbonus/100)),
                 'k': k,
                 'iqty': p['iqty'],
+                'mbonus': mbonus,
                 'level': level,
                 'leaf': False if sub_materials else True,
             }
             result.append(temp)
 
             if sub_materials:
-                sub_k = ceil(p['qty'] / sub_materials['qty'])
-                self.add_materials(result, level+1, sub_k, sub_materials)
+                sub_mbonus, sub_tbonus = self.get_max_bonus(p['type']['id'])
+                sub_k = ceil(temp['qty'] / sub_materials['qty'])
+                self.add_materials(result, level+1, sub_k, sub_materials, sub_mbonus, sub_tbonus)
 
 
 

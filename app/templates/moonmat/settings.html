@@ -25,6 +25,7 @@
 <ul class="list-unstyled">
     <li v-for="obj in settings.rigs">
         <i v-on:click="DeleteRig(obj.rig_id)" class="icon ion-trash-a"></i>
+        <img width="24" height="24" v-bind:src="obj.rig_id|url"/>
         <% obj.type_name %>
     </li>
 </ul>

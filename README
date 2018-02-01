@@ -191,3 +191,29 @@ reactor rigs
             and (ta.value is not null or ta2.value is not null)
             and t.published=1
           order by ta6.value, t.name;
+
+
+type attributes
+
+SELECT t.id,
+       t.name,
+       ta.*,
+       a.*
+  FROM eve_groups g,
+       eve_types t
+         left join eve_type_attributes ta on ta.type_id = t.id #and ta.attribute_id in (2713)
+         left join eve_attributes a on a.id=ta.attribute_id
+  where g.published=1
+    and t.group_id = g.id
+    and t.published=1
+    and t.name like 'Standup M-Set Hybrid Reactor Time Efficiency II'
+  order by t.name;
+
+
+reactions:
+
+    type.group_id        |  rig.group_id M  |  rig.group_id T
+    ---------------------------------------------------------
+    1888 - Composite     |  1934,1939       |  1933,1939
+    1889 - Hybrid        |  1936,1939       |  1935,1939
+    1890 - Biochemical   |  1938,1939       |  1937,1939

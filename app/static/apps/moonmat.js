@@ -42,6 +42,8 @@ var scanner = new Vue({
             var vm = this;
             axios.post('/moonmat/rigs.json', {rig_id: this.ask.rig_id})
                 .then(function (response) {
+                    vm.materials = response.data.materials;
+                    vm.totals = response.data.totals;
                     vm.settings = response.data.settings;
                     vm.ask.rig_id=0;
                 })
@@ -54,6 +56,8 @@ var scanner = new Vue({
             var vm = this;
             axios.delete('/moonmat/rigs/'+rig_id+'.json')
                 .then(function (response) {
+                    vm.materials = response.data.materials;
+                    vm.totals = response.data.totals;
                     vm.settings = response.data.settings;
                 })
                 .catch(function (error) {
@@ -71,7 +75,8 @@ var scanner = new Vue({
             var vm = this;
             axios.post('/moonmat.json', {raw: this.raw})
                 .then(function (response) {
-                    vm.items = response.data.items;
+                    vm.materials = response.data.materials;
+                    vm.totals = response.data.totals;
                     vm.ask.rawChanged = false;
                 })
                 .catch(function (error) {

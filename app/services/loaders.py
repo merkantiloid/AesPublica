@@ -242,7 +242,8 @@ REACTOR_RIGS_SQL = text(
     "       coalesce(ta2.value,0) as mat_bonus,"
     "       ta3.value as low_m,"
     "       ta4.value as null_m,"
-    "       ta6.value as rig_size"
+    "       ta6.value as rig_size,"
+    "       t.group_id"
     "  FROM eve_groups g,"
     "       eve_types t"
     "         left join eve_type_attributes ta on ta.type_id = t.id and ta.attribute_id in (2713)"
@@ -271,9 +272,10 @@ def load_reactor_rigs():
             "name": record[1],
             "time_bonus": record[2],
             "mat_bonus": record[3],
-            "low_m": record[4],
-            "null_m": record[5],
+            "l": record[4],
+            "z": record[5],
             "rig_size": record[6],
+            "group_id": record[7],
         })
 
     return result

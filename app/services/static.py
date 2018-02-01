@@ -54,7 +54,20 @@ class Static:
     REPR_RIGS = load_repr_rigs()
 
     RRIGS = load_reactor_rigs()
+    RRIGS_HASH = {x['id']:x for x in RRIGS}
 
+    RIG_APPLY = {
+        'time': {
+            1888: [1933,1939],
+            1889: [1935,1939],
+            1890: [1937,1939],
+        },
+        'materials': {
+            1888: [1934,1939],
+            1889: [1936,1939],
+            1890: [1938,1939],
+        },
+    }
 
     @staticmethod
     def to_json():
