@@ -1,12 +1,24 @@
-<h6 class="text-left">Totals:</h6>
-<ul class="list-unstyled">
-    <li v-for="item in totals">
-        <div class="inline w-name" v-bind:class="'pad-'+item.level">
-            <img width="24" height="24" v-bind:src="item.type.id|url"/>
-            <% item.type.name %>
-        </div>
-        <div class="inline text-right w-num">
-            <span><% item.qty|fi %></span>
-        </div>
-    </li>
-</ul>
+<h6 class="text-left">
+     <i id="copy-point" class="icon ion-ios-copy"></i>
+    Totals:
+</h6>
+
+<table class="table table-sm">
+    <tr>
+        <th></th>
+        <th class="text-center">Qty</th>
+        <th class="text-center">m<sup>3</sup>/u</th>
+    </tr>
+    <tr v-for="item in totals.items">
+        <td><img width="24" height="24" v-bind:src="item.type.id|url"/><% item.type.name %></td>
+        <td class="text-right"><% item.qty|fi %></td>
+        <td class="text-right"><% item.type.volume|ff %></td>
+    </tr>
+    <tr>
+        <th></th>
+        <th class="text-right">Total m<sup>3</sup>:</th>
+        <th class="text-right"><% totals.volume|ff %></th>
+    </tr>
+</table>
+
+

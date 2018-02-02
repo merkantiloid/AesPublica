@@ -31,6 +31,12 @@ var scanner = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
+
+        new Clipboard('#copy-point', {
+            text: function(trigger) {
+                return vm.CopyTotals();
+            }
+        });
     },
 
     methods: {
@@ -82,6 +88,14 @@ var scanner = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+
+        CopyTotals: function(){
+            result = "";
+            this.totals.forEach(function(el){
+                result = result + el.type.name + ", " + el.qty + "\n";
+            });
+            return result;
         },
 
 

@@ -109,14 +109,16 @@ class MoonMatService:
                 hash[r['type']['id']] = hash.get(r['type']['id'], 0) + r['qty']
 
         total = []
+        vol = 0
         for x in hash:
             total.append({
                 'type': Static.type_by_id(x),
                 'qty': hash[x]
             })
+            vol += Static.type_by_id(x).volume * hash[x]
         total.sort(key=lambda r: r['type']['name'])
 
-        return result, total
+        return result, {'items': total, 'volume': vol}
 
     def add_materials(self, result, level, k, materials, mbonus, tbonus):
         parts = []
