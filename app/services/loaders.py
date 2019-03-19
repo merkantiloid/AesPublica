@@ -8,6 +8,7 @@ CITADELS_SQL = text(
     "         left join eve_type_attributes tab on tab.type_id=t.id and tab.attribute_id in (2722)"
     "         inner join eve_groups g on t.group_id = g.id and g.category_id=65 and g.published=1"
     "  where t.published=1"
+    "    and ta.value is not null"
     "  order by t.name"
 )
 
