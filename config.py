@@ -11,4 +11,4 @@ WTF_CSRF_ENABLED = True
 SECRET_KEY = os.getenv('SECRET_KEY', 'replace with env variable')
 
 ESI_DATASOURCE = 'tranquility'
-ESI_SWAGGER_JSON = 'https://esi.tech.ccp.is/latest/swagger.json?datasource=%s' % ESI_DATASOURCE
+ESI_SWAGGER_JSON = 'https://esi.evetech.net/latest/swagger.json?datasource=%s' % ESI_DATASOURCE
