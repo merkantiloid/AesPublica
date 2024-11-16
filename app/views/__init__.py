@@ -35,13 +35,13 @@ def logout():
     return redirect('/login')
 
 
-@mainApp.route('/register' , methods=['GET'])
+@mainApp.route('/register', methods=['GET'])
 def register_get():
     form = RegisterForm()
     return render_template('register.html', form=form)
 
 
-@mainApp.route('/register' , methods=['POST'])
+@mainApp.route('/register', methods=['POST'])
 def register():
     form = RegisterForm()
     if not form.validate_on_submit():

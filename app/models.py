@@ -2,7 +2,7 @@ from app import db
 from app.eve_models import EveType
 from sqlalchemy import ForeignKey
 from math import ceil, floor
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 class User(db.Model):
@@ -66,7 +66,7 @@ class OreCalc(db.Model):
         parts = self.ore_settings.split(',')
         for part in parts:
             try:
-                result.append( int(part) )
+                result.append(int(part))
             except ValueError:
                 pass
         return result
@@ -142,8 +142,11 @@ class CalcResult(db.Model):
     qty = db.Column(db.BigInteger, nullable=False)
 
     def to_json(self, **kwargs):
-        source = kwargs ['price_source'] if 'price_source' in kwargs else 'esi'
-        price = Price.query.filter(Price.source == source, Price.type_id == self.type_id).order_by(Price.id.desc()).first()
+        source = kwargs['price_source'] if 'price_source' in kwargs else 'esi'
+        price = Price.query.filter(
+            Price.source == source,
+            Price.type_id == self.type_id
+        ).order_by(Price.id.desc()).first()
         return {
             'id': self.id,
             'type': self.type.to_json(),
@@ -155,10 +158,12 @@ class CalcResult(db.Model):
 
 
 def sort_key(item):
-    return '%d-%s' % (item['type']['group_id'] , item['type']['name'])
+    return '%d-%s' % (item['type']['group_id'], item['type']['name'])
+
 
 def sort_location(item):
     return '%s-%s' % (item['char_name'], item['location_name'])
+
 
 class MScan(db.Model):
     __tablename__ = 'mscans'
@@ -193,7 +198,7 @@ class MScan(db.Model):
 
         last_checked = 'never'
         if self.check_date:
-            delta = datetime.utcnow()-datetime.strptime(self.check_date, "%Y-%m-%dT%H:%M:%S.%f")
+            delta = datetime.now(timezone.utc) - datetime.strptime(self.check_date, "%Y-%m-%dT%H:%M:%S.%f")
             last_checked = '%dd %d:%02d ago' % (delta.days, delta.seconds // 3600, delta.seconds % 3600 // 60)
 
         return {
@@ -263,6 +268,7 @@ class MScanItem(db.Model):
             'fit_times': floor((self.market_qty or 0) / (1.0*(self.qty or 1))),
             'store_fit_times': floor((self.store_qty or 0) / (1.0*(self.qty or 1))),
         }
+
 
 class UserAction(db.Model):
     __tablename__ = 'user_actions'
