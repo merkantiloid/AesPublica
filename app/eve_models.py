@@ -1,4 +1,4 @@
-from app import db
+from app.extensions import db  # Импорт из extensions
 from sqlalchemy import ForeignKey
 
 class EveTypeSimple():

@@ -10,54 +10,87 @@ from esipy import EsiClient
 from esipy import EsiSecurity
 
 from datetime import datetime, timezone
+import logging
+from logging.handlers import RotatingFileHandler
+from .extensions import db, lm
 from .models import User
+from app.views import register_blueprints  # Импортируем функцию для регистрации Blueprint
+
 # import os
 
-mainApp = Flask(__name__)
-mainApp.config.from_object('config')
-mainApp.config.from_envvar('ESI_CONFIG', silent=True)
 
-if not mainApp.debug:
-    import logging
-    from logging.handlers import RotatingFileHandler
-    handler = RotatingFileHandler('log/aes-publica.log', maxBytes=10000000, backupCount=3)
-    handler.setLevel(logging.INFO)
-    handler.setFormatter(logging.Formatter(
-        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-    ))
-    mainApp.logger.addHandler(handler)
+# Функция создания приложения
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config')
+    app.config.from_envvar('ESI_CONFIG', silent=True)
 
+    # Инициализация db и lm
+    db.init_app(app)
+    lm.init_app(app)
 
-def fldate(value):
-    return datetime.fromtimestamp(value, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    # Вставляем логику до и после запроса
+    @app.before_request
+    def before_request():
+        g.user = current_user
 
+    @app.after_request
+    def save_user_action(response):
+        if g.user.is_authenticated:
+            db.session.add(models.UserAction(
+                user_id=g.user.id,
+                path=str(request.url_rule),
+                created_at=datetime.now().isoformat())
+            )
+            db.session.commit()
+        else:
+            db.session.add(models.UserAction(
+                user_id=-1,
+                path=str(request.url_rule),
+                created_at=datetime.now().isoformat())
+            )
+            db.session.commit()
 
-mainApp.jinja_env.filters['fldate'] = fldate
+        return response
 
-db = SQLAlchemy(mainApp)
+    # Логирование
+    if not app.debug:
+        handler = RotatingFileHandler('log/aes-publica.log', maxBytes=10000000, backupCount=3)
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(logging.Formatter(
+            '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+        ))
+        app.logger.addHandler(handler)
 
-lm = LoginManager()
-lm.init_app(mainApp)
+    # Инициализация ESI
+    esiapp = EsiApp(meta_url=app.config.get('ESI_SWAGGER_JSON', ''))
+    esiapp.prepare()
+    esisecurity = EsiSecurity(
+        app=esiapp,
+        redirect_uri=app.config.get('ESI_CALLBACK_URL', ''),
+        client_id=app.config.get('ESI_CLIENT_ID', ''),
+        secret_key=app.config.get('ESI_SECRET', ''),
+    )
+    esiclient = EsiClient(
+        security=esisecurity,
+        cache=None,
+        headers={'User-Agent': 'Aes Publica'}
+    )
 
+    # Регистрируем фильтры Jinja
+    def fldate(value):
+        return datetime.fromtimestamp(value, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
 
-# def _hook(url):
-#     return 'file://'+os.getcwd()+'/swagger.t.json'
-# esiapp = App.load(mainApp.config.get('ESI_SWAGGER_JSON',''), url_load_hook=_hook)
+    app.jinja_env.filters['fldate'] = fldate
 
-esiapp = EsiApp(meta_url=mainApp.config.get('ESI_SWAGGER_JSON', ''))
-esiapp.prepare()
-esisecurity = EsiSecurity(
-    app=esiapp,
-    redirect_uri=mainApp.config.get('ESI_CALLBACK_URL', ''),
-    client_id=mainApp.config.get('ESI_CLIENT_ID', ''),
-    secret_key=mainApp.config.get('ESI_SECRET', ''),
-)
+    # Импортируем и регистрируем views
+    with app.app_context():
+        from . import views  # Импортируем views после создания app контекста
 
-esiclient = EsiClient(
-    security=esisecurity,
-    cache=None,
-    headers={'User-Agent': 'Aes Publica'}
-)
+    with app.app_context():
+        register_blueprints(app)  # Регистрируем все Blueprint
+
+    return app
 
 
 @lm.user_loader
@@ -68,28 +101,3 @@ def load_user(user_id):
 @lm.unauthorized_handler
 def unauthorized_callback():
     return redirect('/login')
-
-
-@mainApp.after_request
-def save_user_action(response):
-    if g.user.is_authenticated:
-        db.session.add(models.UserAction(
-            user_id=g.user.id,
-            path=str(request.url_rule),
-            created_at=datetime.now().isoformat())
-        )
-        db.session.commit()
-    else:
-        db.session.add(models.UserAction(
-            user_id=-1,
-            path=str(request.url_rule),
-            created_at=datetime.now().isoformat())
-        )
-        db.session.commit()
-
-    return response
-
-
-@mainApp.before_request
-def before_request():
-    g.user = current_user

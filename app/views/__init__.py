@@ -1,8 +1,9 @@
-from flask import render_template, redirect
+from flask import Blueprint, render_template, redirect
 from flask_login import login_user, logout_user
 import bcrypt
 
-from app import mainApp, db
+from app.extensions import db  # Импорт из extensions
+from .calc import calc_bp  # Импортируем Blueprint калькулятора
 from ..forms import LoginForm, RegisterForm
 from ..models import User
 
@@ -12,14 +13,21 @@ import app.views.moonmat
 from .characters import characters
 from .search import search_type
 
+views_bp = Blueprint('views', __name__)
 
-@mainApp.route('/login', methods=['GET'])
+
+# Регистрация Blueprint для калькулятора
+def register_blueprints(app):
+    app.register_blueprint(calc_bp)  # Регистрируем Blueprint в приложении
+
+
+@views_bp.route('/login', methods=['GET'])
 def login_get():
     form = LoginForm()
     return render_template('login.html', form=form)
 
 
-@mainApp.route('/login', methods=['POST'])
+@views_bp.route('/login', methods=['POST'])
 def login():
     form = LoginForm()
     if not form.validate_on_submit():
@@ -29,19 +37,19 @@ def login():
     return redirect("/")
 
 
-@mainApp.route('/logout')
+@views_bp.route('/logout')
 def logout():
     logout_user()
     return redirect('/login')
 
 
-@mainApp.route('/register', methods=['GET'])
+@views_bp.route('/register', methods=['GET'])
 def register_get():
     form = RegisterForm()
     return render_template('register.html', form=form)
 
 
-@mainApp.route('/register', methods=['POST'])
+@views_bp.route('/register', methods=['POST'])
 def register():
     form = RegisterForm()
     if not form.validate_on_submit():

@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey
-from app import db
+from app.extensions import db  # Импорт из extensions
 from app.eve_models import EveType
 from time import time
 
