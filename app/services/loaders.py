@@ -1,5 +1,5 @@
 from sqlalchemy.sql import text
-from app import db
+from app.extensions import db  # Импорт из extensions
 
 CITADELS_SQL = text(
     "SELECT t.id, t.name, ta.value as rig_size, coalesce(tab.value,0) as yield_bonus"

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, ValidationError
 from .models import User, OreCalc
-from app import db
+from app.extensions import db  # Импорт из extensions
 import bcrypt
 
 
