@@ -6,6 +6,7 @@ from app.esi_models import EsiChar
 
 import json
 
+
 @mainApp.route('/moonmat')
 @login_required
 def moonmat():
@@ -14,11 +15,13 @@ def moonmat():
         title='Moon Materials'
     )
 
+
 @mainApp.route('/moonmat/data.json')
 @login_required
 def moonmat_json():
     s = MoonMatService(g.user)
     return jsonify(s.to_json())
+
 
 @mainApp.route('/moonmat/rigs.json', methods=['POST'])
 @login_required
@@ -26,6 +29,7 @@ def add_rigs_json():
     s = MoonMatService(g.user)
     s.add_rig(request.get_json()['rig_id'])
     return jsonify(s.to_json())
+
 
 @mainApp.route('/moonmat/rigs/<int:rig_id>.json', methods=['DELETE'])
 @login_required

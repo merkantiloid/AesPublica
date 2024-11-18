@@ -16,16 +16,16 @@ class PriceService:
             'updated_at': temp.updated_at,
         }
 
-    def esi(self, type_ids = []):
-        db_types = self.outdated(type_ids,'esi')
-        if len(db_types)>0:
+    def esi(self, type_ids=[]):
+        db_types = self.outdated(type_ids, 'esi')
+        if len(db_types) > 0:
             all_prices = esiclient.markets.prices()
             all_prices_hash = {}
             for r in all_prices:
                 all_prices_hash[r['type_id']] = r['adjusted_price']
             ts = datetime.now().isoformat()
             for db_type in db_types:
-                db_price = Price.query.filter(Price.source=='esi', Price.type_id==db_type.id).first()
+                db_price = Price.query.filter(Price.source == 'esi', Price.type_id == db_type.id).first()
                 if not db_price:
                     db_price = Price(source='esi', type_id=db_type.id)
                 db_price.buy = all_prices_hash[db_price.type_id]
@@ -34,12 +34,12 @@ class PriceService:
                 db.session.add(db_price)
             db.session.commit()
 
-
-    def evemarketer(self, type_ids = []):
-        db_types = self.outdated(type_ids,'evemarketer')
-        if len(db_types)>0:
+    def evemarketer(self, type_ids=[]):
+        db_types = self.outdated(type_ids, 'evemarketer')
+        if len(db_types) > 0:
             ids = ','.join([str(x.id) for x in db_types])
-            all_prices = requests.get(url='https://api.evemarketer.com/ec/marketstat/json?typeid='+ids+'&regionlimit=10000002')
+            all_prices = requests.get(
+                url='https://api.evemarketer.com/ec/marketstat/json?typeid=' + ids + '&regionlimit=10000002')
             all_prices_hash = {}
             for r in all_prices.json():
                 type_id = r['sell']['forQuery']['types'][0]
@@ -47,7 +47,8 @@ class PriceService:
 
             ts = datetime.now().isoformat()
             for db_type in db_types:
-                db_price = Price.query.filter(Price.source=='evemarketer', Price.type_id==db_type.id).order_by(Price.id.desc()).first()
+                db_price = Price.query.filter(Price.source == 'evemarketer', Price.type_id == db_type.id).order_by(
+                    Price.id.desc()).first()
                 if not db_price:
                     db_price = Price(source='evemarketer', type_id=db_type.id)
                 db_price.buy = all_prices_hash[db_type.id]['buy']['fivePercent']
@@ -62,10 +63,8 @@ class PriceService:
                     db.session.rollback()
                 db.session.commit()
 
-
-
     def outdated(self, type_ids, source):
-        if len(type_ids)==0:
+        if len(type_ids) == 0:
             return []
 
         db_types = EveType.query.from_statement(
@@ -78,7 +77,3 @@ class PriceService:
             )
         ).params(source=source, ids=type_ids).all()
         return db_types
-
-
-
-

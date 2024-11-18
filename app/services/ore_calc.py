@@ -1,6 +1,6 @@
 from app.models import OreCalc, BuildItem, StoreItem, Price, CalcResult
 from .static import Static
-from app import db
+from app.extensions import db
 from .loaders import load_chars
 from .parsing import parse_name_qty
 from .components import ComponentsService
@@ -19,10 +19,10 @@ class OreCalcService:
                 user=self.user,
                 space=Static.DEFAULT_SPACE,
                 citadel_id=Static.DEFAULT_CITADEL,
-                implant_id= -1,
-                rig1_id= -1,
-                rig2_id= -1,
-                rig3_id= -1,
+                implant_id=-1,
+                rig1_id=-1,
+                rig2_id=-1,
+                rig3_id=-1,
                 esi_char_id=-1,
             )
             db.session.add(temp)
@@ -62,7 +62,9 @@ class OreCalcService:
 
     def _warnings(self, model):
         result = []
-        if (model.rig1_id==-1 or model.rig1_id == None) and (model.rig2_id==-1 or model.rig2_id == None) and (model.rig3_id==-1 or model.rig3_id == None):
+        if (model.rig1_id == -1 or model.rig1_id is None) \
+                and (model.rig2_id == -1 or model.rig2_id is None) \
+                and (model.rig3_id == -1 or model.rig3_id is None):
             result.append('No rig(s) selected')
 
         if len(model.build_items) == 0:
@@ -91,48 +93,60 @@ class OreCalcService:
             'total_volume': total_volume,
         }
 
-
     def add_build_item(self, text):
         items = parse_name_qty(text)
         ids = []
         ore_calc = self.user.ore_calc
         for item in items:
-            ids.append( item['type_id'] )
-            model = BuildItem.query.filter(BuildItem.ore_calc_id == ore_calc.id, BuildItem.type_id == item['type_id']).first()
+            ids.append(item['type_id'])
+            model = BuildItem.query.filter(BuildItem.ore_calc_id == ore_calc.id,
+                                           BuildItem.type_id == item['type_id']).first()
             if not model:
-                model = BuildItem(ore_calc_id = ore_calc.id, type_id = item['type_id'])
+                model = BuildItem(ore_calc_id=ore_calc.id, type_id=item['type_id'])
             model.qty = item['qty']
             model.me = item['me']
             model.te = item['te']
             db.session.add(model)
 
         if len(ids) == 0:
-            db.session.execute('delete from build_items where ore_calc_id = :id',  params={'id': ore_calc.id} )
+            db.session.execute(
+                'delete from build_items where ore_calc_id = :id',
+                params={'id': ore_calc.id}
+            )
         else:
-            db.session.execute('delete from build_items where ore_calc_id = :id and type_id not in :ids',  params={'id': ore_calc.id, 'ids': ids} )
+            db.session.execute(
+                'delete from build_items where ore_calc_id = :id and type_id not in :ids',
+                params={'id': ore_calc.id, 'ids': ids}
+            )
 
         ore_calc.build_items_text = text
         db.session.add(ore_calc)
 
         db.session.commit()
 
-
     def add_store_item(self, text):
         items = parse_name_qty(text)
         ids = []
         ore_calc = self.user.ore_calc
         for item in items:
-            ids.append( item['type_id'] )
-            model = StoreItem.query.filter(StoreItem.ore_calc_id == ore_calc.id, StoreItem.type_id == item['type_id']).first()
+            ids.append(item['type_id'])
+            model = StoreItem.query.filter(StoreItem.ore_calc_id == ore_calc.id,
+                                           StoreItem.type_id == item['type_id']).first()
             if not model:
-                model = StoreItem(ore_calc_id = ore_calc.id, type_id = item['type_id'])
+                model = StoreItem(ore_calc_id=ore_calc.id, type_id=item['type_id'])
             model.qty = item['qty']
             db.session.add(model)
 
         if len(ids) == 0:
-            db.session.execute('delete from store_items where ore_calc_id = :id',  params={'id': ore_calc.id} )
+            db.session.execute(
+                'delete from store_items where ore_calc_id = :id',
+                params={'id': ore_calc.id}
+            )
         else:
-            db.session.execute('delete from store_items where ore_calc_id = :id and type_id not in :ids',  params={'id': ore_calc.id, 'ids': ids} )
+            db.session.execute(
+                'delete from store_items where ore_calc_id = :id and type_id not in :ids',
+                params={'id': ore_calc.id, 'ids': ids}
+            )
 
         ore_calc.store_items_text = text
         db.session.add(ore_calc)
@@ -145,7 +159,6 @@ class OreCalcService:
         db.session.add(ore_calc)
         db.session.commit()
 
-
     def calc_result(self):
         print("calc_result >>")
         model = self.user.ore_calc
@@ -156,7 +169,7 @@ class OreCalcService:
         ordered_minerals = []
         minerals = []
         for goal_mineral in goal_minerals:
-            if goal_mineral['need_qty']>0:
+            if goal_mineral['need_qty'] > 0:
                 ordered_minerals.append(goal_mineral['type']['id'])
                 minerals.append(goal_mineral['need_qty'])
 
@@ -178,27 +191,40 @@ class OreCalcService:
                     ore.append(0)
             ores.append(ore)
 
-            price = Price.query.filter(Price.source=='evemarketer', Price.type_id==ore_id).order_by(Price.id.desc()).first()
+            price = Price.query.filter(
+                Price.source == 'evemarketer',
+                Price.type_id == ore_id).order_by(Price.id.desc()).first()
             ore_prices.append(price.sell)
 
-        #print('minerals')
-        #print(minerals)
+        # print('minerals')
+        # print(minerals)
         #
-        #print('ores')
-        #print(ores)
+        # print('ores')
+        # print(ores)
         # for index, d in enumerate(ores):
         #   print(TypeById[ordered_ores[index]].name, d)
         #
-        #print('ore_prices')
-        #print(ore_prices)
+        # print('ore_prices')
+        # print(ore_prices)
 
-        result_ores = OptimizeService().calc(minerals=minerals, ores=ores, ore_prices=ore_prices)
-        db.session.execute('delete from calc_results where ore_calc_id = :id',  params={'id': model.id} )
+        result_ores = OptimizeService().calc(
+            minerals=minerals,
+            ores=ores,
+            ore_prices=ore_prices
+        )
+        db.session.execute(
+            'delete from calc_results where ore_calc_id = :id',
+            params={'id': model.id}
+        )
         for index, x in enumerate(result_ores):
-            if x>0:
+            if x > 0:
                 # print( TypeById[ordered_ores[index]].name, x, ceil(x)*TypeById[ordered_ores[index]].portion_size )
                 ore_id = ordered_ores[index]
-                calc_result = CalcResult(ore_calc_id=model.id, type_id=ore_id, qty=ceil(x)*Static.type_by_id(ore_id).portion_size)
+                calc_result = CalcResult(
+                    ore_calc_id=model.id,
+                    type_id=ore_id,
+                    qty=ceil(x) * Static.type_by_id(ore_id).portion_size
+                )
                 db.session.add(calc_result)
         db.session.commit()
 

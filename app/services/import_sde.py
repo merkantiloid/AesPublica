@@ -1,34 +1,37 @@
 import yaml
 
 from app import db
-from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory, EveAttribute, EveTypeAttribute, EveBlueprint, EveTypeMaterial
+from app.eve_models import EveType, EveMarketGroup, EveGroup, EveCategory,\
+    EveAttribute, EveTypeAttribute, EveBlueprint, EveTypeMaterial
+
 
 def parse_categories(file):
     print(".... loading categories")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        name = data[key]['name'].get('en','N/A').encode("utf-8")
+        name = data[key]['name'].get('en', 'N/A').encode("utf-8")
         print(key, name)
         item = EveCategory.query.get(key)
         if not item:
             item = EveCategory(id=key)
-        item.icon_id = data[key].get('iconID',None)
+        item.icon_id = data[key].get('iconID', None)
         item.published = data[key]['published']
         item.name = name
         db.session.add(item)
     db.session.commit()
 
+
 def parse_groups(file):
     print(".... loading groups")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        name = data[key]['name'].get('en','N/A').encode("utf-8")
+        name = data[key]['name'].get('en', 'N/A').encode("utf-8")
         print(key, name)
         item = EveGroup.query.get(key)
         if not item:
             item = EveGroup(id=key)
         item.category_id = data[key]['categoryID']
-        item.icon_id = data[key].get('iconID',None)
+        item.icon_id = data[key].get('iconID', None)
         item.published = data[key]['published']
         item.name = name
         db.session.add(item)
@@ -45,10 +48,10 @@ def parse_market_groups(file):
         if not item:
             item = EveMarketGroup(id=key)
         item.name = record['marketGroupName']
-        item.description = record.get('description','N/A')
+        item.description = record.get('description', 'N/A')
         item.has_types = record['hasTypes']
-        item.icon_id = record.get('iconID',None)
-        item.parent_id = record.get('parentGroupID',None)
+        item.icon_id = record.get('iconID', None)
+        item.parent_id = record.get('parentGroupID', None)
         db.session.add(item)
     db.session.commit()
 
@@ -57,14 +60,14 @@ def parse_type_ids(file):
     print(".... loading type IDs")
     data = yaml.load(file, Loader=yaml.Loader)
     for key in data:
-        name = data[key]['name'].get('en','N/A').encode("utf-8")
+        name = data[key]['name'].get('en', 'N/A').encode("utf-8")
         print(key, name)
         item = EveType.query.get(key)
         if not item:
             item = EveType(id=key)
-        item.group_id = data[key].get('groupID',None)
-        item.market_group_id = data[key].get('marketGroupID',None)
-        item.volume = data[key].get('volume',None)
+        item.group_id = data[key].get('groupID', None)
+        item.market_group_id = data[key].get('marketGroupID', None)
+        item.volume = data[key].get('volume', None)
         item.name = name
         item.portion_size = data[key]['portionSize']
         item.published = data[key]['published']
@@ -83,12 +86,12 @@ def parse_attrs(file):
             item = EveAttribute(id=key)
 
         item.code = record['attributeName']
-        item.name = record.get('displayName','N/A')
-        item.category_id = record.get('categoryID',None)
+        item.name = record.get('displayName', 'N/A')
+        item.category_id = record.get('categoryID', None)
         item.default_value = record['defaultValue']
         item.description = record['description']
-        item.icon_id = record.get('iconID',None)
-        item.unit_id = record.get('unitID',None)
+        item.icon_id = record.get('iconID', None)
+        item.unit_id = record.get('unitID', None)
         item.published = record['published']
         item.stackable = record['stackable']
         item.high_is_good = record['highIsGood']
@@ -106,9 +109,10 @@ def parse_type_attrs(file):
         type_id = record['typeID']
         attr_id = record['attributeID']
 
-        item = EveTypeAttribute.query.filter(EveTypeAttribute.type_id == type_id, EveTypeAttribute.attribute_id == attr_id).first()
+        item = EveTypeAttribute.query.filter(EveTypeAttribute.type_id == type_id,
+                                             EveTypeAttribute.attribute_id == attr_id).first()
         if not item:
-            item = EveTypeAttribute(type_id=type_id, attribute_id = attr_id)
+            item = EveTypeAttribute(type_id=type_id, attribute_id=attr_id)
 
         if 'valueInt' in record:
             item.value = record['valueInt']
@@ -144,9 +148,10 @@ def parse_type_materials(file):
     print(".... loading type materials")
     data = yaml.load(file, Loader=yaml.Loader)
     for record in data:
-        item = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == record['typeID'], EveTypeMaterial.material_id == record['materialTypeID']).first()
+        item = EveTypeMaterial.query.filter(EveTypeMaterial.type_id == record['typeID'],
+                                            EveTypeMaterial.material_id == record['materialTypeID']).first()
         if not item:
-            item = EveTypeMaterial(type_id = record['typeID'], material_id = record['materialTypeID'])
+            item = EveTypeMaterial(type_id=record['typeID'], material_id=record['materialTypeID'])
         item.qty = record['quantity']
         db.session.add(item)
     db.session.commit()

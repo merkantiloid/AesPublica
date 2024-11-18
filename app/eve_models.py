@@ -1,7 +1,8 @@
 from app.extensions import db  # Импорт из extensions
 from sqlalchemy import ForeignKey
 
-class EveTypeSimple():
+
+class EveTypeSimple:
     def __init__(self, complex):
         self.id = complex.id
         self.name = complex.name
@@ -18,6 +19,7 @@ class EveTypeSimple():
             'volume': self.volume,
         }
 
+
 class EveType(db.Model):
     __tablename__ = 'eve_types'
     id = db.Column(db.BigInteger, primary_key=True)
@@ -33,6 +35,7 @@ class EveType(db.Model):
 
     def to_json(self):
         return self.simple().to_json()
+
 
 class EveMarketGroup(db.Model):
     __tablename__ = 'eve_market_groups'
@@ -88,6 +91,7 @@ class EveBlueprintSimple():
         self.id = complex.id
         self.product_id = complex.product_id
 
+
 class EveBlueprint(db.Model):
     __tablename__ = 'eve_blueprints'
     id = db.Column(db.BigInteger, primary_key=True)
@@ -99,10 +103,10 @@ class EveBlueprint(db.Model):
     def simple(self):
         return EveBlueprintSimple(self)
 
+
 class EveTypeMaterial(db.Model):
     __tablename__ = 'eve_type_materials'
 
     type_id = db.Column(db.BigInteger, primary_key=True)
     material_id = db.Column(db.BigInteger, primary_key=True)
     qty = db.Column(db.BigInteger)
-

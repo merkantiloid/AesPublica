@@ -6,6 +6,7 @@ from app.esi_models import EsiChar
 
 import json
 
+
 @mainApp.route('/mscan')
 @login_required
 def mscan():
@@ -15,6 +16,7 @@ def mscan():
         title='Fit on Market',
         chars=chars,
     )
+
 
 @mainApp.route('/mscans.json', methods=['GET'])
 @login_required
@@ -72,7 +74,7 @@ def add_mscan_location_json(mscan_id):
 
 @mainApp.route('/mscans/<int:mscan_id>/locations/<int:loc_id>.json', methods=['DELETE'])
 @login_required
-def delete_mscan_location_json(mscan_id,loc_id):
+def delete_mscan_location_json(mscan_id, loc_id):
     s = MScanService(g.user)
     s.delete_location(mscan_id, loc_id)
     return jsonify(s.to_json(selected_id=mscan_id))

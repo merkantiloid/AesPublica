@@ -1,8 +1,10 @@
 from .static import CalcIDs, Static
 from math import ceil
 
+
 def sort_key(item):
-    return '%d-%s' % (item['type']['group_id'] , item['type']['name'])
+    return '%d-%s' % (item['type']['group_id'], item['type']['name'])
+
 
 class ComponentsService:
 
@@ -16,9 +18,9 @@ class ComponentsService:
         result = []
         for key in all:
             if key in CalcIDs:
-                need_qty = need.get(key,0)
-                after_qty = after_refine.get(key,0)
-                percent = 100.0 * (after_qty - need_qty) / need_qty if need_qty>0 else 0
+                need_qty = need.get(key, 0)
+                after_qty = after_refine.get(key, 0)
+                percent = 100.0 * (after_qty - need_qty) / need_qty if need_qty > 0 else 0
                 result.append({
                     'type': Static.type_by_id(key).toDict(),
                     'all_qty': all[key],
@@ -68,12 +70,12 @@ class ComponentsService:
                             imt_key = "%d-%d-%d" % (mid, 10, 20)
                             record = process.get(imt_key, {'type_id': mid, 'runs': 0, 'qty': 0, 'me': 10, 'te': 20})
                             record['qty'] = record['qty'] + store_real_qty
-                            record['runs'] = ceil(record['qty']/Static.type_by_id(mid).portion_size)
+                            record['runs'] = ceil(record['qty'] / Static.type_by_id(mid).portion_size)
                             process[imt_key] = record
                         else:
-                            result[mid] = result.get(mid,0) + store_real_qty
+                            result[mid] = result.get(mid, 0) + store_real_qty
                 else:
-                    result[i_type_id] = result.get(i_type_id,0) + queue[pkey]['qty']
+                    result[i_type_id] = result.get(i_type_id, 0) + queue[pkey]['qty']
 
             if len(process) == 0:
                 break
@@ -84,21 +86,20 @@ class ComponentsService:
         return result
 
     def applyME(self, cnt, runs, me, bonus1=0, bonus2=0):
-        if cnt==1:
+        if cnt == 1:
             return runs
-        return ceil( cnt * runs * (1-me/100) * (1-bonus1/100) * (1-bonus2/100) )
+        return ceil(cnt * runs * (1 - me / 100) * (1 - bonus1 / 100) * (1 - bonus2 / 100))
 
         return runs
 
     def apply_store(self, store, type_id, qty):
-        if type_id in store and store[type_id]>0:
-            if store[type_id]>qty:
-                store[type_id] = store[type_id]-qty
+        if type_id in store and store[type_id] > 0:
+            if store[type_id] > qty:
+                store[type_id] = store[type_id] - qty
                 return 0
             else:
-                temp = qty-store[type_id]
+                temp = qty - store[type_id]
                 store[type_id] = 0
                 return temp
 
         return qty
-
