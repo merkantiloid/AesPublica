@@ -26,9 +26,10 @@ class RegisterForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired()])
 
     def validate_name(form, field):
-        user = User.query.filter(User.name==field.data).first()
+        user = User.query.filter(User.name == field.data).first()
         if user:
             raise ValidationError('Name already taken')
+
 
 class SettingsForm(FlaskForm):
     space = StringField('space', validators=[DataRequired()])

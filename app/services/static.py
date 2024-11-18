@@ -6,7 +6,7 @@ from munch import Munch
 from functools import lru_cache
 
 _HASHES = {}
-for type in EveType.query.filter(EveType.published==True).all():
+for type in EveType.query.filter(EveType.published == True).all():
     _HASHES[type.name.lower()] = type.id
 
 CalcIDs = load_calc_ids()
@@ -17,7 +17,7 @@ AllOresGrouped = {
     '1_ore_h': {'name': 'Hi-Sec Ores', 'items': {}},
     '2_ore_l': {'name': 'Low-Sec Ores', 'items': {}},
     '3_ore_z': {'name': 'Zero-Sec Ores', 'items': {}},
-    '4_ice':   {'name': 'Ice', 'items': {}},
+    '4_ice': {'name': 'Ice', 'items': {}},
     '5_ore_m': {'name': 'Moon Extra Ores', 'items': {}}
 }
 
@@ -42,30 +42,30 @@ for x in ReprImplants:
 
 
 class Static:
-    SPACES = {'h':'Hi-Sec', 'l':'Low-Sec', 'z':'Zero/WH'}
-    RSPACES = {'l':'Low-Sec', 'z':'Zero/WH'}
+    SPACES = {'h': 'Hi-Sec', 'l': 'Low-Sec', 'z': 'Zero/WH'}
+    RSPACES = {'l': 'Low-Sec', 'z': 'Zero/WH'}
     DEFAULT_SPACE = 'z'
 
     CITADELS = load_citadels()
     CITADELS_HASH = load_citadels_hash()
 
-    DEFAULT_CITADEL = 35825 #Raitaru
+    DEFAULT_CITADEL = 35825  # Raitaru
 
     REPR_RIGS = load_repr_rigs()
 
     RRIGS = load_reactor_rigs()
-    RRIGS_HASH = {x['id']:x for x in RRIGS}
+    RRIGS_HASH = {x['id']: x for x in RRIGS}
 
     RIG_APPLY = {
         'time': {
-            1888: [1933,1939],
-            1889: [1935,1939],
-            1890: [1937,1939],
+            1888: [1933, 1939],
+            1889: [1935, 1939],
+            1890: [1937, 1939],
         },
         'materials': {
-            1888: [1934,1939],
-            1889: [1936,1939],
-            1890: [1938,1939],
+            1888: [1934, 1939],
+            1889: [1936, 1939],
+            1890: [1938, 1939],
         },
     }
 
@@ -97,7 +97,7 @@ class Static:
 
     @lru_cache()
     def materials_by_id(pid):
-        bp = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
+        bp = EveBlueprint.query.filter(EveBlueprint.product_id == pid).first()
         if bp:
             if 'manufacturing' in bp.props['activities'] and 'materials' in bp.props['activities']['manufacturing']:
                 array = bp.props['activities']['manufacturing']['materials']
@@ -109,7 +109,7 @@ class Static:
 
     @lru_cache()
     def materials_by_reaction_pid(rpid):
-        bp = EveBlueprint.query.filter(EveBlueprint.product_id==rpid).first()
+        bp = EveBlueprint.query.filter(EveBlueprint.product_id == rpid).first()
         if bp:
             if 'reaction' in bp.props['activities'] and 'materials' in bp.props['activities']['reaction']:
                 array = bp.props['activities']['reaction']['materials']
@@ -121,7 +121,7 @@ class Static:
 
     @lru_cache()
     def bid_by_pid(pid):
-        data = EveBlueprint.query.filter(EveBlueprint.product_id==pid).first()
+        data = EveBlueprint.query.filter(EveBlueprint.product_id == pid).first()
 
         if data:
             return data.id
@@ -135,4 +135,3 @@ class Static:
         for r in data:
             hash[r.material_id] = r.qty
         return hash
-

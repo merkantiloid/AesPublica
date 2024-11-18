@@ -2,41 +2,40 @@ from app.esi_models import EsiLocation
 from .esi import EsiService
 from app import db
 
+
 class LocationsService:
 
     def __init__(self, char=None):
         self.char = char
         self.esi = EsiService(self.char)
 
-
     def search_location(self, term):
         result = []
 
-        ids = self.esi.character_search('station,structure',term)
+        ids = self.esi.character_search('station,structure', term)
 
-        sids = ids.get('station',[])
-        if len(sids)>0:
+        sids = ids.get('station', [])
+        if len(sids) > 0:
             names = self.station_names(sids)
             result = result + names
 
-        cids = ids.get('structure',[])
-        if len(cids)>0:
+        cids = ids.get('structure', [])
+        if len(cids) > 0:
             names = self.citadel_names(cids)
             result = result + names
 
         return result
 
-
     def station_names(self, ids):
         result = []
 
-        if len(ids)>0:
+        if len(ids) > 0:
             with_names = EsiLocation.query.filter(EsiLocation.id.in_(ids)).all()
             for l in with_names:
                 result.append({'id': l.id, 'name': l.name, 'category': l.category})
                 ids.remove(l.id)
 
-            if len(ids)>0:
+            if len(ids) > 0:
                 data = self.esi.universe_names(ids)
                 for st in data:
                     result.append({'id': st['id'], 'name': st['name'], 'category': st['category']})
@@ -46,17 +45,16 @@ class LocationsService:
 
         return result
 
-
     def citadel_names(self, ids):
         result = []
 
-        if len(ids)>0:
+        if len(ids) > 0:
             with_names = EsiLocation.query.filter(EsiLocation.id.in_(ids)).all()
             for l in with_names:
                 result.append({'id': l.id, 'name': l.name, 'category': l.category})
                 ids.remove(l.id)
 
-            if len(ids)>0:
+            if len(ids) > 0:
                 for id in ids:
                     st = self.esi.universe_structures(id)
                     if 'error' in st:

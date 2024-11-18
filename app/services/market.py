@@ -3,8 +3,10 @@ from .locations import LocationsService
 from .static import Static
 from app import db
 
+
 def _sort_key(item):
     return item[1]
+
 
 class MarketService:
 
@@ -14,9 +16,9 @@ class MarketService:
     def _apply_order(self, result, order):
         temp = result[order['type_id']]
         temp['qty'] += order['volume_remain']
-        if not temp['min'] or temp['min']>order['price']:
+        if not temp['min'] or temp['min'] > order['price']:
             temp['min'] = order['price']
-        temp['prices'].append([order['volume_remain'],order['price']])
+        temp['prices'].append([order['volume_remain'], order['price']])
 
     def _appropriate(self, flag):
         return not flag.startswith('RigSlot') \
@@ -31,7 +33,6 @@ class MarketService:
                and flag != 'FighterBay' \
                and flag != 'HiddenModifiers' \
                and flag != 'SpecializedFuelBay'
-
 
     def info(self, locations, assets, items, fit_times):
         station_ids, station_region_ids, citadels, citadel_ids = self.sort_locations(locations)
@@ -69,7 +70,6 @@ class MarketService:
 
         self.post_processing(fit_times, items, result)
 
-
     def post_processing(self, fit_times, items, result):
         for item in items:
             prices = result[item.type_id]['prices']
@@ -105,7 +105,9 @@ class MarketService:
             while True:
                 orders, pages = esi.markets_structures(citadel.esi_location_id, current)
                 for order in orders:
-                    if not order['is_buy_order'] and order['location_id'] in citadel_ids and order['type_id'] in type_ids:
+                    if not order['is_buy_order']\
+                            and order['location_id'] in citadel_ids\
+                            and order['type_id'] in type_ids:
                         self._apply_order(result, order)
                 if not max_page:
                     max_page = pages
@@ -154,6 +156,5 @@ class MarketService:
                     esi = EsiService(str.esi_char)
                     st_data = esi.universe_structures(loc.id)
                     LocationsService().update_region_id(loc, st_data['solar_system_id'])
-
 
         return station_ids, station_region_ids, citadels, citadel_ids

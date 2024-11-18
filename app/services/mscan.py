@@ -5,15 +5,16 @@ from .parsing import parse_name_qty
 from .static import Static
 from .price import PriceService
 from .market import MarketService
-from datetime import datetime
+from datetime import datetime, timezone
+
 
 class MScanService:
 
     def __init__(self, user):
-        self.user=user
+        self.user = user
 
     def list(self):
-        mscans=MScan.query.filter(MScan.user_id == self.user.id).order_by(MScan.name).all()
+        mscans = MScan.query.filter(MScan.user_id == self.user.id).order_by(MScan.name).all()
         result = []
         for scan in mscans:
             result.append(scan.short_json())
@@ -48,13 +49,13 @@ class MScanService:
         temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
         if temp:
             if 'raw' in params:
-                temp.raw = params.get('raw',None)
+                temp.raw = params.get('raw', None)
             if 'fit_times' in params:
-                temp.fit_times = params.get('fit_times',None)
+                temp.fit_times = params.get('fit_times', None)
             if 'goal_fit_times' in params:
-                temp.goal_fit_times = params.get('goal_fit_times',None)
+                temp.goal_fit_times = params.get('goal_fit_times', None)
             if 'store_fit_times' in params:
-                temp.store_fit_times = params.get('store_fit_times',None)
+                temp.store_fit_times = params.get('store_fit_times', None)
             db.session.add(temp)
             db.session.commit()
             self.parse_raw(temp)
@@ -105,19 +106,24 @@ class MScanService:
 
         ids = [x['type_id'] for x in items]
         if len(ids) == 0:
-            db.session.execute('delete from mscan_items where mscan_id = :id',  params={'id': mscan.id} )
+            db.session.execute('delete from mscan_items where mscan_id = :id',
+                               params={'id': mscan.id}
+                               )
         else:
-            db.session.execute('delete from mscan_items where mscan_id = :id and type_id not in :ids',  params={'id': mscan.id, 'ids': ids} )
+            db.session.execute('delete from mscan_items where mscan_id = :id and type_id not in :ids',
+                               params={'id': mscan.id, 'ids': ids}
+                               )
 
         for item in items:
-            db_item = MScanItem.query.filter(MScanItem.mscan_id==mscan.id, MScanItem.type_id==item['type_id']).first()
+            db_item = MScanItem.query.filter(MScanItem.mscan_id == mscan.id,
+                                             MScanItem.type_id == item['type_id']).first()
             if not db_item:
                 db_item = MScanItem(mscan_id=mscan.id, type_id=item['type_id'])
             db_item.qty = item['qty']
             db.session.add(db_item)
         db.session.commit()
 
-    def market_info(self,mscan_id):
+    def market_info(self, mscan_id):
         temp = MScan.query.filter(MScan.user_id == self.user.id, MScan.id == mscan_id).first()
         if temp:
             temp.check_date = datetime.isoformat(datetime.utcnow())
@@ -128,5 +134,3 @@ class MScanService:
             types = [x for x in temp.items]
             assets = [x for x in temp.locations.filter(MScanLocation.kind == 'asset').all()]
             MarketService().info(locations, assets, types, temp.fit_times)
-
-

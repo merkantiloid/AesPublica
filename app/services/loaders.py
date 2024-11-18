@@ -12,6 +12,7 @@ CITADELS_SQL = text(
     "  order by t.name"
 )
 
+
 def load_citadels():
     citadel_raws = db.session.execute(CITADELS_SQL).fetchall()
     citadels = [
@@ -21,6 +22,7 @@ def load_citadels():
         citadels.append({'id': record[0], 'name': record[1], 'rig_size': int(record[2]), 'bonus': int(record[3])})
     return citadels
 
+
 def load_citadels_hash():
     citadels = load_citadels()
     result = {}
@@ -29,7 +31,6 @@ def load_citadels_hash():
         result[record['id']] = record
 
     return result
-
 
 
 def load_repr_implants():
@@ -95,9 +96,10 @@ REPR_RIGS_SQL = text(
     " order by t.name  "
 )
 
+
 def get_metas(record):
-    if record[3]>2:
-        return ['ore','ice','moon']
+    if record[3] > 2:
+        return ['ore', 'ice', 'moon']
     elif record[3] == 2 and "Asteroid Ore" in record[1]:
         return ['ore']
     elif record[3] == 2 and "Ice" in record[1]:
@@ -105,8 +107,9 @@ def get_metas(record):
     elif record[3] == 2 and "Moon Ore" in record[1]:
         return ['moon']
 
+
 def load_repr_rigs():
-    none_rig = {'id': -1, 'name': '-None-', 'value': 0.0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']}
+    none_rig = {'id': -1, 'name': '-None-', 'value': 0.0, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore', 'ice', 'moon']}
 
     rig_raws = db.session.execute(REPR_RIGS_SQL).fetchall()
     rigs = {
@@ -115,20 +118,19 @@ def load_repr_rigs():
         4: [none_rig],
         5: [
             none_rig,
-            {'id': -2, 'name': '- Base 50% -', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']},
-            {'id': -3, 'name': '- Base 30% -', 'value': 0.3, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore','ice','moon']},
+            {'id': -2, 'name': '- Base 50% -', 'value': 0.5, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore', 'ice', 'moon']},
+            {'id': -3, 'name': '- Base 30% -', 'value': 0.3, 'h': 1, 'l': 1, 'z': 1, 'metas': ['ore', 'ice', 'moon']},
         ],
     }
     for record in rig_raws:
-        temp = {
-            'id': record[0],
-            'name': record[1],
-            'value': record[2],
-            'h': record[4],
-            'l': record[5],
-            'z': record[6],
-        }
-        temp['metas'] = get_metas(record)
+        temp = {'id': record[0],
+                'name': record[1],
+                'value': record[2],
+                'h': record[4],
+                'l': record[5],
+                'z': record[6],
+                'metas': get_metas(record)
+                }
 
         rigs[int(record[3])].append(temp)
 
@@ -145,13 +147,13 @@ def load_repr_rigs_hash():
 
 
 ALL_ORES_SQL = text(
-    "select t.id," 
-    "       t.name," 
-    "       t.portion_size," 
+    "select t.id,"
+    "       t.name,"
+    "       t.portion_size,"
     "       t.volume, "
-    "       tac.value as compressed_id," 
+    "       tac.value as compressed_id,"
     "       ta.value as ore_type,"
-    "       case" 
+    "       case"
     "         when mg.id = 1855 then '4_ice'"
     "         when ta.value=4 then '5_ore_m'"
     "         when mg.id in (512,514,521,522,525,530,517) then '3_ore_z'"
@@ -170,6 +172,8 @@ ALL_ORES_SQL = text(
     "  where t.published=1 "
     "  order by ore_type_text, skill_id, base_ore_id, case when compressed_id is null then '0' else '1' end,  ore_type"
 )
+
+
 def load_ores():
     records = db.session.execute(ALL_ORES_SQL).fetchall()
     ores = {}
@@ -189,22 +193,24 @@ def load_ores():
 
 
 ALL_CHARS_SQL = text(
-    "select c.id," 
+    "select c.id,"
     "       c.character_name,"
     "       ifnull(s3385.current_skill_level,0) as s3385,"
     "       ifnull(s3389.current_skill_level,0) as s3389,"
     "       ifnull(s12196.current_skill_level,0) as s12196"
     "  from esi_chars c"
-    "         left join esi_skills s3385 on s3385.esi_char_id = c.id and s3385.skill_id = 3385" 
+    "         left join esi_skills s3385 on s3385.esi_char_id = c.id and s3385.skill_id = 3385"
     "         left join esi_skills s3389 on s3389.esi_char_id = c.id and s3389.skill_id = 3389 "
-    "         left join esi_skills s12196 on s12196.esi_char_id = c.id and s12196.skill_id = 12196" 
+    "         left join esi_skills s12196 on s12196.esi_char_id = c.id and s12196.skill_id = 12196"
     "  where user_id=:user_id"
     "    and token_type = 'Character'"
     "  order by c.character_name "
 )
+
+
 def load_chars(user_id):
     records = db.session.execute(ALL_CHARS_SQL, params={'user_id': user_id}).fetchall()
-    chars = [{'id': -1,'name': 'All 5','skills': {3385: 5, 3389: 5, 12196: 5}}]
+    chars = [{'id': -1, 'name': 'All 5', 'skills': {3385: 5, 3389: 5, 12196: 5}}]
     for record in records:
         chars.append(
             {
@@ -221,7 +227,7 @@ def load_chars(user_id):
 
 
 CALC_IDS_SQL = text(
-    "select id " 
+    "select id "
     "  from eve_types"
     "  where group_id in (18,423)"
     "    and published=1"
@@ -264,6 +270,8 @@ REACTOR_RIGS_SQL = text(
     "    and t.published=1"
     "  order by ta6.value, t.name;"
 )
+
+
 def load_reactor_rigs():
     records = db.session.execute(REACTOR_RIGS_SQL).fetchall()
     result = []

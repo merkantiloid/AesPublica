@@ -1,10 +1,11 @@
 import re
 from .static import Static
 
+
 def parse_name_qty(text):
     lines = text.splitlines()
 
-    temp={}
+    temp = {}
 
     for line in lines:
         success, type_id, qty, me, te = name_qty_line(line)
@@ -69,7 +70,7 @@ def name_qty_line(line):
             groups = re.match('ME\d*$',part)
             if groups:
                 temp = int(groups[0][2:])
-                if temp>=0 and temp<=10:
+                if 0 <= temp <= 10:
                     result_me = temp
 
     if index <= last and type_is_found:
@@ -77,7 +78,7 @@ def name_qty_line(line):
             groups = re.match('TE\d*$',part)
             if groups:
                 temp = int(groups[0][2:])
-                if temp>=0 and temp<=20:
+                if 0 <= temp <= 20:
                     result_te = temp
 
     return type_is_found, result_type_id, result_qty, result_me, result_te

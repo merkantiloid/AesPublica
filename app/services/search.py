@@ -2,12 +2,11 @@ from app import db
 from app.eve_models import EveBlueprint, EveType
 from sqlalchemy.sql import text
 
-class SearchService:
 
+class SearchService:
     def __init__(self, type):
         self.type = type
         self.result = []
-
 
     SEARCH_BLUEPRINT_SQL = text(
         'select t.id, t.name'
@@ -16,7 +15,6 @@ class SearchService:
         '    and t.published=1'
         '    and t.name like :term'
     )
-
 
     SEARCH_TYPE_SQL = text(
         'select t.id, t.name'
@@ -31,16 +29,15 @@ class SearchService:
         self.result = []
         records = []
         if self.type == 'blueprint':
-            records = db.session.execute(self.SEARCH_BLUEPRINT_SQL,  params={'term': '%'+term+'%'} )
+            records = db.session.execute(self.SEARCH_BLUEPRINT_SQL,  params={'term': '%'+term+'%'})
         elif self.type == 'type':
-            records = db.session.execute(self.SEARCH_TYPE_SQL,  params={'exact': term, 'term': '%'+term+'%'} )
+            records = db.session.execute(self.SEARCH_TYPE_SQL,  params={'exact': term, 'term': '%'+term+'%'})
 
         for record in records:
             self.result.append({
                 'id': record[0],
                 'name': record[1]
             })
-
 
     def to_json(self):
         return self.result
